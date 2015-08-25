@@ -1,4 +1,4 @@
-function click(div) {
+function clickActive(div) {
 	alert('bruh');
 	var paragraph = div.getElementsByTagName("p")[0];
 	if (paragraph.style.opacity == "1.0") {
