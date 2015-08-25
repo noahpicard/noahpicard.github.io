@@ -61,7 +61,14 @@
 
 
 <script>
-
+function click(div) {
+	var paragraph = div.getElementsByTagName("p")[0];
+	if (paragraph.style.opacity == "1.0") {
+		collapseInfo(div);
+	} else {
+		expandInfo(div);
+	}
+}
 function expandInfo(div) {
 	//div = h2.parentNode;
 	var paragraph = div.getElementsByTagName("p")[0];
@@ -116,8 +123,7 @@ function collapseInfo(div) {
 			</h2>
 		</div>
 		<div class="panel" align="left"
-		onmouseover="expandInfo(this)"
-		onmouseout="collapseInfo(this)">
+		onclick="click(this)">
 			<h2>Experience</h2>
 			<p style="height:488px">
 				<b>Software Engineering Intern, Remote Sensing Systems -</b> 
