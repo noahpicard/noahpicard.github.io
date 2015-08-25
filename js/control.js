@@ -1,7 +1,7 @@
 function clickActive(div) {
 	alert('bruh');
 	var paragraph = div.getElementsByTagName("p")[0];
-	if (paragraph.style.opacity == "1.0") {
+	if (div.test) {
 		collapseInfo(div);
 	} else {
 		expandInfo(div);
@@ -22,6 +22,7 @@ function expandInfo(div) {
       div.style.height = divheight+parheight+26+'px';   
 	//div.style.height = div.style.height + paragraph.style.height;
 	paragraph.style.opacity = "1.0";
+	div.test = true;
 	//paragraph.style.height = +parheight+'px';
 }
 function collapseInfo(div) {
@@ -32,5 +33,6 @@ function collapseInfo(div) {
 	//paragraph.style.height = "0px";
 	div.style.height = "115px";
 	paragraph.style.opacity = "0.0";
+	div.test = false
 	
 }
