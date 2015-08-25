@@ -15,9 +15,9 @@ function expandInfo(div) {
 
       //change height
 
-      var divheight = div.style.height.replace("px","");
+      var divheight = div.style.h.replace("px","");
       divheight=+divheight;
-      var parheight = paragraph.style.height.replace("px","");
+      var parheight = paragraph.style.h.replace("px","");
       parheight=+parheight;
       div.style.height = divheight+parheight+26+'px';   
 	//div.style.height = div.style.height + paragraph.style.height;
