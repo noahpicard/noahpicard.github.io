@@ -1,6 +1,4 @@
 function clickActive(div) {
-	alert('bruh');
-	var paragraph = div.getElementsByTagName("p")[0];
 	if (div.test) {
 		collapseInfo(div);
 	} else {
@@ -8,31 +6,41 @@ function clickActive(div) {
 	}
 }
 function expandInfo(div) {
+	div.test = true;
 	//div = h2.parentNode;
 	var paragraph = div.getElementsByTagName("p")[0];
 	//height=height.replace("px","");
       //height=+height;
-
       //change height
+      
+      div = $(div);
+      paragraph = $(paragraph);
 
-      var divheight = div.style.h.replace("px","");
+      var divheight = div.height();
       divheight=+divheight;
-      var parheight = paragraph.style.h.replace("px","");
+      console.log(divheight);
+      var parheight = paragraph.height();
       parheight=+parheight;
-      div.style.height = divheight+parheight+26+'px';   
+      console.log(parheight);
+      div.height(divheight+parheight+26+'px');   
 	//div.style.height = div.style.height + paragraph.style.height;
-	paragraph.style.opacity = "1.0";
-	div.test = true;
+	paragraph.fadeTo(1,1.0);
+	
 	//paragraph.style.height = +parheight+'px';
 }
 function collapseInfo(div) {
+	div.test = false;
 	//div = h2.parentNode;
 	var paragraph = div.getElementsByTagName("p")[0];
-	var divheight = div.style.height.replace("px","");
+	div = $(div);
+    paragraph = $(paragraph);
+    
+	var divheight = div.height();
     divheight=+divheight;
+
 	//paragraph.style.height = "0px";
-	div.style.height = "115px";
-	paragraph.style.opacity = "0.0";
-	div.test = false
+	div.height("115px");
+	paragraph.fadeTo(1, 0.0);
+	
 	
 }
