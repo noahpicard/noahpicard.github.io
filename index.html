@@ -38,6 +38,7 @@
 		width: 332px;
 		transition: height .5s;
 		cursor: pointer;
+		overflow:hidden;
 	}
 	.inpanel {
 		height: 100%;
@@ -89,8 +90,39 @@
 				Hi. Let's create something beautiful.
 			</h2>
 		</div>
-		<div class="panel" align="left"
-		onclick="clickActive(this)">
+		<div class="panel" align="left" data-info="experience"
+		onclick="clickActive(this)"
+		onmouseover="expandInfo(this)"
+		onmouseout="collapseInfo(this)">
+			<h2>Projects</h2>
+			<p class="detail" style="h:165px;">
+			<br>Tensor, an iOS app integrated with the Myo armband allowing you to record and practice dance moves, and teach those moves virtually to your friends (Objective-C)
+			<br>Read routines for Native and NetCDF meteorological files (IDL, Fortran)
+			<br>Experimental footprint modeling applying Gaussian fitting to calibrate geostationary satellite microwave sensors (Python, Anaconda)
+			<br>Product customization and internal software for Mantis Security alarm systems (Java, Eclipse)
+			<br>IT, a web-based team augmented reality game (HTML, CSS, PHP, SQL, Javascript)
+			<br>Cartesia, a educational platformer designed to teach graphing (STEM Challenge Finalist 2013) 
+			<br>The New King, and 30+ other games for Salazar Games (C++)
+			<br>A mobile, photovoltaic-powered water purification system for the Third World
+			</p>
+			
+		</div>
+		<div class="panel" align="left" data-info="skills"
+		onclick="clickActive(this)"
+		onmouseover="expandInfo(this)"
+		onmouseout="collapseInfo(this)">
+			<h2>Skills</h2>
+			<p style="h:105px;">
+			<br>Knowledge of Python, C, C++, C#, Objective-C, Java, Javascript, PHP, CSS, HTML, SQL, Fortran, IDL, Lisp, x86-Assembly 
+			<br>Theoretical and Applied Mathematician
+			<br>Published Poet/ Writer
+			<br>Hip-Hop Dance Performer
+			</p>
+		</div>
+		<div class="panel" style="width: 692px;" align="left" data-info="projects"
+		onclick="clickActive(this)"
+		onmouseover="expandInfo(this)"
+		onmouseout="collapseInfo(this)">
 			<h2>Experience</h2>
 			<p style="h:488px;">
 				<b>Software Engineering Intern, Remote Sensing Systems -</b> 
@@ -113,41 +145,20 @@
 			<br>Researched data for competitor and market analysis of technology use in elder care
 			</p>
 		</div>
-		<div class="panel" align="left"
-		onclick="clickActive(this)">
-			<h2>Skills</h2>
-			<p style="h:105px;">
-			<br>Knowledge of Python, C, C++, C#, Objective-C, Java, Javascript, PHP, CSS, HTML, SQL, Fortran, IDL, Lisp, x86-Assembly 
-			<br>Theoretical and Applied Mathematician
-			<br>Published Poet/ Writer
-			<br>Hip-Hop Dance Performer
-			</p>
-		</div>
-		<div class="panel" style="
-		width: 692px;" align="left"
-		onclick="clickActive(this)">
-			<h2>Projects</h2>
-			<p class="detail" style="h:165px;">
-			<br>Tensor, an iOS app integrated with the Myo armband allowing you to record and practice dance moves, and teach those moves virtually to your friends (Objective-C)
-			<br>Read routines for Native and NetCDF meteorological files (IDL, Fortran)
-			<br>Experimental footprint modeling applying Gaussian fitting to calibrate geostationary satellite microwave sensors (Python, Anaconda)
-			<br>Product customization and internal software for Mantis Security alarm systems (Java, Eclipse)
-			<br>IT, a web-based team augmented reality game (HTML, CSS, PHP, SQL, Javascript)
-			<br>Cartesia, a educational platformer designed to teach graphing (STEM Challenge Finalist 2013) 
-			<br>The New King, and 30+ other games for Salazar Games (C++)
-			<br>A mobile, photovoltaic-powered water purification system for the Third World
-			</p>
-		</div>
-		<div class="panel" align="left"
-		onclick="clickActive(this)">
+		<div class="panel" align="left" data-info="education"
+		onclick="clickActive(this)"
+		onmouseover="expandInfo(this)"
+		onmouseout="collapseInfo(this)">
 			<h2>Education</h2>
 			<p style="h:75px;">
 			<br>Sc.B in Computer Science/ Math, Brown University ‘18
 			<br>Studied Computer Science/ Math, Sonoma State University ‘14 (GPA 4.00)
 			</p>
 		</div>
-		<div class="panel" align="left"
-		onclick="clickActive(this)">
+		<div class="panel" align="left" data-info="references"
+		onclick="clickActive(this)"
+		onmouseover="expandInfo(this)"
+		onmouseout="collapseInfo(this)">
 			<h2>References</h2>
 			<p style="h:75px;">
 			<br>Deborah K. Smith, Data Scientist at Remote Sensing Systems - 707-545-2904 - smith@remss.com

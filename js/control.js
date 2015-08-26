@@ -16,13 +16,9 @@ function expandInfo(div) {
       div = $(div);
       paragraph = $(paragraph);
 
-      var divheight = div.height();
-      divheight=+divheight;
-      console.log(divheight);
       var parheight = paragraph.height();
       parheight=+parheight;
-      console.log(parheight);
-      div.height(divheight+parheight+26+'px');   
+      div.height(115+parheight+26+'px');   
 	//div.style.height = div.style.height + paragraph.style.height;
 	paragraph.fadeTo(1,1.0);
 	
@@ -41,6 +37,9 @@ function collapseInfo(div) {
 	//paragraph.style.height = "0px";
 	div.height("115px");
 	paragraph.fadeTo(1, 0.0);
-	
-	
 }
+
+/*
+
+
+*/
