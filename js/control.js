@@ -2,6 +2,7 @@ $(document).ready(function() {
 	var block = $('#header');
 	block.css('background-color', getRandomColor());
 	block.css('color', 'white');
+	tools.currList = getShuffled(tools.titleList);
 	setInterval(changeBlockColor, 7000);
 	setTimeout(function() {
 		setInterval(changeHeaderTitle, 7000);
@@ -10,43 +11,67 @@ $(document).ready(function() {
 
 function changeHeaderTitle() {
 	var title = $('#headerTitle');
-	var startStr = 'Let\'s create ';
+	var startStr = 'Let\'s ';
 	var endStr = '.';
-	var midStr = tools.titleList[randomRange(0, tools.titleList.length)];
+	tools.titleIndex++;
+	if (tools.titleIndex >= tools.currList.length) {
+		tools.currList = getShuffled(tools.titleList);
+		tools.titleIndex = 0;
+	}
+	var midStr = tools.currList[tools.titleIndex];
 	title.text(startStr + midStr + endStr);
 }
 
+function getShuffled(list) {
+	var list2 = [];
+	for(i = 0; i < list.length; i++) {
+		list2.push(list[i]);
+	}
 
+	var m = list2.length;
+	for (i = 0; i < m; i++) {
+		var n = i + randomRange(0, m - i);
+		var temp = list2[i];
+		list2[i] = list2[n];
+		list2[n] = temp;
+	}
+	return list2;
+}
+
+/////////////// USE SHUFFLING INSTEAD
 tools = {};
 
+tools.titleIndex = 0;
+tools.currList = [];
+
 tools.titleList = [
-'something beautiful',
-'something inspiring',
-'something unique',
-'a game to teach graphing',
-'a game to learn about vectors',
-'an app to share your stuff',
-'an app to teach martial arts',
-'an app to learn to dance',
-'a web puzzle game for a team',
-'new ways to share your stuff',
-'opportunities to see the world',
-'cheap solar water purifiers',
-'mappings for satellite data',
-'a stunning website',
-'new mathematical proofs',
-'data-driven fashion',
-'procedurally generated music',
-'location based artist promotion',
-'an ecofriendly teacher app',
-'a real life cooking game',
-'disease tracking through facebook',
-'a website to spread happiness',
-'neural network fraud detection',
-'animal based topographic mapping',
-'a climate action game',
-'mappings of knowledge',
-'decentralized security systems'
+'create something beautiful',
+'build something inspiring',
+'make something unique',
+'create a game to teach graphing',
+'create a game to learn about vectors',
+'build an app to share your stuff',
+'build an app to teach martial arts',
+'build an app to learn to dance',
+'create a web puzzle game for a team',
+'design new ways to share your stuff',
+'make opportunities to see the world',
+'build cheap solar water purifiers',
+'statistically map satellite data',
+'code a stunning website',
+'develop new mathematical proofs',
+'make procedurally generated music',
+'create data-driven fashion',
+'build location based artist promotion',
+'make an ecofriendly teacher app',
+'craft a real life cooking game',
+'track diseases through facebook',
+'create a website to spread happiness',
+'create neural network fraud detection',
+'create animal based topographic mapping',
+'develop a climate action game',
+'visually map academic subjects',
+'build decentralized security systems'
 ];
 
 function changeBlockColor() {
