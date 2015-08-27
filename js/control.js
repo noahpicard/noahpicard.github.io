@@ -1,12 +1,24 @@
+$(document).ready(function() {
+	var block = $('#header');
+	var color = Math.floor(Math.random() * 360);
+	var colorStr = 'hsl(' + color + ',50%,50%)';
+	block.css('background-color', colorStr);
+	block.css('color', 'white');
+
+});
+
+
+
 function clickActive(div) {
 	if (div.test) {
+		div.test = false;
 		collapseInfo(div);
 	} else {
+		div.test = true;
 		expandInfo(div);
 	}
 }
 function expandInfo(div) {
-	div.test = true;
 	//div = h2.parentNode;
 	var paragraph = div.getElementsByTagName("p")[0];
 	//height=height.replace("px","");
@@ -25,7 +37,9 @@ function expandInfo(div) {
 	//paragraph.style.height = +parheight+'px';
 }
 function collapseInfo(div) {
-	div.test = false;
+	if (div.test) {
+		return;
+	}
 	//div = h2.parentNode;
 	var paragraph = div.getElementsByTagName("p")[0];
 	div = $(div);
