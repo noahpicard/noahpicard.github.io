@@ -38,7 +38,6 @@ function getShuffled(list) {
 	return list2;
 }
 
-/////////////// USE SHUFFLING INSTEAD
 tools = {};
 
 tools.titleIndex = 0;
@@ -61,6 +60,7 @@ tools.titleList = [
 'code a stunning website',
 'develop new mathematical proofs',
 'make procedurally generated music',
+'build decentralized security systems',
 'create data-driven fashion',
 'build location based artist promotion',
 'make an ecofriendly teacher app',
@@ -71,7 +71,7 @@ tools.titleList = [
 'create animal based topographic mapping',
 'develop a climate action game',
 'visually map academic subjects',
-'build decentralized security systems'
+'craft an intuitive visual language'
 ];
 
 function changeBlockColor() {
@@ -101,28 +101,22 @@ function clickActive(div) {
 	}
 }
 function expandInfo(div) {
-	//div = h2.parentNode;
 	var paragraph = div.getElementsByTagName("p")[0];
-	//height=height.replace("px","");
-      //height=+height;
-      //change height
-      
+
       div = $(div);
       paragraph = $(paragraph);
 
       var parheight = paragraph.height();
       parheight=+parheight;
       div.height(115+parheight+26+'px');   
-	//div.style.height = div.style.height + paragraph.style.height;
+
 	paragraph.fadeTo(1,1.0);
 	
-	//paragraph.style.height = +parheight+'px';
 }
 function collapseInfo(div) {
 	if (div.test) {
 		return;
 	}
-	//div = h2.parentNode;
 	var paragraph = div.getElementsByTagName("p")[0];
 	div = $(div);
     paragraph = $(paragraph);
@@ -130,7 +124,6 @@ function collapseInfo(div) {
 	var divheight = div.height();
     divheight=+divheight;
 
-	//paragraph.style.height = "0px";
 	div.height("115px");
 	paragraph.fadeTo(1, 0.0);
 }
