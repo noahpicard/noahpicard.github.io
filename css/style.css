@@ -1,0 +1,336 @@
+
+/*
+	DOM CLASSES
+*/
+body {
+	margin:0px;
+	padding:0px;
+}
+
+h1 {
+	color: white;
+	font-family: "Montserrat", Helvetica, Arial;
+	text-decoration: none;
+}
+h2 {
+	color: white;
+	font-family: "Montserrat", Helvetica, Arial;
+	text-decoration: none;
+}
+
+h3 {
+	margin: 0;
+	padding: 0;
+	padding-bottom: 0.1em;
+	font-family: "Montserrat", Helvetica, Arial;
+	font-weight: 700;
+	line-height: 1em;
+	letter-spacing: 1px;
+	text-decoration: none;
+}
+
+h4 {
+	margin: 0;
+	padding: 0;
+	padding-bottom: 0.1em;
+	font-family: "Montserrat", Helvetica, Arial;
+	font-weight: 700;
+	line-height: 1em;
+	letter-spacing: 1px;
+	text-decoration: none;
+	color: #667;
+}
+
+p {
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height: 1.42857143;
+}
+
+/*
+20141012_160243.jpg // new york bay
+20150305_162826.jpg // snowy trees
+20150322_185713.jpg 
+20150522_141106.jpg
+20150522_141156.jpg // spinies
+20150522_141350.jpg // nettles
+20150522_141712.jpg // bark up tree
+
+20150522_141726.jpg // wish floater
+20150522_141752.jpg // bark wall (15% margin top)
+20150522_141810.jpg // reaching bauble plant
+20150522_141846.jpg // sawdust bark far
+20150522_141851.jpg // sawdust bark close
+20150522_141940.jpg // bark bridge
+20150522_141956.jpg // bark channel
+20150522_142024.jpg // bark crevasse
+20150522_142045.jpg // bark smooth
+20150522_142250.jpg // wood chop into warm
+20150522_142343.jpg // bark crevasse 2
+20150522_142404.jpg // bark hump
+20150522_142543.jpg // bark wave
+20150522_142531.jpg // bark bark
+20150522_142557.jpg // bark mound
+20150522_142917.jpg // mom sky
+20150522_143110.jpg // mom sky 2
+20150522_143215.jpg // alien plants
+20150522_143831.jpg // fennel 1
+20150522_143841.jpg // fennel 2
+20150522_144154.jpg // hidden moss
+20150522_144205.jpg // into log
+20150522_144426.jpg // grass at you
+20150522_144523.jpg // grass sideways
+
+20150522_145202.jpg // grass through bench
+20150627_192408.jpg // succulent
+20150705_104602.jpg // black white tree
+20150705_104904.jpg // ivy through tramp
+20150705_104920.jpg
+20150711_124729.jpg // through GGB to bay
+SAM_0023.JPG
+SAM_0028.JPG
+SAM_0086.JPG
+SAM_0172.JPG /*education
+SAM_0230.JPG
+SAM_0257.JPG // march skyscrapers
+
+
+20150322_185713.jpg // sunset car
+20150711_180900.jpg // tall church
+*/
+
+
+
+.imageFrame, .colorFrame {
+	position: relative;
+	width:100%;
+  	display: flex;
+  	justify-content: center;
+}
+
+.imageFrame {
+	height:800px;
+	background: bruh no-repeat center center; 
+  	-webkit-background-size: auto 100%;
+  	-moz-background-size: auto 100%;
+  	-o-background-size: auto 100%;
+  	background-size: auto 100%;
+  	background-size: cover;
+}
+
+.colorFrame {
+	min-height: 500px;/*800px;*/
+}
+
+.titleFrame {
+	align-self: center;
+	text-align: center;
+}
+
+.contentFrame {
+	width: 100%;
+	margin: 2em;
+	text-align: left;
+}
+
+.flexPanel {
+	width: 100%;
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: space-around;
+	align-content: space-between;*/
+
+}
+
+.linedPanel {
+	width:100%;
+	border-top: 1px solid white;
+	border-bottom: 1px solid white;
+}
+
+.thinPanel {
+	margin-right: auto;
+	margin-left: auto;
+	max-width: 800px;
+}
+
+.companyPanel {
+	margin:.5em;
+	margin-right: auto;
+	margin-left: auto;
+	max-width: 800px;
+	padding:20px;
+	min-height:160px;
+}
+
+.companyPanel>p {
+	color: white;
+}
+
+.projectPanel {
+	/*background-color: #9E9D9B;*/
+	background-color: white;
+	border-radius: .25em;
+	padding:20px;
+	margin:.5em;
+	min-height:160px;
+}
+
+.projectPic {
+	height:120px;
+	margin-right: 1em;
+	float: left;
+}
+
+.whiteText {
+	color: #eee;
+	font-size: 16px;
+}
+
+.muted {
+	font-weight: 500;
+	color: #667;
+}
+
+.date {
+	font-weight: 500;
+	color: #889;
+}
+
+.navbar.center .navbar-inner {
+    text-align: center;
+}
+
+.navbar.center .navbar-inner .nav {
+    display:inline-block;
+    float: none;
+}
+
+.footer {
+	position: absolute;
+	bottom: 20px;
+	right:20px;
+}
+
+.links>li>a {
+	font-family: "Bitter", Helvetica, Arial;
+	font-size: 24px;
+}
+
+.links>li>a:hover {
+	text-decoration: none;
+}
+
+.nav>li>a {
+	color: white;
+	font-family: "Bitter", Helvetica, Arial;
+	text-decoration: none;
+	font-size: 30px;
+	font-weight: 500;
+	text-shadow: 0 0 20px black;
+}
+
+.nav>li>a:hover {
+	background: none;
+	color: cornflowerblue;
+}
+
+
+/*
+	Unique Items
+*/
+
+#mainHeader>h1 {
+	color: white;
+	font-family: "Montserrat", Helvetica, Arial;
+	text-decoration: none;
+	font-size: 820%;
+	text-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+#mainHeader>.container-fluid {
+	width:100%;
+	color: white;
+}
+
+#bioPic {
+	float: left;
+	width: 200px;
+	margin-right: 1em;
+	margin-bottom: 1em;
+}
+
+#imgHeader {
+	background: url("../images/possible/20150522_144426.jpg") no-repeat center center; 
+	-webkit-background-size: auto 100%;
+  	-moz-background-size: auto 100%;
+  	-o-background-size: auto 100%;
+  	background-size: auto 100%;
+  	background-size: cover;
+}
+
+#colAbout{
+	background-color: rgb(92, 184, 92);
+	background-color: #71BA51;
+}
+
+#imgProjects {
+	background: url("../images/possible/20150522_141846.jpg") no-repeat center center; 
+	-webkit-background-size: auto 100%;
+  	-moz-background-size: auto 100%;
+  	-o-background-size: auto 100%;
+  	background-size: auto 100%;
+  	background-size: cover;
+}
+
+#colProjects{
+	background-color: #D98B3A;
+	/*background-color: #FF7416;*/
+}
+
+#imgEducation {
+	background: url("../images/possible/SAM_0172.JPG") no-repeat center center; 
+	-webkit-background-size: auto 100%;
+  	-moz-background-size: auto 100%;
+  	-o-background-size: auto 100%;
+  	background-size: auto 100%;
+  	background-size: cover;
+}
+
+#colEducation {
+	background-color: #00B5B5;
+	background-color: #64DDBB;
+}
+
+#imgMore {
+	background: url("../images/possible/SAM_0257.JPG") no-repeat center center; 
+	-webkit-background-size: auto 100%;
+  	-moz-background-size: auto 100%;
+  	-o-background-size: auto 100%;
+  	background-size: auto 100%;
+  	background-size: cover;
+}
+
+#colMore {
+	background-color: #BB3658;
+	/*background-color: #D33257;
+	background-color: #D8335B;
+	background-color: #0C545C;
+	background-color: #0F595E;
+	background-color: #F1C40F;
+	background-color: #C0BA78;
+	background-color: #6F532A;*/
+	background-color: #6C8784;
+
+
+}
+
+#copyright {
+	color: #ccc;
+}
+
+
+
+
+
+
+
