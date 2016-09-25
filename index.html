@@ -9,7 +9,6 @@
 	<link rel="shortcut icon" type="image/x-icon" href="images/NoahIcon.ico">
 	<script src="js/jquery.js"></script>
 	<script src="js/underscore.js"></script>
-	<script src="js/jquery.js"></script>
 	<script src="js/bootstrap.min.js"></script>
   <script src="js/control.js"></script>
 
@@ -59,11 +58,12 @@
   <div class="container-fluid" align="right">
     <div style="float:right;">
       
+      <a class="navbar-child menuChild" href="http://noahpicard.blogspot.com/"><img src="images/socialmedia/blogger7white.png" height="32px"/></a> 
       <a class="navbar-child menuChild" href="https://github.com/noahpicard"><img src="images/socialmedia/github13white.png" height="32px"/></a> 
       <a class="navbar-child menuChild" href="https://www.linkedin.com/in/noah-picard-48773470"><img src="images/socialmedia/linkedin12white.png" height="32px"/></a>
        
       <p id="copyright">
-        noah_picard@brown.edu - 707.974.0145<!--Copyright © 2015 Noah Picard-->
+        noah_picard@brown.edu - 707.974.0145<!--Copyright © 2016 Noah Picard-->
       </p>
     </div>
   </div>
@@ -77,17 +77,25 @@
 <div class="colorFrame" id="colAbout">
 
 <div class="contentFrame">
+<div class="row centerRow">
+  <div class="col-md-3 ">
+    <img id="bioPic" src="images/profile/intropic2.jpg" \>
+  </div>
+  <div class="col-md-9 midText">
+    <div>
+    <h1>Hi there! I'm Noah.</h1>
+    <h2>I'm a software developer, entrepreneur, and spoken poet based in Providence, RI.</h2>
+  </div>
+  </div>
+</div>
 
-<img id="bioPic" src="images/possible/intropic2.jpg" \>
-<h1>Hi there! I'm Noah.</h1>
-<h2>I'm a software developer, entrepreneur, and spoken poet based in Providence, RI.</h2>
-<p class="whiteText">
+<p class="whiteText centerText">
 We've reached this incredible point in history where technology encompasses most of the world, which means we have the opportunity to revolutionize industry, economy, politics, and the way we treat our planet. By learning from other cultures and using the data poured every day into servers worldwide, we can build sustainable systems to improve everyone's quality of life. <br> 
 I intend to do exactly that.
 
 <br><br>
 
-I'm a sophomore at Brown University studying Computer Science and Math. I grew up in Frogsong, a Cohousing community in Cotati CA, where 30 families eat, play, and live together as a village. I learned to code at the age of 10, and have been building things ever since.
+I'm a junior at Brown University studying Computer Science and Math. I grew up in Frogsong, a Cohousing community in Cotati CA, where 30 families eat, play, and live together as a village. I learned to code at the age of 10, and have been building things ever since.
 
 <br><br>
 
@@ -137,9 +145,31 @@ I'm a sophomore at Brown University studying Computer Science and Math. I grew u
 <div class="projectPanel col-md-5 col-sm-12">
 
 <p>
+  <img src="images/projects/BookButler.png" class="projectPic">
+ 
+  <h3>Book Butler</h3> Tired of googling every book title? Meet your personal Book Butler. Book Butler turns book names into <a href="http://bookbutler.org/">clickable links</a>, so you can start reading that much faster.
+  <br><span class="muted">This was made using: Javascript, Jquery, Amazon API</span>
+</p>
+</div>
+
+<div class="projectPanel col-md-5 col-sm-12">
+
+<p>
+  <img src="images/projects/ElizaAvidan.png" class="projectPic">
+ 
+  <h3>Eliza Avidan</h3>(In progress)<br> Eliza Avidan is a poet, who posts daily experimental poems to a <a href="http://elizaavidan.tumblr.com/">blog</a>.
+  <br><span class="muted">This was made using: Python, Tumblr API</span>
+</p>
+</div>
+
+<a class="location" name="iOS"></a>
+
+<div class="projectPanel col-md-5 col-sm-12">
+
+<p>
   <img src="images/projects/OurStory.png" class="projectPic">
  
-	<h3>OurStory</h3>(In progress)<br> OurStory is an iOS app where you and your friends film/compile 10 second videos to make collaborative stories. (HackMIT Best Use of Parse API &amp; 1517 Grant Recipient)
+	<h3>OurStory</h3> OurStory is an iOS app where you and your friends film/compile 10 second videos to make collaborative stories. (HackMIT Best Use of Parse API &amp; 1517 Grant Recipient)
   <br><span class="muted">This was made using: Swift, Javascript, Parse API</span>
 </p>
 </div>
@@ -158,7 +188,7 @@ I'm a sophomore at Brown University studying Computer Science and Math. I grew u
 <p>
   <img src="images/projects/UNeedPreview.png" class="projectPic">
 	
-  <h3>UNeed</h3> (In progress)<br> <a href="http://uneed.meteor.com/">UNeed</a> is a web app providing sharing and borrowing services in local communities. (<a href="http://devpost.com/software/uneed">Hack@Brown Best Real World App</a>)
+  <h3>UNeed</h3> <a href="http://uneed.meteor.com/">UNeed</a> is a web app providing sharing and borrowing services in local communities. (<a href="http://devpost.com/software/uneed">Hack@Brown Best Real World App</a>)
   <br><span class="muted">This was made using: Javascript, Meteor, Google Maps API</span></p>
 </div>
 
@@ -239,6 +269,7 @@ I'm a sophomore at Brown University studying Computer Science and Math. I grew u
     <ul class="nav navbar-nav">
       <li class="active"><a href="#Employment">Employment</a></li>
       <li><a href="#Education">Education</a></li>
+      <li><a target="_" href="Resume%20-%20Noah%20Picard.pdf">Resume</a></li>
     </ul>
   </div>
 </nav>
@@ -258,12 +289,38 @@ I'm a sophomore at Brown University studying Computer Science and Math. I grew u
 <div class="linedPanel">
 <div class="companyPanel">
 <p>
-  <img src="images/companies/Brown.jpg" class="projectPic">
+  <img src="images/companies/Pinterest.jpg" class="projectPic">
+ 
+<h3>Pinterest</h3> 
+<h4>Software Engineering Contractor <span class="date">July 2016 – Sept 2016</span></h4>
+Developed content-focused new user emails while improving frameworks for selection algorithm testing.
+Wrote database crawler to convert system-specific new user signals to system-agnostic signals for entire user database.
+</p>
+</div>
+</div>
+<div class="linedPanel">
+<div class="companyPanel">
+<p>
+  <img src="images/companies/Highlight.png" class="projectPic">
+ 
+<h3>Highlight</h3> 
+<h4>Software Engineering Intern <span class="date">May 2016 – July 2016</span></h4>
+Improved image displays for user suggestions in iOS photo-sharing app.
+Open-sourced the lightweight iOS database framework, <a href="https://github.com/mathcamp/lightbase">LightBase</a>.
+Transitioned through acquisition of Highlight by Pinterest.
+</p>
+</div>
+</div>
+<div class="linedPanel">
+<div class="companyPanel">
+<p>
+  <img src="images/companies/Brown.png" class="projectPic">
  
 <h3>Brown UPOD Lab</h3> 
-<h4>Researcher <span class="date">Jan 2015 – present</span></h4>
-Investigating Embedded Home Systems<br>
-Conducting studies on the integration of IoT technology into common households, while developing interfaces for user communication with home systems, which include artificial intelligence and machine learning usage to affect temperature, lighting, alarm systems, and appliances. 
+<h4>Researcher <span class="date">Jan 2015 – May 2016</span></h4>
+Investigated Embedded Home Systems<br>
+Conducting studies on the integration of IoT technology into common households, while developing interfaces for user communication with home systems, to affect temperature, lighting, alarm systems, and appliances. Published in CHI 2016 and ACM.
+
 </p>
 </div>
 </div>
@@ -271,7 +328,7 @@ Conducting studies on the integration of IoT technology into common households, 
 <div class="linedPanel">
 <div class="companyPanel">
 <p>
-  <img src="images/companies/Enphase.jpg" class="projectPic">
+  <img src="images/companies/Enphase.png" class="projectPic">
 
 <h3>Enphase Energy</h3> 
 <h4>Software Embedded Intern <span class="date">Jun – Aug 2015</span></h4>
@@ -288,7 +345,9 @@ Developed software and user interfaces loaded onto the Envoy system, now used by
 <h3>Picard Web Design</h3>
 <h4>Freelance Web Designer <span class="date">Dec 2013 – Jul 2015</span></h4>
 Developed Informative company Websites<br>
-Worked to design and build company websites for global executive search Raymond International, Nancy Lundy Doula Services, and Heather Picard (Life Coach). Mentored by graphic designer Daya Ceglia.
+Designed and built company websites for <a href="http://everett-solutions.com/">Everett Solutions International Executive Search</a>, <a href="http://www.adoulaspromise.com/">Nancy Lundy Doula Services</a>, and <a href="http://heatherpicard.com/">Heather Picard (Life Coach)</a>. Mentored by graphic designer Daya Ceglia.
+Developed <a href="http://sfma-app.herokuapp.com/">SFMA diagnostic app</a> for Performance Physical Therapy, RI.
+
 </p>
 </div>
 </div>
@@ -296,7 +355,7 @@ Worked to design and build company websites for global executive search Raymond 
 <div class="linedPanel">
 <div class="companyPanel">
 <p>
-  <img src="images/companies/Brown.jpg" class="projectPic">
+  <img src="images/companies/Brown.png" class="projectPic">
 
 <h3>Brown University CS</h3>
 <h4>Software Designer <span class="date">Dec 2014 – Jan 2015</span></h4>
@@ -354,7 +413,7 @@ Collected data for competitor analysis and transferred site data for investment 
 <div class="flexPanel">
 <div class="projectPanel col-md-5">
 <p>
-  <img src="images/companies/Brown.jpg"  class="projectPic">
+  <img src="images/companies/Brown.png"  class="projectPic">
   
 <h3>Brown University</h3>
 <h4>Sc. B Comp Sci/ Math <span class="date">2014 – 2018</span></h4><br>
@@ -366,8 +425,12 @@ Collected data for competitor analysis and transferred site data for investment 
       <li>Accelerated Intro to Comp Sci</li>
       <li>Software Engineering</li>
       <li>Computer Systems</li>
-      <li>Logic for Hackers</li>
+      <li>Logic for Systems</li>
       <li>Models of Computation</li>
+      <li>Probability and Computing</li>
+      <li>Data Science</li>
+      <li>Design/Analysis of Algorithms</li>
+      <li>User Interface and User Experience</li>
     </ul>
   </li>
 
@@ -376,6 +439,7 @@ Collected data for competitor analysis and transferred site data for investment 
       <li>Abstract Algebra</li>
       <li>Topics in Abstract Algebra</li>
       <li>Cryptography</li>
+      <li>Number Theory</li>
     </ul>
   </li>
   <li>Other
@@ -386,6 +450,10 @@ Collected data for competitor analysis and transferred site data for investment 
       <li>Cave Writing</li>
       <li>Modern Architecture</li>
       <li>Advanced Poetry</li>
+      <li>Digital Media</li>
+      <li>Advanced Digital Language Arts</li>
+      <li>Dance Composition</li>
+      <li>Planning Sustainable Cities</li>
     </ul>
   </li>
 <ul>
@@ -470,7 +538,9 @@ Collected data for competitor analysis and transferred site data for investment 
   <li><a href="http://www.openingthebook.com/whichbook/">If you're looking for a good book</a></li>
   <li><a href="https://codyhouse.co/">A great resource for HTML, CSS, JS pieces</a></li>
   <li><a href="http://iammorley.squarespace.com/">Curious street art</a></li>
+  <li><a href="http://everynoise.com/engenremap.html">Every genre of music, visualized and listen-able</a></li>
   <li><a href="https://www.shortoftheweek.com/2014/07/28/a-truncated-story-of-infinity/">A wonderful short film in the multiverse</a></li>
+  <br><br><br>
 
 </ul>
 
@@ -481,11 +551,12 @@ Collected data for competitor analysis and transferred site data for investment 
   <div class="container-fluid" align="right">
     <div style="float:right;">
       
+      <a class="navbar-child menuChild" href="http://noahpicard.blogspot.com/"><img src="images/socialmedia/blogger7white.png" height="32px"/></a> 
       <a class="navbar-child menuChild" href="https://github.com/noahpicard"><img src="images/socialmedia/github13white.png" height="32px"/></a> 
       <a class="navbar-child menuChild" href="https://www.linkedin.com/in/noah-picard-48773470"><img src="images/socialmedia/linkedin12white.png" height="32px"/></a>
        
       <p id="copyright">
-        noah_picard@brown.edu - 707.974.0145<!--Copyright © 2015 Noah Picard-->
+        noah_picard@brown.edu - 707.974.0145<!--Copyright © 2016 Noah Picard-->
       </p>
     </div>
   </div>

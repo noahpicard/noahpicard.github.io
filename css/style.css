@@ -191,8 +191,29 @@ SAM_0257.JPG // march skyscrapers
 }
 
 .whiteText {
-	color: #eee;
+	color: #fff;
 	font-size: 16px;
+}
+
+.midText {
+	display: flex;
+	align-items: center;
+	height: 100%;
+	min-height: 240px;
+}
+
+.centerText {
+	max-width: 800px;
+	margin-right: auto;
+	margin-left: auto;
+	margin-top: 1em;
+}
+
+.centerRow {
+	max-width: 1120px;
+	padding: 0px;
+	margin-right: auto;
+	margin-left: auto;
 }
 
 .muted {
@@ -282,9 +303,9 @@ SAM_0257.JPG // march skyscrapers
 
 #bioPic {
 	float: left;
-	width: 200px;
-	margin-right: 1em;
-	margin-bottom: 1em;
+	width: 100%;
+	max-width: 300px;
+	margin:.5em;
 }
 
 #imgHeader {
@@ -360,6 +381,72 @@ SAM_0257.JPG // march skyscrapers
 #copyright {
 	color: #ccc;
 }
+
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen 
+and (min-device-width : 320px) 
+and (max-device-width : 480px) {
+
+#mainHeader>h1 {
+	font-size: 500%;
+}
+
+}
+
+/* Smartphones (landscape) ----------- */
+@media only screen 
+and (min-width : 321px) {
+/* Styles */
+}
+
+/* Smartphones (portrait) ----------- */
+@media only screen 
+and (max-width : 320px) {
+/* Styles */
+}
+
+/* iPads (portrait and landscape) ----------- */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) {
+/* Styles */
+}
+
+/* iPads (landscape) ----------- */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : landscape) {
+/* Styles */
+}
+
+/* iPads (portrait) ----------- */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : portrait) {
+/* Styles */
+}
+
+/* Desktops and laptops ----------- */
+@media only screen 
+and (min-width : 1224px) {
+/* Styles */
+}
+
+/* Large screens ----------- */
+@media only screen 
+and (min-width : 1824px) {
+/* Styles */
+}
+
+/* iPhone 4 ----------- */
+@media
+only screen and (-webkit-min-device-pixel-ratio : 1.5),
+only screen and (min-device-pixel-ratio : 1.5) {
+/* Styles */
+}
+
 
 
 
