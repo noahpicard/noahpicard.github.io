@@ -183,6 +183,7 @@ SAM_0257.JPG // march skyscrapers
   	-o-transition: max-height 1s; 
   	transition: max-height 1s;  
   	overflow: hidden;
+  	flex-grow: 1;
 }
 
 .projectPic {
