@@ -1,0 +1,520 @@
+/*
+font-family: 'Dancing Script', cursive;
+font-family: 'Pacifico', cursive;
+font-family: 'Satisfy', cursive;
+font-family: 'Great Vibes', cursive;
+font-family: 'Homemade Apple', cursive;
+*/
+
+
+/*
+	DOM CLASSES
+*/
+body {
+	margin:0px;
+	padding:0px;
+	background: #71BA51;
+	background: url("../backgrounds/stock-birds.jpg");
+}
+
+
+h1 {
+	color: white;
+	font-family: 'Dancing Script', cursive;
+	text-decoration: none;
+}
+h2 {
+	color: white;
+	font-family: "Montserrat", Helvetica, Arial;
+	text-decoration: none;
+}
+
+h3 {
+	margin: 0;
+	padding: 0;
+	padding-bottom: 0.1em;
+	font-family: "Montserrat", Helvetica, Arial;
+	font-weight: 700;
+	line-height: 1em;
+	letter-spacing: 1px;
+	text-decoration: none;
+}
+
+h4 {
+	margin: 0;
+	padding: 0;
+	padding-bottom: 0.1em;
+	font-family: "Montserrat", Helvetica, Arial;
+	font-weight: 700;
+	line-height: 1em;
+	letter-spacing: 1px;
+	text-decoration: none;
+	color: #667;
+}
+
+p {
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height: 1.42857143;
+}
+
+
+
+
+.imageFrame, .colorFrame {
+	position: relative;
+	width:100%;
+  	display: flex;
+  	justify-content: center;
+}
+
+.imageFrame {
+	/*height:800px;*/
+	flex-direction: column;
+	background: bruh no-repeat center center; 
+  	-webkit-background-size: auto 100%;
+  	-moz-background-size: auto 100%;
+  	-o-background-size: auto 100%;
+  	background-size: auto 100%;
+  	background-size: cover;
+}
+
+.colorFrame {
+	min-height: 500px;/*800px;*/
+}
+
+.titleFrame {
+	align-self: center;
+	text-align: center;
+}
+
+.contentFrame {
+	width: 100%;
+	margin: 2em;
+	text-align: left;
+}
+
+.flexPanel {
+	width: 100%;
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: space-around;
+	align-content: space-between;*/
+
+}
+
+.linedPanel {
+	width:100%;
+	border-top: 1px solid white;
+	border-bottom: 1px solid white;
+}
+
+.thinPanel {
+	margin-right: auto;
+	margin-left: auto;
+	max-width: 800px;
+}
+
+.companyPanel {
+	margin:.5em;
+	margin-right: auto;
+	margin-left: auto;
+	max-width: 800px;
+	padding:20px;
+	min-height:160px;
+	background-color: white;
+	border-radius: .25em;
+}
+
+.companyPanel>p {
+	color: white;
+}
+
+.projectPanel {
+	/*background-color: #9E9D9B;*/
+	background-color: white;
+	border-radius: .25em;
+	padding:20px;
+	margin:.5em;
+	min-height:160px;
+	-webkit-transition: max-height 1s; 
+  	-moz-transition: max-height 1s; 
+  	-ms-transition: max-height 1s; 
+  	-o-transition: max-height 1s; 
+  	transition: max-height 1s;  
+  	overflow: hidden;
+  	flex-grow: 1;
+}
+
+.projectPic {
+	height:120px;
+	margin-right: 1em;
+	float: left;
+}
+
+.whiteText {
+	color: #fff;
+	font-size: 16px;
+}
+
+.midText {
+	display: flex;
+	align-items: center;
+	height: 100%;
+	min-height: 240px;
+}
+
+.centerText {
+	max-width: 800px;
+	margin-right: auto;
+	margin-left: auto;
+	margin-top: 1em;
+}
+
+.centerRow {
+	max-width: 1120px;
+	padding: 0px;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+.muted {
+	font-weight: 500;
+	color: #667;
+}
+
+.date {
+	font-weight: 500;
+	color: #889;
+}
+
+.navbar.center .navbar-inner {
+    text-align: center;
+}
+
+.navbar.center .navbar-inner .nav {
+    display:inline-block;
+    float: none;
+}
+
+.footer {
+	position: absolute;
+	bottom: 20px;
+	right: 20px;
+}
+
+.seeMore {
+	font-family: "Bitter", Helvetica, Arial;
+	font-size: 18px;
+}
+
+.seeMore:hover {
+	text-decoration: none;
+}
+
+.expand {
+	-webkit-transition: max-height 1s; 
+  	-moz-transition: max-height 1s; 
+  	-ms-transition: max-height 1s; 
+  	-o-transition: max-height 1s; 
+  	transition: max-height 1s;  
+  	overflow: hidden;
+	max-height: 0px;
+}
+
+.links>li>a {
+	font-family: "Bitter", Helvetica, Arial;
+	font-size: 24px;
+}
+
+.links>li>a:hover {
+	text-decoration: none;
+}
+
+.nav>li>a {
+	color: white;
+	font-family: "Bitter", Helvetica, Arial;
+	text-decoration: none;
+	font-size: 30px;
+	font-weight: 500;
+	text-shadow: 0 0 20px black;
+}
+
+.nav>li>a:hover {
+	background: none;
+	color: cornflowerblue;
+}
+
+.noselect {
+	cursor: default;
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+
+::selection {
+    background-color: #71BA51;
+    color: #fff;
+}
+::-moz-selection {
+    background-color: #71BA51;
+    color: #fff;
+}
+
+
+/*
+	Unique Items
+*/
+
+#mainHeader>h1 {
+	color: white;
+	font-family: 'Dancing Script', cursive;
+	text-decoration: none;
+	font-size: 820%;
+	text-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+#mainHeader>.container-fluid {
+	width:100%;
+	color: white;
+}
+
+#bioPic {
+	float: left;
+	width: 100%;
+	max-width: 300px;
+	margin:.5em;
+}
+
+#imgHeader {
+	background: url("../images/noahamelielean.jpg") no-repeat center center; 
+	-webkit-background-size: auto 100%;
+  	-moz-background-size: auto 100%;
+  	-o-background-size: auto 100%;
+  	background-size: auto 100%;
+  	background-size: cover;
+  	height: 95vh;
+  	margin-bottom: 2em;
+}
+
+#colAbout{
+	background-color: rgb(92, 184, 92);
+	background-color: #71BA51;
+}
+
+#imgProjects {
+	background: url("../images/possible/20150522_141846.jpg") no-repeat center center; 
+	-webkit-background-size: auto 100%;
+  	-moz-background-size: auto 100%;
+  	-o-background-size: auto 100%;
+  	background-size: auto 100%;
+  	background-size: cover;
+}
+
+#colProjects{
+	background-color: #D98B3A;
+	/*background-color: #FF7416;*/
+}
+
+#imgEducation {
+	background: url("../images/possible/SAM_0172.JPG") no-repeat center center; 
+	-webkit-background-size: auto 100%;
+  	-moz-background-size: auto 100%;
+  	-o-background-size: auto 100%;
+  	background-size: auto 100%;
+  	background-size: cover;
+}
+
+#colEducation {
+	background-color: #00B5B5;
+	background-color: #64DDBB;
+	background-color: #3498db;
+}
+
+#imgMore {
+	background: url("../images/possible/SAM_0257.JPG") no-repeat center center; 
+	-webkit-background-size: auto 100%;
+  	-moz-background-size: auto 100%;
+  	-o-background-size: auto 100%;
+  	background-size: auto 100%;
+  	background-size: cover;
+}
+
+#colMore {
+	background-color: #BB3658;
+	/*background-color: #D33257;
+	background-color: #D8335B;
+	background-color: #0C545C;
+	background-color: #0F595E;
+	background-color: #F1C40F;
+	background-color: #C0BA78;
+	background-color: #6F532A;*/
+	background-color: #6C8784;
+	background-color: #BB3658;
+	background-color: #E22211;
+	background-color: #ecf0f1;
+	background-color: #2c3e50;
+
+
+}
+
+#copyright {
+	color: #ccc;
+}
+
+.child {
+	flex-shrink: 1;
+	margin: 2em;
+	box-shadow: 0px 1px 2px #333;
+	border-radius: 2px;
+	border: 1px solid #999;
+	background: #DEEFE9;
+}
+
+.image {
+	max-width: 100%;
+	max-height: 400px;
+	border-radius: 2px;
+}
+
+.video-child {
+	width: 100%;
+	height: 600px;
+	border: 1px solid #F26;
+}
+
+.video {
+	width: 100%;
+	height: 100%;
+	border-radius: 2px;
+}
+
+.image-flow {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: space-around;
+	justify-items: space-around;
+}
+
+.intro-heart {
+	color: #F26;
+	font-size: 24px;
+	text-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.text-heart {
+	color: #F26;
+	font-size: 18px;
+}
+
+.poem-child {
+	box-shadow: none;
+	border-radius: 0px;
+	border: none;
+	background: rgba(0,0,0,0);
+	flex: 1 100%;
+	flex-shrink: 1;
+	margin: 2em;
+	display: flex;
+	justify-content: center;
+}
+
+.poem-box {
+	margin-left: auto;
+	margin-right: auto;
+	box-shadow: 0px 1px 2px #333;
+	border-radius: 2px;
+	border: 1px solid #999;
+	background: #DEEFE9;
+	padding: 3em;
+	background: white;
+	display: inline-block;
+}
+
+.poem {
+	font-family: 'Sedgwick Ave', sans-serif;
+	font-size: 16px;
+	color: #333;
+	letter-spacing: 1px;
+}
+
+.center {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen 
+and (min-device-width : 320px) 
+and (max-device-width : 480px) {
+
+#mainHeader>h1 {
+	font-size: 500%;
+}
+
+}
+
+/* Smartphones (landscape) ----------- */
+@media only screen 
+and (min-width : 321px) {
+/* Styles */
+}
+
+/* Smartphones (portrait) ----------- */
+@media only screen 
+and (max-width : 320px) {
+/* Styles */
+}
+
+/* iPads (portrait and landscape) ----------- */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) {
+/* Styles */
+}
+
+/* iPads (landscape) ----------- */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : landscape) {
+/* Styles */
+}
+
+/* iPads (portrait) ----------- */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : portrait) {
+/* Styles */
+}
+
+/* Desktops and laptops ----------- */
+@media only screen 
+and (min-width : 1224px) {
+/* Styles */
+}
+
+/* Large screens ----------- */
+@media only screen 
+and (min-width : 1824px) {
+/* Styles */
+}
+
+/* iPhone 4 ----------- */
+@media
+only screen and (-webkit-min-device-pixel-ratio : 1.5),
+only screen and (min-device-pixel-ratio : 1.5) {
+/* Styles */
+}
+
+
+
+
+
+
+
+
