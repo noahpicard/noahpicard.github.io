@@ -1,4 +1,4 @@
-var imageFolder = "../images/";
+var imageFolder = "./images/";
 
 var content = []
 
@@ -19,7 +19,7 @@ var videoList = [
 
 var getImages = function() {
 	$.ajax({
-	    url: imageFolder,
+	    url: 'js/get_files.php',
 	    success: resultImages
 	});
 }
@@ -44,12 +44,20 @@ var getPoems = function() {
 	renderContent(content);
 }
 
+var checkImage = function(i, val) {
+	if( val.match(/\.(jpe?g|png|gif)$/) ) { 
+    	content.push(["image", val]);
+    } 
+}
+
 var resultImages = function(data) {
-	$(data).find("a").attr("href", function (i, val) {
-        if( val.match(/\.(jpe?g|png|gif)$/) ) { 
-        	content.push(["image", val]);
-        } 
-    });
+	console.log(data);
+	var split = data.split(",");
+	for (i in split) {
+		checkImage(i, split[i]);
+	}
+
+	//$(data).find("a").attr("href", checkImage);
     getVideos();
 }
 
@@ -124,6 +132,31 @@ she angers the trail flares, splashes <br/>
 her face so my eyes cannot wander<br/>
 `;
 
+var poem4 = `
+Spread into follicles, phallic fallacy<br/>
+fantastical forerunner, escape<br/>
+artist escaping himself, waiting <br/>
+handcuffed, blindfolded, blind-folded,<br/> 
+wrapped in silk and sinew, a seconds<br/>
+panic and slippery slope. There is<br/>
+The eye widen, the toe curl, the chain sawed<br/>
+but the tongue tied, everest everest, ever<br/>
+resting every resisting arrest and resisting<br/>
+a rest. His lips are lisped, listless, lit and lifted, <br/>
+his lashes like the licks of leaves, leaving little <br/>
+lost to the limbic, lithe lyrically, lyric calling<br/>
+lyrical he weeps laughably laughable laughable<br/>
+laughable laughable laughable laughable languid<br/>
+laughable laughable lapsing laughable follicles <br/>
+laughable curling tongue laughable laughable slippery<br/>
+panic slick panic laughable lisped laughable blind<br/>
+laughable escape blind escape handcuffed<br/>
+forerunner resisting everest, leaving little <br/>
+licks, calling limbic sinew limbic folded<br/>
+laughable laughable phallic fantasy<br/>
+
+`
+
 var poem2 = `
 I break the sheet<br/>
 In Vancouver the trains run on the sky<br/>
@@ -172,7 +205,7 @@ To him we must be a landscape<br/>
 Something (immobile) to be barreled through<br/>
 `;
 
-var poems = [intro, poem1, poem2, poem3];
+var poems = [intro, poem1, poem4,  poem2, poem3];
 
 
 
