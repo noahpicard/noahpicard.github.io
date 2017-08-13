@@ -109,7 +109,7 @@ SAM_0257.JPG // march skyscrapers
 }
 
 .imageFrame {
-	/*height:800px;*/
+	height:100vh;
 	flex-direction: column;
 	background: bruh no-repeat center center; 
   	-webkit-background-size: auto 100%;
