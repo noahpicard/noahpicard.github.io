@@ -48,7 +48,6 @@ function startGame() {
     field.start();
     
     create(new groundObj(960, 10, 0, 630));
-
 }
 
 
