@@ -1,0 +1,247 @@
+/*
+	DOM CLASSES
+*/
+body {
+	margin:0px;
+	padding:0px;
+	background: white;
+	font-size: 11px;
+	hyphens: auto;
+	color: #000;
+}
+
+h1 {
+	color: white;
+	font-family: "Montserrat", Helvetica, Arial;
+	text-decoration: none;
+}
+h2 {
+	color: white;
+	font-family: "Montserrat", Helvetica, Arial;
+	text-decoration: none;
+}
+
+h3 {
+	margin: 0;
+	padding: 0;
+	padding-bottom: 0.1em;
+	font-family: "Montserrat", Helvetica, Arial;
+	font-weight: 700;
+	line-height: 1em;
+	letter-spacing: 1px;
+	text-decoration: none;
+}
+
+h4 {
+	margin: 0;
+	padding: 0;
+	padding-bottom: 0.1em;
+	font-family: "Montserrat", Helvetica, Arial;
+	font-weight: 700;
+	line-height: 1em;
+	letter-spacing: 1px;
+	text-decoration: none;
+	color: #667;
+}
+
+span {
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height: 1.42857143;
+}
+
+.spacerFull {
+	width: 1em;
+	height: 1em;
+}
+
+.logotypeBox {
+	position: fixed;
+	top: 55px;
+	left: 35px;
+	width: 40px;
+}
+
+.logotype {
+	width: 100%;
+}
+
+.sideLine {
+	position: fixed;
+	top: 3em;
+	left: 70px;
+	height: calc(100% - 6em);
+	width: 0px;
+	background-color: #000;
+}
+
+.content {
+	position: relative;
+	margin-left: 93px;
+	margin-top: 30px;
+	margin-bottom: 30px;
+	width: calc(100% - 95px);
+	max-width: 1200px;
+	padding-left: 18px;
+	padding-top: 30px;
+	padding-bottom: 30px;
+	border-left: solid 2px black;
+	padding-right: 8px;
+}
+
+.column-2 {
+	display: flex;
+	flex-flow: row wrap;
+}
+
+.column-2 > .column {
+	flex-grow: 1;
+	min-width: 200px;
+	max-width: 300px;
+	margin-right: 1em;
+}
+
+.experience {
+	margin-top: 50px;
+}
+
+.sectionTitle {
+	font-weight: bold;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.company {
+	font-weight: bold;
+	text-transform: uppercase;
+	font-variant: small-caps;
+	font-size: 100%;
+}
+
+.location {
+	font-style: italic;
+	font-size: 85%;
+}
+
+.date {
+	font-weight: bold;	
+	font-size: 85%;
+} 
+
+.position {
+	font-style: italic;
+}
+
+.experienceItem {
+	margin-bottom: 2em;
+}
+
+.educationBox { 
+	display: flex;
+	flex-flow: row wrap;
+}
+
+.educationBox > div { 
+	margin-right: 1em;
+}
+
+.titleName {
+	font-weight: bold;
+	text-transform: uppercase;
+	letter-spacing: 3px;
+}
+
+.titleProfession {
+	font-weight: bold;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	color: rgba(0,0,0,0.50);
+}
+
+.contact {
+	color: rgba(0,0,0,0.50);
+}
+
+
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen 
+and (min-device-width : 320px) 
+and (max-device-width : 480px) {
+
+}
+
+/* Smartphones (landscape) ----------- */
+@media only screen 
+and (min-width : 321px) {
+/* Styles */
+}
+
+/* Smartphones (portrait) ----------- */
+@media only screen 
+and (max-width : 320px) {
+/* Styles */
+
+	.logotypeBox {
+		position: absolute;
+		top: 65px;
+		left: 18px;
+		width: 40px;
+	}
+
+	.content {
+		position: relative;
+		margin-left: 0px;
+		margin-top: 30px;
+		margin-bottom: 30px;
+		width: calc(100% - 0px);
+		padding-top: 120px;
+		padding-right: 8px;
+	}
+
+}
+
+/* iPads (portrait and landscape) ----------- */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) {
+/* Styles */
+}
+
+/* iPads (landscape) ----------- */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : landscape) {
+/* Styles */
+}
+
+/* iPads (portrait) ----------- */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : portrait) {
+/* Styles */
+}
+
+/* Desktops and laptops ----------- */
+@media only screen 
+and (min-width : 1224px) {
+/* Styles */
+}
+
+/* Large screens ----------- */
+@media only screen 
+and (min-width : 1824px) {
+/* Styles */
+}
+
+/* iPhone 4 ----------- */
+@media
+only screen and (-webkit-min-device-pixel-ratio : 1.5),
+only screen and (min-device-pixel-ratio : 1.5) {
+/* Styles */
+}
+
+
+
+
+

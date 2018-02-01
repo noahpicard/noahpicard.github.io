@@ -326,7 +326,7 @@ SAM_0257.JPG // march skyscrapers
 #bioPic {
 	float: left;
 	width: 100%;
-	max-width: 300px;
+	//max-width: 300px;
 	margin:.5em;
 }
 
@@ -384,13 +384,6 @@ SAM_0257.JPG // march skyscrapers
 
 #colMore {
 	background-color: #BB3658;
-	/*background-color: #D33257;
-	background-color: #D8335B;
-	background-color: #0C545C;
-	background-color: #0F595E;
-	background-color: #F1C40F;
-	background-color: #C0BA78;
-	background-color: #6F532A;*/
 	background-color: #6C8784;
 	background-color: #BB3658;
 	background-color: #E22211;
