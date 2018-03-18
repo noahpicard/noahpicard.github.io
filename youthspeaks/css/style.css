@@ -129,7 +129,7 @@ a {
 
 .subtitle {
 	font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-	max-width: 500px;
+	max-width: 600px;
 	margin: 0em 0em 0em 0em;
 }
 
@@ -138,10 +138,14 @@ a {
 	font-weight: 300;
 }
 
+.story {
+	max-width: 600px;
+}
+
 .story-image {
 	float: left;
-	max-height: 300px;
-	max-width: 300px;
+	max-height: 200px;
+	max-width: 150px;
 	margin: 0 1em 1em 0;
 }
 
