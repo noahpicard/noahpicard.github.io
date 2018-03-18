@@ -1,0 +1,303 @@
+body {
+  background: #f6f6f6;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;  
+  font-size: 16px;
+  margin: 0px;
+  padding: 0px;
+  color: #333;
+}
+
+h1, h2, h3 {
+	text-align: center;
+}
+
+h1 {
+  font-size: 20px;
+  text-align: center;
+}
+
+h2 {
+	font-size: 150%;
+}
+
+h3 {
+ 	font-size: 20px;
+ 	text-align: center;
+}
+
+p {
+	text-align: left;
+	margin: 1em 0px;
+	max-width: 600px;
+}
+
+li {
+	margin: 1em 0px;
+	max-width: 600px;
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 960px;
+}
+
+.panel {
+	background: #FFFFFF;
+	box-shadow: 0 1px 2px #999;
+	padding: 1em;
+	border-radius: 3px;
+}
+
+.center {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-flow: column;
+}
+
+.navbar {
+	background-color: #fff;
+	display: flex;
+	z-index: 1;
+}
+
+.navitem {
+	padding-top: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+	padding-right: 20px;
+	min-width: 20px;
+	display: flex;
+	align-items: middle;
+	justify-content: middle;
+}
+
+.green {
+	color: #00bb00;
+}
+
+.blue {
+	color: #00bbbb;
+}
+
+.panel.blue-grad {
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#87e0fd+0,53cbf1+40,05abe0+100 */
+	background: rgb(135,224,253); /* Old browsers */
+	background: -moz-linear-gradient(-45deg,  rgba(135,224,253,1) 0%, rgba(83,203,241,1) 40%, rgba(5,171,224,1) 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(-45deg,  rgba(135,224,253,1) 0%,rgba(83,203,241,1) 40%,rgba(5,171,224,1) 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(135deg,  rgba(135,224,253,1) 0%,rgba(83,203,241,1) 40%,rgba(5,171,224,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+}
+
+.bold {
+	font-weight: 700;
+}
+
+.em-margin {
+	margin-top: 1em;
+	margin-bottom: 1em;
+}
+
+.logo {
+	font-weight: 700;
+	color: #666;
+}
+
+.title {
+	color: #666;
+	font-size: 250%;
+	margin: 1em 0em 1em 0em;
+}
+
+.subtitle {
+	max-width: 500px;
+	margin: 0em 0em 1em 0em;
+}
+
+.attribution {
+	font-size: 30%;
+	font-weight: 300;
+}
+
+.navlink {
+	color: #666;
+	font-weight: 300;
+}
+
+.welcome-message {
+	margin: 3em 1em;
+}
+
+.splash-image {
+	background-image: url("../images/rawpixel-com-570914-unsplash.jpg");
+	background-image: url("../images/trina-christian-19571-unsplash.jpg");
+	background-image: url("../images/rawpixel-com-267082-unsplash.jpg");
+	background-image: url("../images/alex-iby-371384-unsplash.jpg");
+	background-image: url("../images/japheth-mast-329255-unsplash.jpg");
+	background-image: url("../images/mantas-hesthaven-135478-unsplash.jpg");
+	background-image: url("../images/meghan-holmes-516533-unsplash.jpg");
+	background-image: url("../images/monika-majkowska-219-unsplash.jpg");
+	background-position: 50% 50%;
+	background-size: cover;
+	background-repeat: no-repeat;
+	color: white;
+	min-height: 500px;
+}
+
+.cta {
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+	flex-flow: row wrap;
+	width: 100%;
+}
+
+.cta-message {
+	text-shadow: 0 0 5px rgba(0,0,0,0.2);
+	font-size: 70px;
+	text-align: left;
+	margin-bottom: 10px;
+	margin-top: 10px;
+	width: auto;
+}
+
+.button {
+	padding: .5em 1em;
+	margin: 1em;
+	background: #FFFFFF;
+	box-shadow: 0 1px 2px #999;
+	border-radius: 3px;
+	color: #333;
+	text-shadow: none;
+	font-weight: 300;
+}
+
+.button:hover {
+	background-color: #00bbbb;
+	color: #ffffff;
+	cursor: pointer;
+}
+
+.button-section {
+	padding: 3em;
+	display: flex;
+	flex-flow: column;
+}
+
+.button-section > .button {
+	margin: 2px;
+}
+
+.cta-button {
+	background-color: #00bbbb;
+	color: white;
+	font-size: 25px;
+	box-shadow: 0 1px 2px #444;
+}
+
+.cta-button:hover {
+	background-color: white;
+	color: #00bbbb;
+}
+
+.form-list {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-flow: row wrap;
+	width: calc(100%-60px);
+	max-width: 600px;
+	border-radius: .5em;
+	padding: 1em;
+	margin: 2em 0em;
+	background: #eee;
+}
+
+.form-item {
+	width: 120px;
+	height: 140px;	
+	margin: 1em;
+	text-align: center;
+	font-weight: 500;
+}
+
+.form-item:hover {
+	//background: #00bbbb;
+	color: #00bbbb;
+	box-shadow: 0 1px 0px #999;
+	cursor: pointer;
+}
+
+.form-flow {
+	background: #FFFFFF;
+	box-shadow: 0 1px 2px #999;
+	padding: 1em;
+	border-radius: 3px;
+	min-height: 300px;
+	width: 100%;
+	max-width: 600px;
+	display: flex;
+	flex-flow: column nowrap;
+	align-items: center;
+	margin: 1em 0em;
+}
+
+.form-title {
+	font-weight: 200;
+}
+
+.form-question-container {
+	display: flex;
+	flex-flow: column nowrap;
+	align-items: center;
+	justify-content: center;
+	//background-color: #fff;
+	border-radius: .5em;
+	min-height: 300px;
+	width: 100%;
+	padding: 1em;
+}
+
+.form-question {
+	color: #333;
+	font-weight: 500;
+	font-size: 150%;
+	margin: 0 0 0 0;
+}
+
+.form-answer-text {
+	border: none;
+	background-color: transparent;
+	border-bottom: 1px solid #333;
+	height: 30px;
+	width: 240px;
+	font-size: 140%;
+	margin: 1em 0 1em 0;
+	text-align: center;
+}
+
+.form-answer-text::placeholder{
+	color: #ccc;
+}
+
+.form-question-details {
+	color: #666;
+	font-size: 80%;
+}
+
+.form-question-example {
+	color: #999;
+	font-size: 80%;
+}
+
+#root {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-flow: column;
+}
