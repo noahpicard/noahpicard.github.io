@@ -1,0 +1,389 @@
+body {
+	background: white;
+	margin: 0px;
+	padding: 0px;
+	font-size: 16px;
+	font-family: "Calluna", Times, "Times New Roman", serif;
+}
+
+line.path {
+	stroke: black;
+	stroke-width: 1px;
+}
+
+circle.circle {
+	stroke-width: 1px;
+  stroke: black;
+  fill: white;
+  cursor: pointer;
+}
+
+circle.circle-pulse {
+	z-index: 1;
+}
+
+div {
+	font-size: 18px;
+	line-height: 1.222;
+	letter-spacing: 0.25;
+}
+
+a {
+	color: green;
+	text-decoration: none;
+	transition: all 0.25s;
+}
+
+a:hover {
+	background: green;
+	color: white;
+	transition: all 1s;
+}
+
+input {
+	font-size: 18px;
+	line-height: 1.222;
+	letter-spacing: 0.25;
+	border: none;
+	border-bottom: solid 1px black;
+	font-family: "Calluna", Times, "Times New Roman", serif;
+	max-width: 100px;
+	min-width: 50px;
+	width: auto;
+	display: inline;
+	text-align: center;
+	position: relative;
+}
+
+input:focus {
+	outline: 0;
+}
+
+input:focus::after {
+	content: "Enter to submit";
+	color: black;
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+div.f {
+	position: absolute;
+	pointer-events: none;
+}
+
+div.f > span {
+	background-color: rgba(255, 255, 255, 0.8);
+}
+
+div.f > span > a {
+	pointer-events: all;
+}
+
+div.f > span > input {
+	pointer-events: all;
+}
+
+div.img {
+	z-index: -1;
+}
+
+div.img > span > img {
+	width: 100%;
+	object-fit: cover;
+}
+
+svg.icon {
+	width: 30px;
+	height: 30px;
+}
+
+span.smi > a {
+	display: inline-block;
+	pointer-events: all;
+	width: 30px;
+	height: 30px;
+	margin: 30px 5px 1px 0px;
+	padding: 1px;
+}
+
+span.bolder {
+	font-size: 24px;
+	line-height: 1.166;
+}
+
+span.title {
+	font-size: 43px;
+	font-weight: bold;
+	line-height: 1.5;
+}
+
+div.subtitle {
+	left: 60px;
+	top: 416.66px;
+	font-size: 30px;
+}
+
+div.img-intro {
+
+}
+
+div.img-profile {
+
+}
+
+div.greeting {
+	left: 390px;
+	top: 1400px;
+	width: 220px;
+}
+
+div.greeting-response {
+	left: 295px;
+	top: 1950px;
+	width: 315px;
+}
+
+div.projects-intro {
+	left: 295px;
+	top: 2205px;
+	width: 315px;
+}
+
+div.projects-section {
+	left: 505px;
+	width: 315px;
+}
+
+div.projects-section-startups {
+	top: 2350px;
+}
+
+div.projects-section-poetry {
+	top: 2500px;
+}
+
+div.projects-section-dla {
+	top: 2650px;
+}
+
+div.projects-section-other {
+	top: 2800px;
+}
+
+div.box-section {
+	left: 285px;
+	top: 3450px;
+	width: 210px;
+	line-height: 1.25;
+}
+
+div.extra-section {
+	left: 725px;
+	width: 210px;
+	font-size: 12px;
+}
+
+div.extra-section-photography {
+	top: 3300px;
+}
+
+div.extra-section-dance {
+	top: 3400px;
+}
+
+div.extra-section-music {
+	top: 3500px;
+}
+
+div.extra-section-blog {
+	top: 3600px;
+}
+
+div.invite {
+	left: 390px;
+	top: 4400px;
+	width: 325px;
+}
+
+div.resume-intro {
+	left: 505px;
+	top: 5350px;
+	width: 435px;
+}
+
+div.extra-intro {
+	left: 840px;
+	top: 5700px;
+	width: 100px;
+	font-size: 12px;
+}
+
+div.startups-section-intro {
+	left: 1170px;
+	top: 1250px;
+	width: 315px;
+}
+
+div.startups-column {
+	top: 1400px;
+	width: 216px;
+	font-size: 12px;
+}
+div.startups-column > span > span.item-title {
+	font-size: 14px;
+	font-weight: bold;
+}
+
+div.startups-column-1 {
+	left: 1170px;
+}
+
+div.startups-column-2 {
+	left: 1395px;
+}
+
+div.poetry-section-intro {
+	left: 1270px;
+	top: 2475px;
+	width: 275px;
+}
+
+div.dla-section-intro {
+	left: 1285px;
+	top: 3250px;
+	width: 275px;
+}
+
+div.dla-column {
+	top: 3400px;
+	width: 105px;
+	font-size: 12px;
+}
+div.dla-column > span > span.item-title {
+	font-size: 14px;
+	font-weight: bold;
+}
+
+div.dla-column-1 {
+	left: 1285px;
+}
+
+div.dla-column-2 {
+	left: 1400px;
+}
+
+div.dla-column-3 {
+	left: 1515px;
+}
+
+div.dla-column-4 {
+	left: 1630px;
+}
+
+#TumblrRecentPosts {
+	left: 1685px;
+	top: 2350px;
+	width: 275px;	
+}
+
+div.tumblr {
+	width: 275px;
+}
+
+div.tumblr-text {
+	font-size: 12px;
+}
+
+div.tumblr-photo {
+	font-size: 16px;
+}
+
+div.tumblr-photo > img {
+	width: 100%;
+}
+
+div.explore-section-1 {
+	left: 505px;
+	top: 6200px;
+	width: 210px;
+}
+
+div.explore-section-2 {
+	left: 285px;
+	top: 6250px;
+	width: 210px;
+}
+
+div.explore-section-3 {
+	left: 60px;
+	top: 6300px;
+	width: 210px;
+}
+
+div.explore-section-4 {
+	left: 505px;
+	top: 6450px;
+	width: 210px;
+}
+
+div.explore-section-5 {
+	left: 285px;
+	top: 6500px;
+	width: 210px;
+}
+
+div.explore-section-6 {
+	left: 60px;
+	top: 6500px;
+	width: 210px;
+}
+
+div.explore-section-7 {
+	left: 505px;
+	top: 6600px;
+	width: 210px;
+}
+
+div.explore-section-8 {
+	left: 505px;
+	top: 6800px;
+	width: 210px;
+}
+
+div.explore-section-9 {
+	left: 60px;
+	top: 6700px;
+	width: 210px;
+}
+
+div.contact-section-direct {
+	left: 830px;
+	top: 6500px;
+	width: 210px;
+}
+
+div.contact-section {
+	left: 1390px;
+	top: 6400px;
+	width: 220px;
+}
+
+div.contact-section > span > span.name {
+	font-weight: bold;
+	line-height: 32px;
+}
+
+div.contact-section > span > span.smi {
+	line-height: 36px;
+}
+
+span.contact-intro {
+	font-size: 18px;
+}
+
+
+
+
+
+
