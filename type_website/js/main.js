@@ -76,10 +76,17 @@ $(document).ready(function() {
 
 
 var scrollToCenter = function(selector, forward) {
-  var windowWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width;
-  var windowHeight = (window.innerHeight > 0) ? window.innerHeight : screen.height;
+  var windowWidth = $(window).width() // || (window.innerWidth > 0) ? window.innerWidth : screen.width;
+  var windowHeight = $(window).height() //(window.innerHeight > 0) ? window.innerHeight : screen.height;
+  var v = {
+    width        : $(window).width(),
+    height       : $(window).height(),
+    screen_width : screen.width,
+    screen_height: screen.height
+  }
   console.log(windowWidth);
   console.log(windowHeight);
+  console.log(v);
 
   var element = $(selector);
   var hTime = windowWidth;
@@ -508,7 +515,7 @@ var getXDir = function(x, dir, len) {
 }
 
 var transformX = function(x, offset=0.0) {
-  var windowWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width;
+  var windowWidth = $(window).width()// (window.innerWidth > 0) ? window.innerWidth : screen.width;
   var w = windowWidth;
 
 	return (((x/100.0*100) * (w/100)) + offset)
