@@ -1,0 +1,247 @@
+body {
+	background: white;
+	margin: 0px;
+	padding: 0px;
+	font-size: 16px;
+	font-family: "Calluna", Times, "Times New Roman", serif;
+	height: 100%;
+	width: 100%;
+}
+
+.board-panel {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: #f6f6f6;
+	overflow: hidden;
+	position: relative;
+}
+
+.card-view {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+	height: 100vh;
+	width: calc(70vh);
+	overflow: hidden;
+	border: ;
+}
+
+.control-panel {
+	position: absolute;
+	bottom: 2em;
+	right: 2em;
+	width: 10vh;
+	height: 10vh;
+	box-shadow: 0 1px 4px #ccc;
+	border-radius: 10em;
+}
+
+.control {
+	position: relative;
+	width: 100%;
+	height: 100%;
+}
+
+.arrow {
+	position: absolute;
+}
+
+.right-arrow {
+	right: 3px;
+	top: 1em;
+}
+
+.left-arrow {
+	left: 3px;
+	top: 1em;
+}
+
+.up-arrow {
+	top: 3px;
+	left: 1em;
+}
+
+.down-arrow {
+	bottom: 3px;
+	left: 1em;
+}
+
+.card-container {
+	min-width: 300px;
+	min-height: 500px;
+	height: calc(100vh - 2em);
+	width: calc(60vh - 1.2em);
+	background: white;
+	margin: 1em;
+	border: 1px solid #eee;
+	border-radius: 15px;
+	box-shadow: 0 1px 2px #ccc;
+	overflow: hidden;
+	position: absolute;
+	top: 0em;
+}
+
+.blend-edges {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(to left, #f6f6f6 0%, rgba(0,0,0,0) 5%, rgba(0,0,0,0) 95%,#f6f6f6 100%);
+}
+
+
+line.path {
+	stroke: black;
+	stroke-width: 1px;
+}
+
+circle.circle {
+	stroke-width: 1px;
+  stroke: black;
+  fill: white;
+  cursor: pointer;
+}
+
+circle.circle-pulse {
+	z-index: 1;
+}
+
+h2 {
+	margin: 0;
+}
+
+div {
+	font-size: 112.5%;
+	line-height: 1.222;
+	letter-spacing: 0.25;
+}
+
+a {
+	color: green;
+	text-decoration: none;
+	transition: all 0.25s;
+}
+
+a:hover {
+	background: green;
+	color: white;
+	transition: all 1s;
+}
+
+input {
+	font-size: 18px;
+	line-height: 1.222;
+	letter-spacing: 0.25;
+	border: none;
+	border-bottom: solid 1px black;
+	font-family: "Calluna", Times, "Times New Roman", serif;
+	max-width: 100px;
+	min-width: 50px;
+	width: auto;
+	display: inline;
+	text-align: center;
+	position: relative;
+}
+
+input:focus {
+	outline: 0;
+}
+
+input:focus::after {
+	content: "Enter to submit";
+	color: black;
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+div.f {
+	position: absolute;
+	pointer-events: none;
+}
+
+div.f > span {
+	background-color: rgba(255, 255, 255, 0.8);
+}
+
+div.f > span > a {
+	pointer-events: all;
+}
+
+div.f > span > input {
+	pointer-events: all;
+}
+
+div.img {
+	z-index: -1;
+}
+
+div.img > span > img {
+	width: 100%;
+	object-fit: cover;
+}
+
+svg.icon {
+	width: 30px;
+	height: 30px;
+}
+
+span.smi > a {
+	display: inline-block;
+	pointer-events: all;
+	width: 30px;
+	height: 30px;
+	margin: 30px 5px 1px 0px;
+	padding: 1px;
+}
+
+span.bolder {
+	font-size: 24px;
+	line-height: 1.166;
+}
+
+span.title {
+	font-size: 43px;
+	font-weight: bold;
+	line-height: 1.5;
+}
+
+div.subtitle {
+	left: 60px;
+	top: 416.66px;
+	font-size: 30px;
+}
+
+#TumblrRecentPosts {
+	left: 1685px;
+	top: 2350px;
+	width: 275px;	
+}
+
+div.tumblr {
+	width: 275px;
+}
+
+div.tumblr-text {
+	font-size: 12px;
+}
+
+div.tumblr-photo {
+	font-size: 16px;
+}
+
+div.tumblr-photo > img {
+	width: 100%;
+}
+
+
+
+
+
+
+

@@ -1,0 +1,113 @@
+machine learning. fullstack development. poetry. (photography. dance. typography. type. meditation. konsei. aikido. tae kwon doe. dla. web design. rap. pop n' lock. freestyle. digital art. game design. entrepreneurship. startups. math. running. puzzles. mixtapes. )
+Noah Picard
+
+
+
+Hi there! I'm Noah.
+
+What's your name? __________
+
+I make things that make things. 
+
+
+
+
+-----
+I build startups
+
+Formally 
+is the intuitive form filler for asylum, immigration and citizenship. Formally provides guidance and translation for refugees applying for legal status. I am a founder and I lead our teach team! (Hack@Brown 2018 Best Real World App, Impact Summit Pitch Competition 2018 First Place) http://www.formally.us/
+
+Speechify
+is the Mac and Iphone app that lets you audiobook anything. Originally made for dyslexics, this application help you read faster through powerful text-to-speech and character recognition algorithms. I was a founding team member! https://getspeechify.com/
+
+Madeleine
+is the chatbot providing sexual education and local resources, targeted for middle school refugees, who cannot get access to formal sex ed due to relocation and lack of funding. I was a founder! (CHIMEHACK 4 Social Good Award) https://www.facebook.com/madeleinethemonkey/
+
+Templatter
+is an AI webdesigner that uses machine learning to analyze your content and generate beautiful, personalized websites for individuals and small businesses. I built it all myself!
+
+Salazar Games
+was a game-design company that made challenging arcade and puzzle games. I was the CEO, and lead a team of 8 game developers to build 20+ games with over 20,000 downloads. (STEM Challenge Finalists 2013) http://www.salazargames.com/
+
+
+-----
+I write poetry
+
+(poetry blog)
+Check out my poetry blog here.
+
+-----
+I make digital art
+
+Eliza Avidan
+is an AI poet, who posts daily experimental poems to a blog. Eliza uses a variety of generative models for poem writing, including CFGs and Deep Learning.
+
+Drifter
+is a game about making games in a world filled with broken games.
+
+Forest
+is a pixelated, procedurally generated forest that only builds.
+
+Saccade
+is a poem game that mimicks the experience of the digital as physical.
+
+http://nocake.eu - 
+
+
+I make other projects
+
+
+
+I have a resume
+
+
+
+We need a new playspace.
+
+
+
+Website with video that autoplays, and which autoscrolls. When you scroll up or down it goes to that part in the video
+
+Get the persons name, and then refer to them by their first name throughout the site.
+
+Use persons name at end to create a small art piece to present them with. 
+
+Freescrolling left-right, up down in space. 
+
+
+
+---
+
+Other things
+
+http://everynoise.com/engenremap.html - Every genre of music, visualized
+
+https://www.shortoftheweek.com/2014/07/28/a-truncated-story-of-infinity/ - A short film in the multiverse
+
+https://practicaltypography.com/ - Good typography, explained
+
+https://www.theoryoffun.com/theoryoffun.pdf - Games need to be art
+
+https://www.theguardian.com/books/2015/feb/27/robert-macfarlane-word-hoard-rewilding-landscape - Language as landscape
+
+http://cs.brown.edu/research/pubs/theses/ugrad/2018/picard.noah.pdf - My undergrad honors thesis
+
+http://trebleclefapp.herokuapp.com/ - A Spotify music recommender
+
+https://devpost.com/software/tensor-o7nfo - A Myo app to teach movements
+
+https://devpost.com/software/uneed - A web app for community sharing
+
+
+
+
+
+
+
+
+
+
+
+
+
