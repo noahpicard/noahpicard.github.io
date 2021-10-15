@@ -1,470 +1,386 @@
-/*
-	DOM CLASSES
-*/
 body {
-	margin:0px;
-	padding:0px;
-  font-size: 16px;
-  font-family: "Source Serif Pro", "PT Serif",Helvetica,Arial,sans-serif;
-  font-weight: 300;
+	background: white;
+	margin: 0px;
+	padding: 0px;
+	font-size: 16px;
+	font-family: "Calluna", Times, "Times New Roman", serif;
 }
 
-
-h1 {
-	font-family:  "Montserrat", Helvetica, Arial,sans-serif;
-	text-decoration: none;
-  font-size: 120%;
+line.path {
+	stroke: black;
+	stroke-width: 1px;
 }
 
-h2 {
-	font-family: "Montserrat", Helvetica, Arial,sans-serif;
-	text-decoration: none;
+circle.circle {
+	stroke-width: 1px;
+  stroke: black;
+  fill: white;
+  cursor: pointer;
 }
 
-h3 {
-	margin: 0;
-	padding: 0;
-	padding-bottom: 0.3em;
-	font-family: "Montserrat", Helvetica, Arial,sans-serif;
-	font-weight: 700;
-	line-height: 1em;
-	letter-spacing: 1px;
-	text-decoration: none;
-  font-size: 150%;
+circle.circle-pulse {
+	z-index: 1;
 }
 
-h4 {
-	margin: 0;
-	padding: 0;
-	padding-bottom: 0.2em;
-	font-family: "Montserrat", Helvetica, Arial,sans-serif;
-	font-weight: 700;
-	line-height: 1em;
-	letter-spacing: 1px;
-	text-decoration: none;
-  font-size: 112.5%;
-}
-
-p {
-  line-height: 1.42857143;
+div {
+	font-size: 18px;
+	line-height: 1.222;
+	letter-spacing: 0.25;
 }
 
 a {
-
+	color: green;
+	text-decoration: none;
+	transition: all 0.25s;
 }
 
 a:hover {
-  color: #3b6628;
+	background: green;
+	color: white;
+	transition: all 1s;
 }
 
-/* COLOR */
-
-.background-green {
-  background-color: #f3f9f0;
-}
-
-.background-white {
-  background-color: #fff;
-}
-
-.light-1 {
- color: #a5d391;
-}
-
-.light-2 {
- color: #c9e4bd;
-}
-
-.light-3 {
-  color: #edf6e9;
-}
-
-.dark-1 {
-  color: #508a37;
-}
-
-.dark-2 {
-  color: #3b6628;
-}
-
-/*
-20141012_160243.jpg // new york bay
-20150305_162826.jpg // snowy trees
-20150322_185713.jpg 
-20150522_141106.jpg
-20150522_141156.jpg // spinies
-20150522_141350.jpg // nettles
-20150522_141712.jpg // bark up tree
-
-20150522_141726.jpg // wish floater
-20150522_141752.jpg // bark wall (15% margin top)
-20150522_141810.jpg // reaching bauble plant
-20150522_141846.jpg // sawdust bark far
-20150522_141851.jpg // sawdust bark close
-20150522_141940.jpg // bark bridge
-20150522_141956.jpg // bark channel
-20150522_142024.jpg // bark crevasse
-20150522_142045.jpg // bark smooth
-20150522_142250.jpg // wood chop into warm
-20150522_142343.jpg // bark crevasse 2
-20150522_142404.jpg // bark hump
-20150522_142543.jpg // bark wave
-20150522_142531.jpg // bark bark
-20150522_142557.jpg // bark mound
-20150522_142917.jpg // mom sky
-20150522_143110.jpg // mom sky 2
-20150522_143215.jpg // alien plants
-20150522_143831.jpg // fennel 1
-20150522_143841.jpg // fennel 2
-20150522_144154.jpg // hidden moss
-20150522_144205.jpg // into log
-20150522_144426.jpg // grass at you
-20150522_144523.jpg // grass sideways
-
-20150522_145202.jpg // grass through bench
-20150627_192408.jpg // succulent
-20150705_104602.jpg // black white tree
-20150705_104904.jpg // ivy through tramp
-20150705_104920.jpg
-20150711_124729.jpg // through GGB to bay
-SAM_0023.JPG
-SAM_0028.JPG
-SAM_0086.JPG
-SAM_0172.JPG /*education
-SAM_0230.JPG
-SAM_0257.JPG // march skyscrapers
-
-
-20150322_185713.jpg // sunset car
-20150711_180900.jpg // tall church
-*/
-
-
-
-.imageFrame, .colorFrame {
-	position: relative;
-	width:100%;
-  display: flex;
-  justify-content: center;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.imageFrame {
-	flex-direction: column;
-  height: 100vh;
-  width: 100%;
-	background: bruh no-repeat center center; 
-  	-webkit-background-size: auto 100%;
-  	-moz-background-size: auto 100%;
-  	-o-background-size: auto 100%;
-  	background-size: auto 100%;
-  	background-size: cover;
-}
-
-.colorFrame {
-	min-height: 500px;/*800px;*/
-}
-
-.titleFrame {
-  margin-top: 5em;
-	align-self: center;
+input {
+	font-size: 18px;
+	line-height: 1.222;
+	letter-spacing: 0.25;
+	border: none;
+	border-bottom: solid 1px black;
+	font-family: "Calluna", Times, "Times New Roman", serif;
+	max-width: 100px;
+	min-width: 50px;
+	width: auto;
+	display: inline;
 	text-align: center;
+	position: relative;
 }
 
-.menuChild {
-  margin: 0em 1em 1em 1em;
-  letter-spacing: 0.7px;
+input:focus {
+	outline: 0;
 }
 
-.contentFrame {
-  max-width: calc(1000px - 4em);
-  margin: 2em auto;
-  text-align: left;
+input:focus::after {
+	content: "Enter to submit";
+	color: black;
+	position: absolute;
+	top: 0;
+	right: 0;
 }
 
-.flexPanel {
+div.f {
+	position: absolute;
+	pointer-events: none;
+}
+
+div.f > span {
+	background-color: rgba(255, 255, 255, 0.8);
+}
+
+div.f > span > a {
+	pointer-events: all;
+}
+
+div.f > span > input {
+	pointer-events: all;
+}
+
+div.img {
+	z-index: -1;
+}
+
+div.img > span > img {
 	width: 100%;
-  max-width: 1300px;
-  margin: auto;
-	display: flex;
-	flex-flow: row wrap;
-	justify-content: space-around;
-	align-content: space-between;
+	object-fit: cover;
 }
 
-.flexPanelCol {
-  width: 100%;
-  max-width: 340px;
-  display: flex;
-  flex-flow: column wrap;
-  justify-content: flex-start;
-  align-items: flex-start;
-  overflow-y: hidden;
+svg.icon {
+	width: 30px;
+	height: 30px;
 }
 
-.linedPanel {
-	width:100%;
+span.smi > a {
+	display: inline-block;
+	pointer-events: all;
+	width: 30px;
+	height: 30px;
+	margin: 30px 5px 1px 0px;
+	padding: 1px;
 }
 
-.thinPanel {
-	margin-right: auto;
-	margin-left: auto;
-	max-width: 800px;
+span.bolder {
+	font-size: 24px;
+	line-height: 1.166;
 }
 
-.panel {
-	margin:.5em;
-	max-width: 600px;
-	padding:20px;
-	background-color: transparent;
-	border-radius: .25em;
-  text-overflow: ellipsis;
-  max-height: 160px;
-  overflow: hidden;
-  position: relative;
+span.title {
+	font-size: 43px;
+	font-weight: bold;
+	line-height: 1.5;
 }
 
-.panel:hover {
-  background-color: rgba(0,0,0,0.2) !important;
+div.subtitle {
+	left: 60px;
+	top: 416.66px;
+	font-size: 30px;
 }
 
-.projectPic {
-	height:120px;
-  width: 120px;
-	margin-right: 1em;
-	float: left;
-  object-fit: cover;
-  background-color: #fff;
-  border: solid 2px #fff;
-  border-radius: 1em;
+div.img-intro {
+
 }
 
-.midText {
-	display: flex;
-	align-items: center;
-	height: 100%;
-	min-height: 240px;
+div.img-profile {
+
 }
 
-.centerText {
-	max-width: 800px;
-	margin-right: auto;
-	margin-left: auto;
-	margin-top: 1em;
+div.greeting {
+	left: 390px;
+	top: 1400px;
+	width: 220px;
 }
 
-.centerRow {
-	max-width: 1120px;
-	padding: 0px;
-	margin-right: auto;
-	margin-left: auto;
+div.greeting-response {
+	left: 295px;
+	top: 1950px;
+	width: 315px;
 }
 
-.muted {
-	font-weight: 500;
+div.projects-intro {
+	left: 295px;
+	top: 2205px;
+	width: 315px;
 }
 
-.date {
-	font-weight: 500;
-	color: #ccc;
+div.projects-section {
+	left: 505px;
+	width: 315px;
 }
 
-.footer {
-	position: fixed;
-	bottom: 10px;
-	right: 10px;
+div.projects-section-startups {
+	top: 2350px;
 }
 
-.expandAll {
-  font-family:  "Montserrat", Helvetica, Arial,sans-serif;
-  letter-spacing: 0.7px;
-  cursor: pointer;
+div.projects-section-poetry {
+	top: 2500px;
 }
 
-.seeMore {
-  align-self: center;
-  text-align: center;
-  font-family:  "Montserrat", Helvetica, Arial,sans-serif;
-  letter-spacing: 0.7px;
-  cursor: pointer;
-  margin: 1em;
+div.projects-section-dla {
+	top: 2650px;
 }
 
-.expand {
-	-webkit-transition: max-height 1s; 
-  	-moz-transition: max-height 1s; 
-  	-ms-transition: max-height 1s; 
-  	-o-transition: max-height 1s; 
-  	transition: max-height 1s;  
-  	overflow: hidden;
-	max-height: 0px;
+div.projects-section-other {
+	top: 2800px;
 }
 
-.links>li>a {
-	font-size: 120%;
+div.box-section {
+	left: 285px;
+	top: 3450px;
+	width: 210px;
+	line-height: 1.25;
 }
 
-.noselect {
-	cursor: default;
-  -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-     -khtml-user-select: none; /* Konqueror HTML */
-       -moz-user-select: none; /* Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none; /* Non-prefixed version, currently
-                                  supported by Chrome and Opera */
+div.extra-section {
+	left: 725px;
+	width: 210px;
+	font-size: 12px;
 }
 
-::selection {
-    background-color: #71BA51;
-    color: #fff;
-}
-::-moz-selection {
-    background-color: #71BA51;
-    color: #fff;
+div.extra-section-photography {
+	top: 3300px;
 }
 
-
-/*
-	Unique Items
-*/
-
-#mainHeader {
-  margin: 0;
+div.extra-section-dance {
+	top: 3400px;
 }
 
-.titleFrame>h1 {
-	color: white;
-	font-family:  "Montserrat", Helvetica, Arial;
-	text-decoration: none;
-	font-size: 200%;
+div.extra-section-music {
+	top: 3500px;
 }
 
-#imgHeader > .titleFrame > h1 {
-  font-size: 820%;
-  text-shadow: 0 0 20px rgba(0,0,0,0.5);
+div.extra-section-blog {
+	top: 3600px;
 }
 
-.menuChild {
-  color: white;
-  font-size: 150%;
-  text-shadow: 0 0 20px rgba(0,0,0,1);
+div.invite {
+	left: 390px;
+	top: 4400px;
+	width: 325px;
 }
 
-#mainHeader>.container-fluid {
-	width:100%;
-	color: white;
+div.resume-intro {
+	left: 505px;
+	top: 5350px;
+	width: 435px;
 }
 
-#imgHeader {
-  background: url("../images/possible/20150522_144426.jpg") no-repeat center center; 
-  -webkit-background-size: auto 100%;
-    -moz-background-size: auto 100%;
-    -o-background-size: auto 100%;
-    background-size: auto 100%;
-    background-size: cover;
+div.extra-intro {
+	left: 840px;
+	top: 5700px;
+	width: 100px;
+	font-size: 12px;
 }
 
-#bioPic {
-	float: left;
+div.startups-section-intro {
+	left: 1170px;
+	top: 1250px;
+	width: 315px;
+}
+
+div.startups-column {
+	top: 1400px;
+	width: 216px;
+	font-size: 12px;
+}
+div.startups-column > span > span.item-title {
+	font-size: 14px;
+	font-weight: bold;
+}
+
+div.startups-column-1 {
+	left: 1170px;
+}
+
+div.startups-column-2 {
+	left: 1395px;
+}
+
+div.poetry-section-intro {
+	left: 1270px;
+	top: 2475px;
+	width: 275px;
+}
+
+div.dla-section-intro {
+	left: 1285px;
+	top: 3250px;
+	width: 275px;
+}
+
+div.dla-column {
+	top: 3400px;
+	width: 105px;
+	font-size: 12px;
+}
+div.dla-column > span > span.item-title {
+	font-size: 14px;
+	font-weight: bold;
+}
+
+div.dla-column-1 {
+	left: 1285px;
+}
+
+div.dla-column-2 {
+	left: 1400px;
+}
+
+div.dla-column-3 {
+	left: 1515px;
+}
+
+div.dla-column-4 {
+	left: 1630px;
+}
+
+#TumblrRecentPosts {
+	left: 1685px;
+	top: 2350px;
+	width: 275px;	
+}
+
+div.tumblr {
+	width: 275px;
+}
+
+div.tumblr-text {
+	font-size: 12px;
+}
+
+div.tumblr-photo {
+	font-size: 16px;
+}
+
+div.tumblr-photo > img {
 	width: 100%;
 }
 
-#switchCSS {
-  cursor: pointer;
+div.explore-section-1 {
+	left: 505px;
+	top: 6200px;
+	width: 210px;
 }
 
-#copyright {
-	color: #ccc;
+div.explore-section-2 {
+	left: 285px;
+	top: 6250px;
+	width: 210px;
 }
 
-/* Smartphones (portrait and landscape) ----------- */
-@media only screen 
-and (min-device-width : 320px) 
-and (max-device-width : 480px) {
-
-  #imgHeader > .titleFrame > h1 {
-  	font-size: 500%;
-  }
-
-  h3 {
-    font-size: 130%;
-  }
-
-  h4 {
-    font-size: 110%;
-  }
-
-  .menuChild {
-    font-size: 120%;
-    margin: 0.2em;
-    width: 100%;
-  }
-
-  .footer {
-    position: fixed;
-    bottom: 2px;
-    right: 2px;
-  }
-
+div.explore-section-3 {
+	left: 60px;
+	top: 6300px;
+	width: 210px;
 }
 
-/* Smartphones (landscape) ----------- */
-@media only screen 
-and (min-width : 321px) {
-/* Styles */
+div.explore-section-4 {
+	left: 505px;
+	top: 6450px;
+	width: 210px;
 }
 
-/* Smartphones (portrait) ----------- */
-@media only screen 
-and (max-width : 320px) {
-/* Styles */
+div.explore-section-5 {
+	left: 285px;
+	top: 6500px;
+	width: 210px;
 }
 
-/* iPads (portrait and landscape) ----------- */
-@media only screen 
-and (min-device-width : 768px) 
-and (max-device-width : 1024px) {
-/* Styles */
+div.explore-section-6 {
+	left: 60px;
+	top: 6500px;
+	width: 210px;
 }
 
-/* iPads (landscape) ----------- */
-@media only screen 
-and (min-device-width : 768px) 
-and (max-device-width : 1024px) 
-and (orientation : landscape) {
-/* Styles */
+div.explore-section-7 {
+	left: 505px;
+	top: 6600px;
+	width: 210px;
 }
 
-/* iPads (portrait) ----------- */
-@media only screen 
-and (min-device-width : 768px) 
-and (max-device-width : 1024px) 
-and (orientation : portrait) {
-/* Styles */
+div.explore-section-8 {
+	left: 505px;
+	top: 6800px;
+	width: 210px;
 }
 
-/* Desktops and laptops ----------- */
-@media only screen 
-and (min-width : 1224px) {
-/* Styles */
+div.explore-section-9 {
+	left: 60px;
+	top: 6700px;
+	width: 210px;
 }
 
-/* Large screens ----------- */
-@media only screen 
-and (min-width : 1824px) {
-/* Styles */
+div.contact-section-direct {
+	left: 830px;
+	top: 6500px;
+	width: 210px;
 }
 
-/* iPhone 4 ----------- */
-@media
-only screen and (-webkit-min-device-pixel-ratio : 1.5),
-only screen and (min-device-pixel-ratio : 1.5) {
-/* Styles */
+div.contact-section {
+	left: 1390px;
+	top: 6400px;
+	width: 220px;
 }
 
+div.contact-section > span > span.my-name {
+	font-weight: bold;
+	line-height: 32px;
+}
 
+div.contact-section > span > span.smi {
+	line-height: 36px;
+}
+
+span.contact-intro {
+	font-size: 18px;
+}
 
 
 

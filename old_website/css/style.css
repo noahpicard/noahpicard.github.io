@@ -1,0 +1,473 @@
+/*
+	DOM CLASSES
+*/
+body {
+	margin:0px;
+	padding:0px;
+  font-size: 16px;
+  font-family: "Source Serif Pro", "PT Serif",Helvetica,Arial,sans-serif;
+  font-weight: 300;
+}
+
+
+h1 {
+	font-family:  "Montserrat", Helvetica, Arial,sans-serif;
+	text-decoration: none;
+  font-size: 120%;
+}
+
+h2 {
+	font-family: "Montserrat", Helvetica, Arial,sans-serif;
+	text-decoration: none;
+}
+
+h3 {
+	margin: 0;
+	padding: 0;
+	padding-bottom: 0.3em;
+	font-family: "Montserrat", Helvetica, Arial,sans-serif;
+	font-weight: 700;
+	line-height: 1em;
+	letter-spacing: 1px;
+	text-decoration: none;
+  font-size: 150%;
+}
+
+h4 {
+	margin: 0;
+	padding: 0;
+	padding-bottom: 0.2em;
+	font-family: "Montserrat", Helvetica, Arial,sans-serif;
+	font-weight: 700;
+	line-height: 1em;
+	letter-spacing: 1px;
+	text-decoration: none;
+  font-size: 112.5%;
+}
+
+p {
+  line-height: 1.42857143;
+}
+
+a {
+
+}
+
+a:hover {
+  color: #3b6628;
+}
+
+/* COLOR */
+
+.background-green {
+  background-color: #f3f9f0;
+}
+
+.background-white {
+  background-color: #fff;
+}
+
+.light-1 {
+ color: #a5d391;
+}
+
+.light-2 {
+ color: #c9e4bd;
+}
+
+.light-3 {
+  color: #edf6e9;
+}
+
+.dark-1 {
+  color: #508a37;
+}
+
+.dark-2 {
+  color: #3b6628;
+}
+
+/*
+20141012_160243.jpg // new york bay
+20150305_162826.jpg // snowy trees
+20150322_185713.jpg 
+20150522_141106.jpg
+20150522_141156.jpg // spinies
+20150522_141350.jpg // nettles
+20150522_141712.jpg // bark up tree
+
+20150522_141726.jpg // wish floater
+20150522_141752.jpg // bark wall (15% margin top)
+20150522_141810.jpg // reaching bauble plant
+20150522_141846.jpg // sawdust bark far
+20150522_141851.jpg // sawdust bark close
+20150522_141940.jpg // bark bridge
+20150522_141956.jpg // bark channel
+20150522_142024.jpg // bark crevasse
+20150522_142045.jpg // bark smooth
+20150522_142250.jpg // wood chop into warm
+20150522_142343.jpg // bark crevasse 2
+20150522_142404.jpg // bark hump
+20150522_142543.jpg // bark wave
+20150522_142531.jpg // bark bark
+20150522_142557.jpg // bark mound
+20150522_142917.jpg // mom sky
+20150522_143110.jpg // mom sky 2
+20150522_143215.jpg // alien plants
+20150522_143831.jpg // fennel 1
+20150522_143841.jpg // fennel 2
+20150522_144154.jpg // hidden moss
+20150522_144205.jpg // into log
+20150522_144426.jpg // grass at you
+20150522_144523.jpg // grass sideways
+
+20150522_145202.jpg // grass through bench
+20150627_192408.jpg // succulent
+20150705_104602.jpg // black white tree
+20150705_104904.jpg // ivy through tramp
+20150705_104920.jpg
+20150711_124729.jpg // through GGB to bay
+SAM_0023.JPG
+SAM_0028.JPG
+SAM_0086.JPG
+SAM_0172.JPG /*education
+SAM_0230.JPG
+SAM_0257.JPG // march skyscrapers
+
+
+20150322_185713.jpg // sunset car
+20150711_180900.jpg // tall church
+*/
+
+
+
+.imageFrame, .colorFrame {
+	position: relative;
+	width:100%;
+  display: flex;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.imageFrame {
+	flex-direction: column;
+  height: 100vh;
+  width: 100%;
+	background: bruh no-repeat center center; 
+  	-webkit-background-size: auto 100%;
+  	-moz-background-size: auto 100%;
+  	-o-background-size: auto 100%;
+  	background-size: auto 100%;
+  	background-size: cover;
+}
+
+.colorFrame {
+	min-height: 500px;/*800px;*/
+}
+
+.titleFrame {
+  margin-top: 5em;
+	align-self: center;
+	text-align: center;
+}
+
+.menuChild {
+  margin: 0em 1em 1em 1em;
+  letter-spacing: 0.7px;
+}
+
+.contentFrame {
+  max-width: calc(1000px - 4em);
+  margin: 2em auto;
+  text-align: left;
+}
+
+.flexPanel {
+	width: 100%;
+  max-width: 1300px;
+  margin: auto;
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: space-around;
+	align-content: space-between;
+}
+
+.flexPanelCol {
+  width: 100%;
+  max-width: 340px;
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  overflow-y: hidden;
+}
+
+.linedPanel {
+	width:100%;
+}
+
+.thinPanel {
+	margin-right: auto;
+	margin-left: auto;
+	max-width: 800px;
+}
+
+.panel {
+	margin:.5em;
+	max-width: 600px;
+	padding:20px;
+	background-color: transparent;
+	border-radius: .25em;
+  text-overflow: ellipsis;
+  max-height: 160px;
+  overflow: hidden;
+  position: relative;
+}
+
+.panel:hover {
+  background-color: rgba(0,0,0,0.2) !important;
+}
+
+.projectPic {
+	height:120px;
+  width: 120px;
+	margin-right: 1em;
+	float: left;
+  object-fit: cover;
+  background-color: #fff;
+  border: solid 2px #fff;
+  border-radius: 1em;
+}
+
+.midText {
+	display: flex;
+	align-items: center;
+	height: 100%;
+	min-height: 240px;
+}
+
+.centerText {
+	max-width: 800px;
+	margin-right: auto;
+	margin-left: auto;
+	margin-top: 1em;
+}
+
+.centerRow {
+	max-width: 1120px;
+	padding: 0px;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+.muted {
+	font-weight: 500;
+}
+
+.date {
+	font-weight: 500;
+	color: #ccc;
+}
+
+.footer {
+	position: fixed;
+	bottom: 10px;
+	right: 10px;
+}
+
+.expandAll {
+  font-family:  "Montserrat", Helvetica, Arial,sans-serif;
+  letter-spacing: 0.7px;
+  cursor: pointer;
+}
+
+.seeMore {
+  align-self: center;
+  text-align: center;
+  font-family:  "Montserrat", Helvetica, Arial,sans-serif;
+  letter-spacing: 0.7px;
+  cursor: pointer;
+  margin: 1em;
+}
+
+.expand {
+	-webkit-transition: max-height 1s; 
+  	-moz-transition: max-height 1s; 
+  	-ms-transition: max-height 1s; 
+  	-o-transition: max-height 1s; 
+  	transition: max-height 1s;  
+  	overflow: hidden;
+	max-height: 0px;
+}
+
+.links>li>a {
+	font-size: 120%;
+}
+
+.noselect {
+	cursor: default;
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+
+::selection {
+    background-color: #71BA51;
+    color: #fff;
+}
+::-moz-selection {
+    background-color: #71BA51;
+    color: #fff;
+}
+
+
+/*
+	Unique Items
+*/
+
+#mainHeader {
+  margin: 0;
+}
+
+.titleFrame>h1 {
+	color: white;
+	font-family:  "Montserrat", Helvetica, Arial;
+	text-decoration: none;
+	font-size: 200%;
+}
+
+#imgHeader > .titleFrame > h1 {
+  font-size: 820%;
+  text-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+.menuChild {
+  color: white;
+  font-size: 150%;
+  text-shadow: 0 0 20px rgba(0,0,0,1);
+}
+
+#mainHeader>.container-fluid {
+	width:100%;
+	color: white;
+}
+
+#imgHeader {
+  background: url("../images/possible/20150522_144426.jpg") no-repeat center center; 
+  -webkit-background-size: auto 100%;
+    -moz-background-size: auto 100%;
+    -o-background-size: auto 100%;
+    background-size: auto 100%;
+    background-size: cover;
+}
+
+#bioPic {
+	float: left;
+	width: 100%;
+}
+
+#switchCSS {
+  cursor: pointer;
+}
+
+#copyright {
+	color: #ccc;
+}
+
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen 
+and (min-device-width : 320px) 
+and (max-device-width : 480px) {
+
+  #imgHeader > .titleFrame > h1 {
+  	font-size: 500%;
+  }
+
+  h3 {
+    font-size: 130%;
+  }
+
+  h4 {
+    font-size: 110%;
+  }
+
+  .menuChild {
+    font-size: 120%;
+    margin: 0.2em;
+    width: 100%;
+  }
+
+  .footer {
+    position: fixed;
+    bottom: 2px;
+    right: 2px;
+  }
+
+}
+
+/* Smartphones (landscape) ----------- */
+@media only screen 
+and (min-width : 321px) {
+/* Styles */
+}
+
+/* Smartphones (portrait) ----------- */
+@media only screen 
+and (max-width : 320px) {
+/* Styles */
+}
+
+/* iPads (portrait and landscape) ----------- */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) {
+/* Styles */
+}
+
+/* iPads (landscape) ----------- */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : landscape) {
+/* Styles */
+}
+
+/* iPads (portrait) ----------- */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : portrait) {
+/* Styles */
+}
+
+/* Desktops and laptops ----------- */
+@media only screen 
+and (min-width : 1224px) {
+/* Styles */
+}
+
+/* Large screens ----------- */
+@media only screen 
+and (min-width : 1824px) {
+/* Styles */
+}
+
+/* iPhone 4 ----------- */
+@media
+only screen and (-webkit-min-device-pixel-ratio : 1.5),
+only screen and (min-device-pixel-ratio : 1.5) {
+/* Styles */
+}
+
+
+
+
+
+
+
+
