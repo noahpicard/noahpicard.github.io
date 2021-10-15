@@ -494,6 +494,12 @@ var cssStruct = {
     left: 139,
     top: 640,
     width: 60.5,
+  },
+
+  'div.img-contact': {
+    left: 168.5,
+    bottom: 680,
+    width: 25,
   }
 }
 
