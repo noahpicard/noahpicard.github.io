@@ -1,0 +1,37 @@
+﻿polysolid
+
+
+There is always a space 
+between the bed and the wall that is unfortunate
+where the edges are
+flat-handed
+into
+                  box~color,blue~replace,into,                  into~replace,flat-handed,                  flat-handed
+I keep an empty plastic tub under my bed~replace,There is always a space,always an unfortunate space
+Hard hat,~replace,keep,kept~replace,between the bed and the wall that is unfortunate,where the bed and the wall meet~color,#8B8000
+        tonguey sneakers,~color,#8B8000
+                        the flashlight~color,#8B8000
+            all crammed themselves into one corner~replace,Hard hat,Hardhattong~replace,        tonguey sneakers,ueysneakers~replace,                        the flashlight,theflashlight
+            Residual blankets made way for 
+                                      impassive 
+                                      clean polysolid~styleWhere,clean polysolid,textDecoration,underline~styleWhere,clean polysolid,color,red
+
+                                Plastic is going to outlive me,~italic
+    and flannel is going to outlive me~italic
+    and fisher-price microphones
+        are going to outlive me~italic
+    and somewhere there is light
+        its going to live me out
+    and plaster is going to be reborn~replace,to live me,to wring me~styleLineMatchingfisher,color,blue
+
+The lamplight is rain as well~color,blue
+as well as it can be~replace, as well,~color,blue
+And sometime in the night
+it was hot enough~replace,rain,rain at least
+that I shifted and carefully                 (so as not to wake you)~replace,And,&
+pinched my fingers to ~replace,And,&~replace,\(,((~replace,\),))
+my collarbone and peeled~replace,\(,((~replace,\),))
+my skin back~replace,\(,((~replace,\),))
+until I was shucked in the
+                                    still
+                                    already-breathed air.

@@ -1,0 +1,49 @@
+I know you asked me already
+
+
+
+and I answered already but I feel
+something needs to be flushed out in full
+so, simply:
+
+
+it is the brush on your fingers webbing
+& in the fingertips brushing 
+        it is the edges of film in the home video
+        and thumb that gets in the shot
+                it is the tune rolling tidally
+                over behind your lips
+                        it is the slimy clasped can
+                        and the gloved hand
+                                it is watching the stars to check
+                                which ones might go out soon~replace,needs to be flushed out in full,is flushing me out
+                                and thanking them for stopping by
+        & it is the memory
+        behind the memory~replace,([A-Za-z]+)ing\W,$1ed 
+        a thousand times~replace,memory,memorymemorymemory
+        the original true thing~replace,memory,memory
+        nesting in the break~replace,emorym,emoryinm
+
+_~styleLine,24,color,blue~setLine,0,I know I’ve already answered
+_~styleLine,23,color,blue~styleLine,22,color,blue~styleLine,21,color,blue~setLine,1,
+_~styleLine,20,color,blue~setLine,2,you twice but since you asked I haven’t been able to stop
+_~styleLine,19,color,blue~setLine,3,thinking about it
+_~styleLine,18,color,blue~setLine,4,there was a strange echo in the base of your throat as you
+_~styleLine,17,color,blue~setLine,5,		            enunciated
+_~styleLine,16,color,blue~setLine,6,okay					                          something like
+_~styleLine,15,color,blue~setLine,7,	  so              						                      this
+_~styleLine,14,color,blue~setLine,8,			
+_~styleLine,13,color,blue~setLine,9,                                            basically
+_~styleLine,12,color,blue~setLine,10,                                            imagine a line turning into a field
+_~styleLine,11,color,blue~setLine,11,                                            the sweeping expansion of that
+_~styleLine,10,color,blue~setLine,12,                                            and the way it spreads along your
+_~styleLine,9,color,blue~setLine,13,                                            chest to fill each space in your
+_~styleLine,8,color,blue~setLine,14,                                            organells
+_~styleLine,7,color,blue~setLine,15,
+_~styleLine,6,color,blue~setLine,16,		             or if you 
+_~styleLine,5,color,blue~setLine,17,     have trouble consider a
+_~styleLine,4,color,blue~setLine,18,   broadknife carving away
+_~styleLine,3,color,blue~setLine,19,      the dead skin from the
+_~styleLine,2,color,blue~setLine,20,   base of your heel its soft
+_~styleLine,1,color,blue~styleLine,24,color,black~styleLine,23,color,black~styleLine,22,color,black~setLine,21,                             scraping
+

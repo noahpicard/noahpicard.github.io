@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<style>
+body {
+    background-color: #000;
+    position: relative;
+}
+canvas {
+    border:1px solid #000;
+    background-color: #050505;
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+</style>
+</head>
+<body onload="startGame()">
+<script>
+
+var myGamePiece;
+var myObstacles = [];
+var myScore;
+var myTextObjects = [];
+var myText = [
+    "The clouds have\ntaken roost on\nthe far edges of your horizon.",
+    "The sun is setting.",
+    "The wind is blowing.",
+    "The moon is rising.",
+    "By now your breath has\nsettled into the\nrough edges of all rocks.",
+    "The wind is blowing.",
+    "The wind is blowing.",
+    "The wind is blowing.",
+    "The wind is blowing.",
+    "The wind is blowing.",
+    "Parchment strains, then\ntears wildly into\nthe mottled blue.",
+    "Please tell me:\n\nwhy were you so scared\n\nto live?\n\n\n\n\n",
+    "The creek-veins on the backs of your hands\n\nswell and fill around the mugs warmth.\n\n\n\n\n",
+    "& a clear water paints pain through the rivulets of your cheek\n\n\n\n\n",
+    "Forgive me. I coaxed your last breath by my asking.\n\n\n\n\n",
+];
+
+function getTextHeight(text, fontSize, fontFamily) {
+    var canvas = document.createElement("canvas");
+    var context = canvas.getContext("2d");
+    context.font = fontSize + " " + fontFamily;
+    var metrics = context.measureText(text);
+    var coreHeight = metrics.fontBoundingBoxAscent + metrics.fontBoundingBoxDescent;
+    var lineCount = text.split("\n").length;
+    return coreHeight * lineCount;
+}
+
+document.onkeydown = checkKey;
+
+function checkKey(e) {
+
+    e = e || window.event;
+
+    if (e.keyCode == '38') {
+        // up arrow
+        step(0, 30);
+    }
+    else if (e.keyCode == '40') {
+        // down arrow
+        step(0, -30);
+    }
+    else if (e.keyCode == '37') {
+       // left arrow
+       step(-30, 0);
+    }
+    else if (e.keyCode == '39') {
+       // right arrow
+       step(30, 0);
+    }
+
+}
+
+
+var myGameArea = {
+    canvas : document.createElement("canvas"),
+    start : function() {
+        this.canvas.width = 960;
+        this.canvas.height = 640;
+        this.context = this.canvas.getContext("2d");
+        document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+        this.frameNo = 0;
+        this.lastGen = Math.floor(this.canvas.width/2)-(30/2*1);
+        this.interval = setInterval(updateGameArea, 20);
+        //this.cameraup = 0;
+        this.cameraX = 0;
+        this.cameraY = 0;
+        this.row = 0;
+        },
+    clear : function() {
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+}
+
+
+function startGame() {
+    myGameArea.start();
+    myGamePiece = new component(28, 28, "red", Math.floor(myGameArea.canvas.width/2)-(30/2*1)+1, 481);
+    myScore = new component("18x", "Consolas", "red", Math.floor(myGameArea.canvas.width/2)-90, 600, "text");
+    myScore.text = "arrow keys <^v> to move";
+    myTextObjects.push(myScore);
+    console.log(Math.floor(myGameArea.canvas.width/2)-(30/2*3));
+    startPath = new component(90, myGameArea.canvas.height-30-60, "white", Math.floor(myGameArea.canvas.width/2)-(30/2*3), 30);
+    startPath.row = 1;
+    myObstacles.push(startPath);
+    pier = new component(30, 30, "white", Math.floor(myGameArea.canvas.width/2)-(30/2*1), 0);
+    pier.row = 3;
+    myObstacles.push(pier);
+    var heightSum = 100;
+    for (i = 0; i < myText.length; i += 1) {
+        var textHeight = getTextHeight(myText[i], "18px", "Consolas");
+        heightSum += textHeight;
+        console.log("textHeight: " + textHeight);
+        var x = Math.floor(Math.random()*((myGameArea.canvas.width-250)/2))*2;
+        var text = new component("18px", "Consolas", "white", x, -heightSum, "text");
+        
+        text.text = myText[i];
+        myTextObjects.push(text);
+    }
+    updatePieces();
+}
+
+
+function renderMultilineText(ctx, text, x, y, lineHeight) {
+    var str = "";
+    var cy = y;
+    var i;
+    for (i = 0; i < text.length; i += 1) {
+        var c = text[i];
+        if (c == "\n") {
+            ctx.fillText(str, x+Math.floor(Math.random()*1.01), cy);
+            cy += lineHeight;
+            str = "";
+        } else {
+            str = str + c;
+        }
+    }
+    ctx.fillText(str, x, cy);
+}
+
+function component(width, height, color, x, y, type) {
+    this.type = type;
+    this.score = 0;
+    this.width = width;
+    this.height = height;
+    this.speedX = 0;
+    this.speedY = 0;    
+    this.x = x;
+    this.y = y;
+    this.gravity = 0;
+    this.gravitySpeed = 0;
+    this.getCenterX = function() {
+        return this.x + (this.width/2);
+    }
+    this.getCenterY = function() {
+        return this.y + (this.height/2);
+    }
+    this.update = function() {
+        ctx = myGameArea.context;
+        if (this.type == "text") {
+            ctx.font = this.width + " " + this.height;
+            ctx.fillStyle = color;
+            renderMultilineText(ctx, this.text, this.x, this.y, 24);
+        } else {
+            ctx.fillStyle = color;
+            ctx.fillRect(this.x, this.y, this.width, this.height);
+        }
+    }
+    this.newPos = function() {
+        this.gravitySpeed += this.gravity;
+        this.x += this.speedX;
+        this.y += this.speedY + this.gravitySpeed;
+        this.hitBottom();
+    }
+    this.hitBottom = function() {
+        var rockbottom = myGameArea.canvas.height - this.height;
+        if (this.y > rockbottom) {
+            this.y = rockbottom;
+            this.gravitySpeed = 0;
+        }
+    }
+    this.crashWith = function(otherobj) {
+        var myleft = this.x;
+        var myright = this.x + (this.width);
+        var mytop = this.y;
+        var mybottom = this.y + (this.height);
+        var otherleft = otherobj.x;
+        var otherright = otherobj.x + (otherobj.width);
+        var othertop = otherobj.y;
+        var otherbottom = otherobj.y + (otherobj.height);
+        var crash = true;
+        if ((mybottom < othertop) || (mytop > otherbottom) || (myright < otherleft) || (myleft > otherright)) {
+            crash = false;
+        }
+        return crash;
+    }
+}
+
+function easeToGoalAddAmount(x, amount, goal) {
+    if (amount > 0 && x < goal && x > goal - amount) {
+        return goal - x;
+    } else if (amount < 0 && x > goal && x < goal - amount) {
+        return goal - x;
+    } else {
+        return amount;
+    }
+}
+
+function updateGameArea() {
+    var x, height, gap, minHeight, maxHeight, minGap, maxGap, dist;
+    myGameArea.clear();
+    myGameArea.frameNo += 1;
+
+    var scrollrateX = 2;
+    var scrollrateY = 2;
+
+    var cameraGoalX = myGamePiece.getCenterX() - Math.floor(myGameArea.canvas.width/2);
+    var cameraGoalY = myGamePiece.getCenterY() - Math.floor(myGameArea.canvas.height/2);
+
+    var scrollRight = myGameArea.cameraX + 1 < cameraGoalX;
+    var scrollLeft = myGameArea.cameraX - 1 > cameraGoalX;
+    var scrollDown = myGameArea.cameraY + 1 < cameraGoalY;
+    var scrollUp = myGameArea.cameraY - 1 > cameraGoalY;
+
+    if (scrollRight) {
+        var moveAmount = easeToGoalAddAmount(myGameArea.cameraX, scrollrateX, cameraGoalX);
+        myGamePiece.x += -moveAmount;
+        for (i = 0; i < myObstacles.length; i += 1) {
+            myObstacles[i].x += -moveAmount;
+        }
+        for (i = 0; i < myTextObjects.length; i += 1) {
+            myTextObjects[i].x += -moveAmount;
+        }
+    }
+    if (scrollLeft) {
+      var moveAmount = easeToGoalAddAmount(myGameArea.cameraX, -scrollrateX, cameraGoalX);
+        myGamePiece.x += -moveAmount;
+        for (i = 0; i < myObstacles.length; i += 1) {
+            myObstacles[i].x += -moveAmount;
+        }
+        for (i = 0; i < myTextObjects.length; i += 1) {
+            myTextObjects[i].x += -moveAmount;
+        }
+    }
+    if (scrollUp) {
+      var moveAmount = easeToGoalAddAmount(myGameArea.cameraY, -scrollrateY, cameraGoalY);
+        myGamePiece.y += -moveAmount;
+        for (i = 0; i < myObstacles.length; i += 1) {
+            myObstacles[i].y += -moveAmount;
+        }
+        for (i = 0; i < myTextObjects.length; i += 1) {
+            myTextObjects[i].y += -moveAmount;
+        }
+    }
+    if (scrollDown) {
+      var moveAmount = easeToGoalAddAmount(myGameArea.cameraY, scrollrateY, cameraGoalY);
+        myGamePiece.y += -moveAmount;
+        for (i = 0; i < myObstacles.length; i += 1) {
+            myObstacles[i].y += -moveAmount;
+        }
+        for (i = 0; i < myTextObjects.length; i += 1) {
+            myTextObjects[i].y += -moveAmount;
+        }
+    }
+    
+
+
+    for (i = 0; i < myObstacles.length; i += 1) {
+        col = Math.floor((myObstacles[i].x - Math.floor(myGameArea.canvas.width/2)+(30/2*3))/30);
+
+        if ((col+myObstacles[i].row)%3 == (Math.floor(myGameArea.frameNo/15)%3)) {
+            myObstacles[i].update();
+        }
+    }
+    for (i = 0; i < myTextObjects.length; i += 1) {
+        myTextObjects[i].update();
+    }
+    
+    myGamePiece.newPos();
+    myGamePiece.update();
+}
+
+function updatePieces() {
+    if (myGameArea.frameNo == 1 || everyinterval(1)) {
+        dist = 3;
+        shift = Math.floor(Math.random()*(dist)-1)*30;
+        x = myGameArea.lastGen + shift;
+        if (x < 0) {
+            x += 30;
+        } else if (x > myGameArea.canvas.width-30) {
+            x -= 30;
+        }
+        var obs = new component(30, 30, "white", x, -30-myGameArea.cameraup)
+        obs.row = myGameArea.row;
+        myGameArea.row += 1;
+        myObstacles.push(obs);
+        myGameArea.lastGen = x;
+    }
+}
+
+function everyinterval(n) {
+    if ((myGameArea.frameNo / n) % 1 == 0) {return true;}
+    return false;
+}
+
+function accelerate(n) {
+    myGamePiece.gravity = n;
+}
+function step(horizontal, vertical) {
+    currx = myGamePiece.x;
+    curry = myGamePiece.y;
+    myGamePiece.x += horizontal;
+    myGamePiece.y -= vertical;
+    onFloor = false;
+    for (i = 0; i < myObstacles.length; i += 1) {
+        if (myGamePiece.crashWith(myObstacles[i])) {
+            onFloor = true;
+        } 
+    }
+    myGamePiece.x = currx;
+    myGamePiece.y = curry;
+    if (onFloor || true) {
+        myGamePiece.x += horizontal;
+        myGamePiece.y -= vertical;
+        myGameArea.cameraup += vertical;
+        updatePieces()
+    }
+}
+</script>
+<br>
+<div style="display:none;">
+  <button onclick="step(-30, 0)">LEFT</button>
+  <button onclick="step(0, 30)">FORTH</button>
+  <button onclick="step(0, -30)">BACK</button>
+  <button onclick="step(30, 0)">RIGHT</button>
+</div>
+</body>
+</html>

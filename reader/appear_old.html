@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<style>
+body {
+    background-color: #fff;
+    position: relative;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+#main {
+    margin: 5em;
+    display: flex;
+    flex-flow: column wrap;
+}
+#openfile {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+}
+.appearText {
+    animation-name: appear;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    text-align: left;
+    padding: 0.05em;
+    display: block;
+    white-space: pre;
+}
+.italic {
+    font-style: italic;
+}
+.underline {
+    text-decoration: underline;
+}
+@keyframes appear {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+</style>
+</head>
+<body onload="run()">
+<input type="file" id="openfile" />
+<div id="main"></div>
+<script>
+document.getElementById("openfile").addEventListener('change', function() {
+  var fr = new FileReader();
+  fr.onload = function() {
+    //document.getElementById("filecontents").textContent = this.result;
+    textIndex = 0;
+    var rawText = this.result
+    fileText = rawText.split(/\r\n|\n|\r/);
+    forward();
+  }
+  fr.readAsText(this.files[0]);
+})
+
+var textIndex = 0;
+
+var fileText = [];
+
+var textHistory = [];
+
+function run() {}
+
+function splitTextAndInstructions(rawtext) {
+  const sep = rawtext.split('~')
+  return {
+    text: sep[0],
+    instructions: sep.slice(1).map(function (item) {return item.split(',');})
+  }
+}
+
+function getAnimation(rawtext) {
+  const text = rawtext.toLowerCase();
+  return "appear";
+}
+
+const styleResets = {
+  color: "black",
+  fontStyle: "normal",
+  textDecoration: "none",
+}
+
+document.onkeydown = checkKey;
+
+function checkKey(e) {
+
+    e = e || window.event;
+
+    if (e.keyCode == '38' || e.key == 'Backspace') {
+        // up arrow
+        back()
+    }
+    else if (e.keyCode == '40' || e.key == ' ' || e.key == 'Enter') {
+        // down arrow
+        forward()
+    }
+    else if (e.keyCode == '37') {
+       // left arrow
+    }
+    else if (e.keyCode == '39') {
+       // right arrow
+    }
+
+}
+
+
+const instructionFunctions = {
+  
+  // Per line
+  setLine: (textHistory, lineNumber, text) => [...textHistory.slice(0, lineNumber), {...textHistory[lineNumber], text}, ...textHistory.slice(lineNumber + 1)],
+  styleLine: (textHistory, lineNumber, styleKey, styleValue) => textHistory.map((row, index) => index === lineNumber ? {...row, modifiers: {...row.modifiers, [styleKey]: styleValue}} : row),
+  replaceLine: (textHistory, lineNumber, pattern, replacement) => textHistory.map((row, index) => index === lineNumber ? {...row, text: row.text.replaceAll(RegExp(pattern, "g"), replacement)} : row),
+  
+  // Global
+  replace: (textHistory, pattern, replacement) => textHistory.map((row) => ({...row, text: row.text.replaceAll(RegExp(pattern, "g"), replacement)})),
+  styleWhere: (textHistory, pattern, styleKey, styleValue) => textHistory.map((row) => {
+    if (row.text.match(RegExp(pattern, "g"))) {
+      console.log("found!", row);  
+      return { ...row, modifiers: { ...row.modifiers, [styleKey]: styleValue}};
+      }
+    return row;
+  }),
+};
+
+
+function applyInstruction(textHistory, instruction) {
+  console.log("instruction", instruction);
+  if (!(instruction[0] in instructionFunctions)) {
+    console.error("instruction missing in instructionFunctions:", instruction);
+    return textHistory;
+  }
+  const result = instructionFunctions[instruction[0]](textHistory, ...instruction.slice(1));
+  console.log("result after instruction", instruction, result);
+  return result;
+}
+
+function getModifiersFromInstructions(instructions) {
+  const modifierObj = {
+    color: (_, color) => ["color", color],
+    italic: () => ["fontStyle", "italic"],
+    underline: () => ["textDecoration", "underline"],
+    style: (_, styleKey, styleValue) => [styleKey, styleValue],
+  };
+  const modifiers = Object.fromEntries(instructions.map((instruction) => {
+    if (instruction[0] in modifierObj)
+      return modifierObj[instruction[0]](...instruction);
+    return null;
+  }).filter((modifier) => modifier !== null))
+  console.log("modifiers", modifiers);
+  return modifiers;
+}
+
+function forward() {
+  while (textIndex < fileText.length) {
+    const check = fileText[textIndex];
+
+    const {text, instructions} = splitTextAndInstructions(fileText[textIndex]);
+
+    console.log(text, instructions);
+
+    const lastTextHistory = textHistory[textHistory.length - 1] || [];
+    const transformedTextHistory = instructions.reduce(applyInstruction, lastTextHistory);
+    console.log(transformedTextHistory);
+    const newTextHistory = [...transformedTextHistory, {text, modifiers: getModifiersFromInstructions(instructions), intervalModifiers: [], instructions}];
+    textHistory.push(newTextHistory);
+
+    updateHTMLFromTextHistory(lastTextHistory, newTextHistory);
+
+    textIndex++;
+    if (check.trim().length > 0) {
+      break
+    }
+  }
+}
+
+function updateHTMLFromTextHistory(oldTextHistory, newTextHistory) {
+  // Update existing text
+  newTextHistory.slice(0, oldTextHistory.length).forEach(updateHTMLTextAtIndex);
+
+  // Remove old text if needed
+  if (newTextHistory.length < oldTextHistory.length) oldTextHistory.slice(newTextHistory.length).forEach(removeLastHTMLText);
+
+  // Add new text if needed
+  if (newTextHistory.length > oldTextHistory.length) newTextHistory.slice(oldTextHistory.length).forEach(addHTMLText);
+}
+
+const appearTextName = "appearText";
+const textContentName = "textContent";
+
+const getTextContentSpan = (index) => document.getElementById("main").getElementsByClassName(appearTextName)[index].getElementsByClassName(textContentName)[0];
+
+
+
+// const addModifierToInterval = (intervals, modifier) => {
+
+
+//   for (let i = 0; i < intervals.length; i++) {
+//     const interval = intervals[i];
+//     const modifierEndBeforeintervalStart = modifier[1] <= interval[0];
+//     const modifierStartAfterintervalEnd = modifier[0] >= interval[1];
+//     if (modifierEndBeforeintervalStart) return [...intervals.slice(0, i), modifier, ...intervals.slice(i)];
+//     if (modifierStartAfterintervalEnd) continue;
+//     // TODO: handle other cases
+  
+//   }
+
+// }
+
+
+
+// const createSpansForRow = (row) => {
+//   const {text, modifiers} = row;
+
+//   const nonOverlappingIntervals = [];
+
+
+
+//   const textContentSpan = document.createElement("span");
+//   textContentSpan.classList.add(textContentName);
+//   textContentSpan.textContent = text;
+//   for (const modifierKey in modifiers) {
+//     textContentSpan.style[modifierKey] = modifiers[modifierKey];
+//   }
+//   return textContentSpan;
+// }
+
+const updateTextContentSpan = (textContentSpan, row) => {
+  const {modifiers} = row;
+  for (const modifierKey in styleResets) {
+    textContentSpan.style[modifierKey] = styleResets[modifierKey];
+  }
+  for (const modifierKey in modifiers) {
+    textContentSpan.style[modifierKey] = modifiers[modifierKey];
+  }
+
+  // const newChildren = createSpansForRow(row);
+
+  //textContentSpan.replaceChildren(...newChildren);
+  textContentSpan.textContent = row.text;
+}
+
+function updateHTMLTextAtIndex(row, index) {
+  const {text, modifiers} = row;
+  const textContentSpan = getTextContentSpan(index);
+  updateTextContentSpan(textContentSpan, row);
+}
+
+function addHTMLText(row) {
+  const {text, modifiers} = row;
+  const elem = document.getElementById("main");
+
+  const newElem = document.createElement("div");
+  elem.appendChild(newElem);
+  newElem.classList.add(appearTextName);
+  newElem.style.animationName = getAnimation(text);  
+
+  const newSpan = document.createElement("span");
+  newElem.appendChild(newSpan);
+  newSpan.textContent = ":";
+  newSpan.style.color = "white";
+
+  const textContentSpan = document.createElement("span");
+  newElem.appendChild(textContentSpan);
+  textContentSpan.classList.add(textContentName);
+  updateTextContentSpan(textContentSpan, row);
+}
+
+function removeLastHTMLText() {
+  const elem = document.getElementById("main");
+  elem.removeChild(elem.lastChild);
+}
+
+function back() {
+  while (textIndex > 0) {
+    const check = fileText[textIndex - 1];
+    const elem = document.getElementById("main");
+
+    const currentTextHistory = textHistory.pop();
+    const prevTextHistory = textHistory[textHistory.length - 1] || [];
+    updateHTMLFromTextHistory(currentTextHistory, prevTextHistory);
+
+    textIndex--;
+    console.log(check);
+    if (check.trim().length > 0) {
+      break
+    }
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+status
+
+
+
+
+
+
+
+
+
+_~setLine,2,You were a friend~setLine,4,I was a friend
+_
+_~setLine,2,You were a crush~setLine,4,I was a crush
+_
+_~setLine,2,You were waiting that summer~setLine,4,I was waiting that summer
+_
+_~setLine,2,You were a lover~setLine,4,I was a lover
+_
+_~setLine,2,You were a path to clarity~setLine,4,I was a lover
+_
+_~setLine,2,You were away~setLine,4,I was a lover
+_
+_~setLine,2,You were a panel of light~setLine,4,I was a lover
+_
+_~setLine,2,You were somewhere blurry in the back of the room~setLine,4,I was a lover
+_
+_~setLine,2,You were smiling~setLine,4,I was watching your smile
+_
+_~setLine,2,You were unrolling your socks across your legs~setLine,4,I was watching your smile
+_
+_~setLine,2,You were whispering~setLine,4,I was watching your smile
+_
+_~setLine,2,You were offline~setLine,4,I was a panel of light
+_
+_~setLine,2,You were trembling by the water, hands around your shins as if around the mast of a ship~setLine,4,I was watching the waves grasp at the rivers edge
+_
+_~setLine,2,You were sinking into a dune~setLine,4,I was watching the waves grasp at the shore
+_
+_~setLine,2,You were forgetting me~setLine,4,I was a panel of light
+_
+_~setLine,2,You were forgetting all panels of light~setLine,4,I was in my bed
+_
+_~setLine,2,You were away~setLine,4,I was on the living room couch
+_
+_~setLine,2,You were away~setLine,4,I was getting up from the couch
+_
+_~setLine,2,You were away~setLine,4,I was boarding a plane
+_
+_~setLine,2,You were away and trembling~setLine,4,I was buying a cheap mattress
+_
+_~setLine,2,You were away and trembling but forgetting~setLine,4,I was attending classes
+_
+_~setLine,2,You were somewhere blurry~setLine,4,I was falling onto a cheap mattress and laying there for some time
+_
+_~setLine,2,You were away and forgetting but smiling~setLine,4,I was getting up from the ground
+_
+_~setLine,2,You were away~setLine,4,I was boarding a plane
+_
+_~setLine,2,You were away~setLine,4,I was buying a expensive mattress
+_
+_~setLine,2,You were paused~setLine,4,I was buying sunflowers
+_
+_~setLine,2,You were sending a text~setLine,4,I was buying contact solution
+_
+_~setLine,2,You were flying~setLine,4,I was laying on my expensive mattress~setLine,6,She was taking our her contacts
+_
+_~setLine,2,You were walking on the Japantown bridge~setLine,4,I was walking on the Japantown bridge~setLine,6,
+_
+_~setLine,2,You were falling asleep to the roar of firetrucks~setLine,4,I was falling asleep to the roar of firetrucks
+_
+_~setLine,2,You were asking about the future~setLine,4,I was thinking about buying more contact solution
+_
+_~setLine,2,You were away~setLine,4,I was reading by the windowsill~setLine,6,She was baking bread
+_
+_~setLine,2,You were away~setLine,4,I was reading by the windowsill~setLine,6,She was putting sunflowers by the windowsill
+_
+_~setLine,2,You were a vocoder rasp~setLine,4,I was a panel of light~setLine,6,She was playing ukelele on the windowsill
+_
+_~setLine,2,You were a vocoder rasp~setLine,4,I was explaining my history~setLine,6,She was listening
+_
+_~setLine,2,You were a vocoder rasp~setLine,4,I was apologizing~setLine,6,She was crying
+_
+_~setLine,2,You were away~setLine,4,I was moving to Oakland~setLine,6,She was moving to Oakland
+_
+_~setLine,2,You were away~setLine,4,I was reading by the windowsill~setLine,6,She was putting sunflowers by the windowsill
+_
+_~setLine,2,You were away~setLine,4,I was reading a letter~setLine,6,She was listening
+_
+_~setLine,2,You were away~setLine,4,I was listening~setLine,6,She was reading a letter
+_
+_~setLine,2,You were following a line from the Nevada mountains along the gold rush trails~setLine,4,I was buying a mid-price desk~setLine,6,
+_
+_~setLine,2,You were passing into a shaded valley~setLine,4,I was considering new paitings for the walls
+_
+_~setLine,2,You were occupying a house by a ranch with a treehouse in front~setLine,4,I was sending a text
+_
+_~setLine,2,You were sharing a towel~setLine,4,I was driving south in the rain
+_
+_~setLine,2,You were sharing a towel~setLine,4,I was apologizing for the late arrival~setLine,8,He was sharing a towel
+_
+_~setLine,2,You were sharing a towel~setLine,4,I was showering~setLine,8,He was sharing a towel
+_
+_~setLine,2,You were playing music in the kitchen~setLine,4,I was dancing~setLine,8,He was dancing
+_
+_~setLine,2,You were listening~setLine,4,I was playing guitar~setLine,8,He was serving dinner
+_
+_~setLine,2,You were listering~setLine,4,I was explaining my history~setLine,8,He was asking about my history
+_
+_~setLine,2,You were listering~setLine,4,I was skipping over a question about the future~setLine,8,He was listening
+_
+_~setLine,2,You were making tea~setLine,4,I was driving north in the rain~setLine,8,He was receiving a second towel
+_
+_~setLine,2,You were drinking tea~setLine,4,I was away~setLine,8,He was drinking tea

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<style>
+
+</style>
+</head>
+<body onload="run()">
+<div id="main">
+
+<a href="appear.html">back</a>
+
+<div style="white-space: pre;">
+The appear program is a small program that reads/interprets a poem.
+You can pass in .txt files of any poem to read.
+The appear program also supports instructions and styling as you proceed through the poemsee the instructions below.
+
+~CONTROLS,
+
+Next ~line, DOWN, ENTER, SPACE
+Previous ~line, UP, BACKSPACE
+
+</div>
+
+
+  <div style="white-space: pre;">
+You can run an instruction on a particular line of the poem by adding it after the text with a tilde and with the arguments separated by commas. For example, to make the ~line,
+
+  this is <span style="color: blue">blue text</span> and this is <span style="text-decoration: underline">lined text</span>
+
+I would write something ~like,
+
+  this is blue text and this is lined text~colorWhere,blue text,blue~underlineWhere,lined text 
+
+INSTRUCTIONS
+
+// Style the current line<br>
+~color,[color]<br>
+~italic<br>
+~underline<br>
+~style,[styleKey],[styleValue]<br>
+<br>
+// Style a range in the current line<br>
+~colorAt,[start],[end],[color]<br>
+~italicAt,[start],[end]<br>
+~underlineAt,[start],[end]<br>
+~styleAt,[start],[end],[styleKey],[styleValue]<br>
+<br>
+// Style where the current line where it matches a regex pattern<br>
+~colorWhere,[pattern],[color]<br>
+~italicWhere,[pattern]<br>
+~underlineWhere,[pattern]<br>
+~styleWhere,[pattern],[styleKey],[styleValue]<br>
+<br>
+// Modify a different line<br>
+~setLine,[lineNumber],[text]<br>
+~styleLine,[lineNumber],[styleKey],[styleValue]<br>
+~replaceLine,[lineNumber],[pattern],[replacement]<br>
+~clearLineStyle,[lineNumber]<br>
+<br>
+// Global<br>
+~replace,[textHistory],[pattern],[replacement]
+<br>
+// Style all lines that match a pattern<br>
+~styleLineMatching,[pattern],[styleKey],[styleValue]
+<br>
+// Style a specified line where there is a match for the pattern<br>
+~styleLineWhere,[lineNumber],[pattern],[styleKey],[styleValue]<br>
+<br>
+<br>
+As an example, here's the entire poem of <em>Polysolid</em>, viewable as a preset on the main page.<br>
+<br>
+</div>
+
+
+
+<div style="white-space: pre;">
+polysolid
+
+
+There is always a space 
+between the bed and the wall that is unfortunate
+where the edges are
+flat-handed
+into
+                  box~color,blue~replace,into,                  into~replace,flat-handed,                  flat-handed
+I keep an empty plastic tub under my bed~replace,There is always a space,always an unfortunate space
+Hard hat,~replace,keep,kept~replace,between the bed and the wall that is unfortunate,where the bed and the wall meet~color,#8B8000
+        tonguey sneakers,~color,#8B8000
+                        the flashlight~color,#8B8000
+            all crammed themselves into one corner~replace,Hard hat,Hardhattong~replace,        tonguey sneakers,ueysneakers~replace,                        the flashlight,theflashlight
+            Residual blankets made way for 
+                                      impassive 
+                                      clean polysolid~styleWhere,clean polysolid,textDecoration,underline~styleWhere,clean polysolid,color,red
+
+                                Plastic is going to outlive me,~italic
+    and flannel is going to outlive me~italic
+    and fisher-price microphones
+        are going to outlive me~italic
+    and somewhere there is light
+        its going to live me out
+    and plaster is going to be reborn~replace,to live me,to wring me~styleLineMatchingfisher,color,blue
+
+The lamplight is rain as well~color,blue
+as well as it can be~replace, as well,~color,blue
+And sometime in the night
+it was hot enough~replace,rain,rain at least
+that I shifted and carefully                so as not to wake you~replace,And,&
+pinched my fingers to ~replace,And,&~replace,\(,((~replace,\),))
+my collarbone and peeled~replace,\(,((~replace,\),))
+my skin back~replace,\(,((~replace,\),))
+until I was shucked in the
+                                    still
+                                    already-breathed air.
+
+</div>
+</div>
+
+</body>

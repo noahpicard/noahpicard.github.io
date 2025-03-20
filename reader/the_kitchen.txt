@@ -1,0 +1,39 @@
+March 8 2025 - the kitchen of 700 Broderick
+you call me back a day later at 12:08
+the near-spring sun slow cooking my pant legs
+a warbling by my kitchen window
+two rock doves nitpicking / arguing / circling
+the way you and grandma used to do
+in the house on the hill with the earth brick floors
+her in the chair~setLine,1,you call me back at 12:08
+both visible through the TV passthrough
+(that's gone now)~setLine,3,a warbling by my window
+(so is the automatic chair I used to tilt on the brink of eternity with)~setLine,2,the near-spring sun slow cooking my legs~setLine,5,you and grandma used to
+the chatter of the TV filling up into static~setLine,4,some rock doves nitpicking - arguing - circling
+quiet now~setLine,5,you and grandma~setLine,6,in the house with the earth brick floors
+the redwoods only interspersed with faint cooing
+as you drag your robe over your knobbly spine~setLine,2,the sun cooking my legs~setLine,5,and grandma
+and slowly~setLine,4,some rock doves arguing - circling~setLine,9,(that's now)~setLine,11,the chatter of the TV filling up
+descend~setLine,2,the sun on my legs~setLine,5,grandma~setLine,6,in the house with the brick floors~setLine,8,visible through the TV passthrough
+the carpeted staircase~setLine,4,some birds arguing - circling~setLine,12,quiet
+the phone is on the couch~setLine,1,you call me back at noon
+but must have moved somewhere~setLine,0,Saturday - the kitchen~setLine,4,some birds circling~setLine,8,visible through the passthrough~setLine,9,(now)~setLine,15,slowly~setLine,18,the phone was on the couch
+there~setLine,6,the brick floors
+on the bathroom sink~setLine,4,some birds~setLine,8,visible through the wall~setLine,9,~setLine,20,here
+with the light blinking green~setLine,12,
+you reach there~setLine,1,you call me~setLine,18,the phone on the couch
+in the dark~setLine,10,(so is the chair I used to tilt on the brink with)~setLine,14,as you drag your robe over your spine
+to dial me~setLine,11,the static filling up
+well hey there noah
+what are you up to in the city these days?~setLine,3,a warbling by the window~setLine,22,with the light blinking~setLine,25,dial me
+you still live in that apartment with your roommates?~setLine,14,as you drag over your spine~setLine,21,on the sink
+right - right~setLine,2,the sun on me
+a pause~setLine,16,~setLine,22,~setLine,24,in dark
+how are you and A doing?~setLine,1,~setLine,10,(the chair I used to tilt with)~setLine,17,the staircase~setLine,21,the sink~setLine,22,blinking
+we broke up years ago grandpa~setLine,13,the redwoods faintly cooing~setLine,18,the phone~setLine,19,moved somewhere~setLine,20,~setLine,22,~setLine,26,hey noah~setLine,27,what are you up to?~setLine,28,you still live in that apartment
+and I tell you about this new woman from Texas~setLine,0,the kitchen~setLine,17,~setLine,22,blinking~setLine,23,you reach~setLine,24,~setLine,29,right
+re-folding my legs on the bench and squinting in the sun~setLine,22,
+oh great~setLine,2,the sun~setLine,14,you drag your spine~setLine,22,blinking~setLine,26,~setLine,28,you still live~setLine,31,me and A~setLine,32,broke up years ago
+how about you grandpa? what's new?~setLine,3,a warbling~setLine,13,the redwoods~setLine,22,~setLine,29,~setLine,30,~setLine,35,that's great
+oh - nothing much - you say~setLine,11,the static~setLine,22,blinking~setLine,27,what are you~setLine,29,~setLine,32,broke up~setLine,33,this new woman~setLine,35,
+nothing much~setLine,0,kitchen~setLine,34,in the sun~setLine,36,grandpa?~setLine,37,you say

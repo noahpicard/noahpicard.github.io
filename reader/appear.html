@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<style>
+body {
+    background-color: #fff;
+    position: relative;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+#main {
+    margin: 5em;
+    display: flex;
+    flex-flow: column wrap;
+}
+#menu {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  /* display: flex;
+  flex-flow: column; */
+  gap: 1px;
+}
+#openfile {
+  width: 200px;
+}
+.appearText {
+  text-align: left;
+  padding: 0.05em;
+  display: block;
+  white-space: pre;
+  position: relative;
+}
+.textContent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  animation-name: appear;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+}
+.fadeOutSpan {
+  position: absolute;
+  top: 0;
+  left: 0;
+  animation-name: disappear;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+}
+.italic {
+    font-style: italic;
+}
+.underline {
+    text-decoration: underline;
+}
+@keyframes appear {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+@keyframes disappear {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+</style>
+</head>
+<body onload="run()">
+<div id="menu">
+  
+  <input type="file" id="openfile" /><br>
+  <select id="select_preset" aria-placeholder="or select preset" style="width: 150px;">
+    <option value="hi">hi</option>
+    <option value="bye">bye</option>
+  </select>
+  <a href="appear_help.html">about</a>
+</div>
+<div id="main"></div>
+<script>
+document.getElementById("openfile").addEventListener('change', function() {
+  var fr = new FileReader();
+  fr.onload = function() {
+    //document.getElementById("filecontents").textContent = this.result;
+    textIndex = 0;
+    textHistory = [];
+    var rawText = this.result
+    fileText = rawText.split(/\r\n|\n|\r/);
+    document.getElementById("select_preset").value = "Select preset -";
+    document.getElementById("main").replaceChildren();
+    document.getElementById("main").innerHTML = "";
+    forward();
+  }
+  fr.readAsText(this.files[0]);
+})
+
+const presetTexts = {
+  "Select preset -": "",
+  polysolid:
+`polysolid
+
+
+There is always a space 
+between the bed and the wall that is unfortunate
+where the edges are
+flat-handed
+into
+                  box~color,blue~replace,into,                  into~replace,flat-handed,                  flat-handed
+I keep an empty plastic tub under my bed~replace,There is always a space,always an unfortunate space
+Hard hat,~replace,keep,kept~replace,between the bed and the wall that is unfortunate,where the bed and the wall meet~color,#8B8000
+        tonguey sneakers,~color,#8B8000
+                        the flashlight~color,#8B8000
+            all crammed themselves into one corner~replace,Hard hat,Hardhattong~replace,        tonguey sneakers,ueysneakers~replace,                        the flashlight,theflashlight
+            Residual blankets made way for 
+                                      impassive 
+                                      clean polysolid~styleWhere,clean polysolid,textDecoration,underline~styleWhere,clean polysolid,color,red
+
+                                Plastic is going to outlive me,~italic
+    and flannel is going to outlive me~italic
+    and fisher-price microphones
+        are going to outlive me~italic
+    and somewhere there is light
+        its going to live me out
+    and plaster is going to be reborn~replace,to live me,to wring me~styleLineMatchingfisher,color,blue
+
+The lamplight is rain as well~color,blue
+as well as it can be~replace, as well,~color,blue
+And sometime in the night
+it was hot enough~replace,rain,rain at least
+that I shifted and carefully                 (so as not to wake you)~replace,And,&
+pinched my fingers to ~replace,And,&~replace,\\(,((~replace,\\),))
+my collarbone and peeled~replace,\\(,((~replace,\\),))
+my skin back~replace,\\(,((~replace,\\),))
+until I was shucked in the
+                                    still
+                                    already-breathed air.`,
+  refracted: 
+`through~styleWhere,through,color,purple
+this~setLine,0,through my~styleWhere,this,color,purple
+crystal~setLine,0,through my own~setLine,1,this prayer~styleWhere,crystal,color,purple
+of~setLine,0,through my own small~setLine,1,this prayer like~setLine,2,crystal atop~styleWhere,of,color,purple
+water~setLine,0,through my own small failings /~setLine,1,this prayer like smoke~setLine,2,crystal atop wood /~setLine,3,of ether~styleWhere,water,color,purple
+I~setLine,0,through my own small failings / palms~setLine,1,this prayer like smoke curdling~setLine,2,crystal atop wood / each~setLine,3,of ether or~setLine,4,water whispering~styleWhere,I,color,purple
+glimpse~setLine,0,through my own small failings / palms re-cup~setLine,1,this prayer like smoke curdling wood /~setLine,2,crystal atop wood / each history~setLine,3,of ether or the~setLine,4,water whispering a~setLine,5,I press~styleWhere,glimpse,color,purple
+refracted~setLine,0,through my own small failings / palms re-cup under~setLine,1,this prayer like smoke curdling wood / extending~setLine,2,crystal atop wood / each history self-deceiving~setLine,3,of ether or the grape~setLine,4,water whispering a gentle~setLine,5,I press pinkies~setLine,6,glimpse a~styleWhere,refracted,color,purple
+the~setLine,0,through my own small failings / palms re-cup under the~setLine,1,this prayer like smoke curdling wood / extending my~setLine,2,crystal atop wood / each history self-deceiving separation~setLine,3,of ether or the grape and~setLine,4,water whispering a gentle porousness~setLine,5,I press pinkies vainly /~setLine,6,glimpse a flash~setLine,7,refracted and~styleWhere,the,color,purple
+entire~setLine,0,through my own small failings / palms re-cup under the gliding~setLine,1,this prayer like smoke curdling wood / extending my stalactite~setLine,2,crystal atop wood / each history self-deceiving separation by~setLine,3,of ether or the grape and its~setLine,4,water whispering a gentle porousness to~setLine,5,I press pinkies vainly / so~setLine,6,glimpse a flash of~setLine,7,refracted and therefore~setLine,8,the last~styleWhere,entire,color,purple
+universe~setLine,0,through my own small failings / palms re-cup under the gliding water~setLine,1,this prayer like smoke curdling wood / extending my stalactite skin~setLine,2,crystal atop wood / each history self-deceiving separation by seams~setLine,3,of ether or the grape and its skin~setLine,4,water whispering a gentle porousness to me~setLine,5,I press pinkies vainly / so to~setLine,6,glimpse a flash of everything~setLine,7,refracted and therefore held~setLine,8,the last lights~setLine,9,entire opening:~styleWhere,universe,color,purple`,
+  the_kitchen:
+`March 8 2025 - the kitchen of 700 Broderick
+you call me back a day later at 12:08
+the near-spring sun slow cooking my pant legs
+a warbling by my kitchen window
+two rock doves nitpicking / arguing / circling
+the way you and grandma used to do
+in the house on the hill with the earth brick floors
+her in the chair~setLine,1,you call me back at 12:08
+both visible through the TV passthrough
+(that's gone now)~setLine,3,a warbling by my window
+(so is the automatic chair I used to tilt on the brink of eternity with)~setLine,2,the near-spring sun slow cooking my legs~setLine,5,you and grandma used to
+the chatter of the TV filling up into static~setLine,4,some rock doves nitpicking - arguing - circling
+quiet now~setLine,5,you and grandma~setLine,6,in the house with the earth brick floors
+the redwoods only interspersed with faint cooing
+as you drag your robe over your knobbly spine~setLine,2,the sun cooking my legs~setLine,5,and grandma
+and slowly~setLine,4,some rock doves arguing - circling~setLine,9,(that's now)~setLine,11,the chatter of the TV filling up
+descend~setLine,2,the sun on my legs~setLine,5,grandma~setLine,6,in the house with the brick floors~setLine,8,visible through the TV passthrough
+the carpeted staircase~setLine,4,some birds arguing - circling~setLine,12,quiet
+the phone is on the couch~setLine,1,you call me back at noon
+but must have moved somewhere~setLine,0,Saturday - the kitchen~setLine,4,some birds circling~setLine,8,visible through the passthrough~setLine,9,(now)~setLine,15,slowly~setLine,18,the phone was on the couch
+there~setLine,6,the brick floors
+on the bathroom sink~setLine,4,some birds~setLine,8,visible through the wall~setLine,9,~setLine,20,here
+with the light blinking green~setLine,12,
+you reach there~setLine,1,you call me~setLine,18,the phone on the couch
+in the dark~setLine,10,(so is the chair I used to tilt on the brink with)~setLine,14,as you drag your robe over your spine
+to dial me~setLine,11,the static filling up
+well hey there noah
+what are you up to in the city these days?~setLine,3,a warbling by the window~setLine,22,with the light blinking~setLine,25,dial me
+you still live in that apartment with your roommates?~setLine,14,as you drag over your spine~setLine,21,on the sink
+right - right~setLine,2,the sun on me
+a pause~setLine,16,~setLine,22,~setLine,24,in dark
+how are you and A doing?~setLine,1,~setLine,10,(the chair I used to tilt with)~setLine,17,the staircase~setLine,21,the sink~setLine,22,blinking
+we broke up years ago grandpa~setLine,13,the redwoods faintly cooing~setLine,18,the phone~setLine,19,moved somewhere~setLine,20,~setLine,22,~setLine,26,hey noah~setLine,27,what are you up to?~setLine,28,you still live in that apartment
+and I tell you about this new woman from Texas~setLine,0,the kitchen~setLine,17,~setLine,22,blinking~setLine,23,you reach~setLine,24,~setLine,29,right
+re-folding my legs on the bench and squinting in the sun~setLine,22,
+oh great~setLine,2,the sun~setLine,14,you drag your spine~setLine,22,blinking~setLine,26,~setLine,28,you still live~setLine,31,me and A~setLine,32,broke up years ago
+how about you grandpa? what's new?~setLine,3,a warbling~setLine,13,the redwoods~setLine,22,~setLine,29,~setLine,30,~setLine,35,that's great
+oh - nothing much - you say~setLine,11,the static~setLine,22,blinking~setLine,27,what are you~setLine,29,~setLine,32,broke up~setLine,33,this new woman~setLine,35,
+nothing much~setLine,0,kitchen~setLine,34,in the sun~setLine,36,grandpa?~setLine,37,you say`,
+  answered:
+`I know you asked me already
+
+
+
+and I answered already but I feel
+something needs to be flushed out in full
+so, simply:
+
+
+it is the brush on your fingers webbing
+& in the fingertips brushing 
+        it is the edges of film in the home video
+        and thumb that gets in the shot
+                it is the tune rolling tidally
+                over behind your lips
+                        it is the slimy clasped can
+                        and the gloved hand
+                                it is watching the stars to check
+                                which ones might go out soon~replace,needs to be flushed out in full,is flushing me out
+                                and thanking them for stopping by
+        & it is the memory
+        behind the memory~replace,([A-Za-z]+)ing\\W,$1ed 
+        a thousand times~replace,memory,memorymemorymemory
+        the original true thing~replace,memory,memory
+        nesting in the break~replace,emorym,emoryinm
+
+_~styleLine,24,color,blue~setLine,0,I know I’ve already answered
+_~styleLine,23,color,blue~styleLine,22,color,blue~styleLine,21,color,blue~setLine,1,
+_~styleLine,20,color,blue~setLine,2,you twice but since you asked I haven’t been able to stop
+_~styleLine,19,color,blue~setLine,3,thinking about it
+_~styleLine,18,color,blue~setLine,4,there was a strange echo in the base of your throat as you
+_~styleLine,17,color,blue~setLine,5,		            enunciated
+_~styleLine,16,color,blue~setLine,6,okay					                          something like
+_~styleLine,15,color,blue~setLine,7,	  so              						                      this
+_~styleLine,14,color,blue~setLine,8,			
+_~styleLine,13,color,blue~setLine,9,                                            basically
+_~styleLine,12,color,blue~setLine,10,                                            imagine a line turning into a field
+_~styleLine,11,color,blue~setLine,11,                                            the sweeping expansion of that
+_~styleLine,10,color,blue~setLine,12,                                            and the way it spreads along your
+_~styleLine,9,color,blue~setLine,13,                                            chest to fill each space in your
+_~styleLine,8,color,blue~setLine,14,                                            organells
+_~styleLine,7,color,blue~setLine,15,
+_~styleLine,6,color,blue~setLine,16,		             or if you 
+_~styleLine,5,color,blue~setLine,17,     have trouble consider a
+_~styleLine,4,color,blue~setLine,18,   broadknife carving away
+_~styleLine,3,color,blue~setLine,19,      the dead skin from the
+_~styleLine,2,color,blue~setLine,20,   base of your heel its soft
+_~styleLine,1,color,blue~styleLine,24,color,black~styleLine,23,color,black~styleLine,22,color,black~setLine,21,                             scraping`,
+  status:
+`status
+
+
+
+
+
+
+
+
+
+
+
+_~setLine,4,You were a friend~setLine,6,I was a friend~styleLineWhere,4,You were,color,blue~styleLineWhere,6,I was,color,red
+
+_~setLine,4,You were a crush~setLine,6,I was a crush
+
+_~setLine,4,You were waiting that summer~setLine,6,I was waiting that summer
+
+_~setLine,4,You were a lover~setLine,6,I was a lover
+
+_~setLine,4,You were a path to clarity~setLine,6,I was a lover
+
+_~setLine,4,You were away~setLine,6,I was a lover
+
+_~setLine,4,You were a panel of light~setLine,6,I was a lover
+
+_~setLine,4,You were somewhere blurry in the back of the room~setLine,6,I was a lover
+
+_~setLine,4,You were smiling~setLine,6,I was watching your smile
+
+_~setLine,4,You were unrolling your socks across your legs~setLine,6,I was watching your smile
+
+_~setLine,4,You were whispering~setLine,6,I was watching your smile
+
+_~setLine,4,You were offline~setLine,6,I was a panel of light
+
+_~setLine,4,You were trembling by the water, hands around your shins as if around the mast of a ship~setLine,6,I was watching the waves grasp at the rivers edge
+
+_~setLine,4,You were sinking into a dune~setLine,6,I was watching the waves grasp at the shore
+
+_~setLine,4,You were forgetting me~setLine,6,I was a panel of light
+
+_~setLine,4,You were forgetting all panels of light~setLine,6,I was in my bed
+
+_~setLine,4,You were away~setLine,6,I was on the living room couch
+
+_~setLine,4,You were away~setLine,6,I was getting up from the couch
+
+_~setLine,4,You were away~setLine,6,I was boarding a plane
+
+_~setLine,4,You were away and trembling~setLine,6,I was buying a cheap mattress
+
+_~setLine,4,You were away and trembling but forgetting~setLine,6,I was attending classes
+
+_~setLine,4,You were somewhere blurry~setLine,6,I was falling onto a cheap mattress and laying there for some time
+
+_~setLine,4,You were away and forgetting but smiling~setLine,6,I was getting up from the ground
+
+_~setLine,4,You were away~setLine,6,I was boarding a plane
+
+_~setLine,4,You were away~setLine,6,I was buying a expensive mattress
+
+_~setLine,4,You were paused~setLine,6,I was buying sunflowers
+
+_~setLine,4,You were sending a text~setLine,6,I was buying contact solution
+
+_~setLine,4,You were flying~setLine,6,I was laying on my expensive mattress~setLine,8,She was taking our her contacts~styleLineWhere,8,She was,color,purple
+
+_~setLine,4,You were walking on the Japantown bridge~setLine,6,I was walking on the Japantown bridge~setLine,8,
+
+_~setLine,4,You were falling asleep to the roar of firetrucks~setLine,6,I was falling asleep to the roar of firetrucks
+
+_~setLine,4,You were asking about the future~setLine,6,I was thinking about buying more contact solution
+
+_~setLine,4,You were away~setLine,6,I was reading by the windowsill~setLine,8,She was baking bread
+
+_~setLine,4,You were away~setLine,6,I was reading by the windowsill~setLine,8,She was putting sunflowers by the windowsill
+
+_~setLine,4,You were a vocoder rasp~setLine,6,I was a panel of light~setLine,8,She was playing ukelele on the windowsill
+
+_~setLine,4,You were a vocoder rasp~setLine,6,I was explaining my history~setLine,8,She was listening
+
+_~setLine,4,You were a vocoder rasp~setLine,6,I was apologizing~setLine,8,She was crying
+
+_~setLine,4,You were away~setLine,6,I was moving to Oakland~setLine,8,She was moving to Oakland
+
+_~setLine,4,You were away~setLine,6,I was reading by the windowsill~setLine,8,She was putting sunflowers by the windowsill
+
+_~setLine,4,You were away~setLine,6,I was reading a letter~setLine,8,She was listening
+
+_~setLine,4,You were away~setLine,6,I was listening~setLine,8,She was reading a letter
+
+_~setLine,4,You were following a line from the Nevada mountains along the gold rush trails~setLine,6,I was buying a mid-price desk~setLine,8,
+
+_~setLine,4,You were passing into a shaded valley~setLine,6,I was considering new paitings for the walls
+
+_~setLine,4,You were occupying a house by a ranch with a treehouse in front~setLine,6,I was sending a text
+
+_~setLine,4,You were sharing a towel~setLine,6,I was driving south in the rain
+
+_~setLine,2,He was sharing a towel~setLine,4,You were sharing a towel~setLine,6,I was apologizing for the late arrival~styleLineWhere,2,He was,color,green
+
+_~setLine,2,He was sharing a towel~setLine,4,You were sharing a towel~setLine,6,I was showering
+
+_~setLine,2,He was dancing~setLine,4,You were playing music in the kitchen~setLine,6,I was dancing
+
+_~setLine,2,He was serving dinner~setLine,4,You were listening~setLine,6,I was playing guitar
+
+_~setLine,2,He was asking about my history~setLine,4,You were listering~setLine,6,I was explaining my history
+
+_~setLine,2,He was listening~setLine,4,You were listering~setLine,6,I was skipping over a question about the future
+
+_~setLine,2,He was receiving a second towel~setLine,4,You were making tea~setLine,6,I was driving north in the rain
+
+_~setLine,2,He was pouring tea~setLine,4,You were drinking tea~setLine,6,I was away
+
+_~setLine,2,He was pouring tea~setLine,4,You were drinking tea~setLine,6,_`,
+  look_for:
+`these days i mostly look for what isn't there
+no songs to teach me anymore
+I've grown too specific - a philosophy
+unreachable save for fleeting images
+of blue crab cakes
+who can refract my anger when you
+are being both kind and generous hurt
+is something more raw and barren - a quicksand
+of the gut. I leave enduring to consider
+how much you can hold right now the songs
+speaking my name don't talk about anything
+directly. they couldn't possibly there isn't a thing
+to say. an eclipse is defined by it's edges, a gap previously
+illuminated. 
+
+_~clearLineStyle,0~styleLine,0,color,lightgray~styleLineWhere,0,these days,color,black
+_~clearLineStyle,1~styleLine,1,color,lightgray~styleLineWhere,1,teach,color,black
+_~clearLineStyle,2~styleLine,2,color,lightgray~styleLineWhere,2,a philosophy,color,black
+_~clearLineStyle,3~styleLine,3,color,lightgray~styleLineWhere,3,for fleeting images,color,black
+_~clearLineStyle,4~styleLine,4,color,lightgray~styleLineWhere,4,blue,color,black
+_~clearLineStyle,5~styleLine,5,color,lightgray~styleLineWhere,5,can refract my,color,black
+_~clearLineStyle,6~styleLine,6,color,lightgray~styleLineWhere,6,generous hurt,color,black
+_~clearLineStyle,7~styleLine,7,color,lightgray~styleLineWhere,7,something,color,black~styleLineWhere,7,raw and,color,black
+_~clearLineStyle,8~styleLine,8,color,lightgray~styleLineWhere,8,enduring,color,black
+_~clearLineStyle,9~styleLine,9,color,lightgray~styleLineWhere,9,the songs,color,black
+_~clearLineStyle,10~styleLine,10,color,lightgray~styleLineWhere,10,don't talk,color,black
+_~clearLineStyle,11~styleLine,11,color,lightgray~styleLineWhere,11,directly.,color,black~styleLineWhere,11,there isn't a thing,color,black
+_~clearLineStyle,12~styleLine,12,color,lightgray~styleLineWhere,12,to say.,color,black~styleLineWhere,12,a gap,color,black
+_~clearLineStyle,13~styleLine,13,color,lightgray~styleLineWhere,13,illuminated,color,black
+
+_~clearLineStyle,0~styleLine,0,color,lightgray~styleLineWhere,0,look for,color,black
+_~clearLineStyle,1~styleLine,1,color,lightgray~styleLineWhere,1,songs,color,black~styleLineWhere,1,more,color,black
+_~clearLineStyle,2~styleLine,2,color,lightgray~styleLineWhere,2,specific,color,black
+_~clearLineStyle,3~styleLine,3,color,lightgray~styleLineWhere,3,reach,color,black~styleLineWhere,3,for,color,black~styleLineWhere,3,images,color,black
+_~clearLineStyle,4~styleLine,4,color,lightgray~styleLineWhere,4,of blue crab cakes,color,black
+_~clearLineStyle,5~styleLine,5,color,lightgray~styleLineWhere,5,refract,color,black
+_~clearLineStyle,6~styleLine,6,color,lightgray~styleLineWhere,6,being,color,black
+_~clearLineStyle,7~styleLine,7,color,lightgray~styleLineWhere,7,something more raw and barren,color,black
+_~clearLineStyle,8~styleLine,8,color,lightgray~styleLineWhere,8,leave,color,black
+_~clearLineStyle,9~styleLine,9,color,lightgray~styleLineWhere,9,the songs,color,black
+_~clearLineStyle,10~styleLine,10,color,lightgray~styleLineWhere,10,speaking,color,black~styleLineWhere,10,anything,color,black
+_~clearLineStyle,11~styleLine,11,color,lightgray~styleLineWhere,11,directly. they couldn't possibly,color,black
+_~clearLineStyle,12~styleLine,12,color,lightgray~styleLineWhere,12,say. an eclipse is,color,black
+_~clearLineStyle,13~styleLine,13,color,lightgray~styleLineWhere,13,illuminated,color,black
+
+_~clearLineStyle,0~styleLine,0,color,lightgray~styleLineWhere,0,what isn't there,color,black
+_~clearLineStyle,1~styleLine,1,color,lightgray~styleLineWhere,1,anymore,color,black
+_~clearLineStyle,2~styleLine,2,color,lightgray~styleLineWhere,2,I've grown too,color,black
+_~clearLineStyle,3~styleLine,3,color,lightgray~styleLineWhere,3,unreachable save for fleeting images,color,black
+_~clearLineStyle,4~styleLine,4,color,lightgray
+_~clearLineStyle,5~styleLine,5,color,lightgray~styleLineWhere,5,you,color,black
+_~clearLineStyle,6~styleLine,6,color,lightgray~styleLineWhere,6,are being both kind and generous,color,black
+_~clearLineStyle,7~styleLine,7,color,lightgray~styleLineWhere,7,raw and barren,color,black
+_~clearLineStyle,8~styleLine,8,color,lightgray~styleLineWhere,8,I,color,black~styleLineWhere,8,consider,color,black
+_~clearLineStyle,9~styleLine,9,color,lightgray~styleLineWhere,9,how,color,black~styleLineWhere,9,you can,color,black
+_~clearLineStyle,10~styleLine,10,color,lightgray~styleLineWhere,10,speak,color,black~styleLineWhere,10,my name,color,black
+_~clearLineStyle,11~styleLine,11,color,lightgray~styleLineWhere,11,there isn't a thing,color,black
+_~clearLineStyle,12~styleLine,12,color,lightgray~styleLineWhere,12,defined by it's edges,color,black
+_~clearLineStyle,13~styleLine,13,color,lightgray~styleLineWhere,13,.,color,black`,
+};
+
+document.getElementById("select_preset").replaceChildren(...Object.keys(presetTexts).map((key) => {
+  const presetOption = document.createElement("option");
+  presetOption.textContent = `${key}`;
+  presetOption.value = key;
+  return presetOption;
+}))
+
+document.getElementById("select_preset").addEventListener('change', function(e) {
+  textIndex = 0;
+  textHistory = [];
+  var rawText = presetTexts[e.target.value];
+  fileText = rawText.split(/\r\n|\n|\r/);
+  //document.getElementById("openfile").files = [];
+  document.getElementById("main").replaceChildren();
+  document.getElementById("main").innerHTML = "";
+  forward();
+})
+
+var textIndex = 0;
+
+var fileText = [];
+
+var textHistory = [];
+
+function run() {}
+
+function splitTextAndInstructions(rawtext) {
+  const sep = rawtext.split('~')
+  return {
+    text: sep[0],
+    instructions: sep.slice(1).map(function (item) {return item.split(',');})
+  }
+}
+
+function getAnimation(rawtext) {
+  const text = rawtext.toLowerCase();
+  return "appear";
+}
+
+const styleResets = {
+  color: "black",
+  fontStyle: "normal",
+  textDecoration: "none",
+}
+
+document.onkeydown = checkKey;
+
+function checkKey(e) {
+
+    e = e || window.event;
+
+    if (e.keyCode == '38' || e.key == 'Backspace') {
+        // up arrow
+        back()
+    }
+    else if (e.keyCode == '40' || e.key == ' ' || e.key == 'Enter') {
+        // down arrow
+        forward()
+    }
+    else if (e.keyCode == '37') {
+       // left arrow
+    }
+    else if (e.keyCode == '39') {
+       // right arrow
+    }
+
+}
+
+
+const instructionFunctions = {
+  
+  // Per line
+  setLine: (textHistory, lineNumber, text) => textHistory.map((row, index) => index === parseInt(lineNumber) ? {...row, text} : row),
+  styleLine: (textHistory, lineNumber, styleKey, styleValue) => textHistory.map((row, index) => index === parseInt(lineNumber) ? {...row, modifiers: [...row.modifiers, [null, null, styleKey, styleValue]]} : row),
+  replaceLine: (textHistory, lineNumber, pattern, replacement) => textHistory.map((row, index) => index === parseInt(lineNumber) ? {...row, text: row.text.replaceAll(RegExp(pattern, "g"), replacement)} : row),
+  clearLineStyle: (textHistory, lineNumber) => textHistory.map((row, index) => index === parseInt(lineNumber) ? {...row, modifiers: []} : row),
+
+  // Global
+  replace: (textHistory, pattern, replacement) => textHistory.map((row) => ({...row, text: row.text.replaceAll(RegExp(pattern, "g"), replacement)})),
+  styleLineMatching: (textHistory, pattern, styleKey, styleValue) => textHistory.map((row) => row.text.match(RegExp(pattern, "g")) ? { ...row, modifiers: [ ...row.modifiers, [null, null, styleKey, styleValue]]} : row),
+  styleLineWhere: (textHistory, lineNumber, pattern, styleKey, styleValue) => textHistory.map((row, index) => index === parseInt(lineNumber) ? {...row, modifiers: [...row.modifiers, [...getStartAndEndOfMatch(row.text, pattern), styleKey, styleValue]]} : row),
+};
+
+
+function applyInstruction(textHistory, instruction) {
+  if (!(instruction[0] in instructionFunctions)) {
+    return textHistory;
+  }
+  const result = instructionFunctions[instruction[0]](textHistory, ...instruction.slice(1));
+  return result;
+}
+
+const getStartAndEndOfMatch = (text, pattern) => {
+  const match = RegExp(pattern, "g").exec(text);
+  if (match === null){
+    return [0, 0];
+  }
+  const start = match.index;
+  const end = match.index + match[0].length;
+  return [start, end];
+}
+
+function getModifiersFromInstructions(instructions, text) {
+  const modifierObj = {
+    // Modify a line
+    color: (_, color) => [null, null, "color", color],
+    italic: () => [null, null, "fontStyle", "italic"],
+    underline: () => [null, null, "textDecoration", "underline"],
+    style: (_, styleKey, styleValue) => [null, null, styleKey, styleValue],
+    
+    // Modify a range
+    colorAt: (_, start, end, color) => [start, end, "color", color],
+    italicAt: (start, end) => [start, end, "fontStyle", "italic"],
+    underlineAt: (start, end) => [start, end, "textDecoration", "underline"],
+    styleAt: (_, start, end, styleKey, styleValue) => [start, end, styleKey, styleValue],
+
+    // Modify a pattern
+    colorWhere: (_, pattern, color) => [...getStartAndEndOfMatch(text, pattern), "color", color],
+    italicWhere: (pattern) => [...getStartAndEndOfMatch(text, pattern), "fontStyle", "italic"],
+    underlineWhere: (pattern) => [...getStartAndEndOfMatch(text, pattern), "textDecoration", "underline"],
+    styleWhere: (_, pattern, styleKey, styleValue) => [...getStartAndEndOfMatch(text, pattern), styleKey, styleValue],
+  };
+  
+  const modifiers = instructions.map((instruction) => {
+    if (instruction[0] in modifierObj)
+      return modifierObj[instruction[0]](...instruction);
+    return null;
+  }).filter((modifier) => modifier !== null)
+  return modifiers;
+}
+
+function forward() {
+  while (textIndex < fileText.length) {
+    const check = fileText[textIndex];
+
+    const {text, instructions} = splitTextAndInstructions(fileText[textIndex]);
+
+    console.log("text + instructions", text, instructions);
+
+    const lastTextHistory = textHistory[textHistory.length - 1] || [];
+    const transformedTextHistory = instructions.reduce(applyInstruction, lastTextHistory);
+    console.log("transformedTextHistory", transformedTextHistory);
+    const newTextHistory = [...transformedTextHistory, {text, modifiers: [], instructions}];
+    textHistory.push(newTextHistory);
+
+    updateHTMLFromTextHistory(lastTextHistory, newTextHistory);
+
+    textIndex++;
+    if (check.trim().length > 0) {
+      break
+    }
+  }
+}
+
+var deepEqual = function (x, y) {
+  if (x === y) {
+    return true;
+  }
+  else if ((typeof x == "object" && x != null) && (typeof y == "object" && y != null)) {
+    if (Object.keys(x).length != Object.keys(y).length)
+      return false;
+
+    for (var prop in x) {
+      if (y.hasOwnProperty(prop))
+      {  
+        if (! deepEqual(x[prop], y[prop]))
+          return false;
+      }
+      else
+        return false;
+    }
+    
+    return true;
+  }
+  else 
+    return false;
+}
+
+function updateHTMLFromTextHistory(oldTextHistory, newTextHistory) {
+  // Update existing text
+  newTextHistory.slice(0, oldTextHistory.length).forEach((row, index) => {
+    if (!deepEqual(row,oldTextHistory[index])) updateHTMLTextAtIndex(row, index)
+  });
+
+  // Remove old text if needed
+  if (newTextHistory.length < oldTextHistory.length) oldTextHistory.slice(newTextHistory.length).forEach(removeLastHTMLText);
+
+  // Add new text if needed
+  if (newTextHistory.length > oldTextHistory.length) newTextHistory.slice(oldTextHistory.length).forEach(addHTMLText);
+}
+
+const appearTextName = "appearText";
+const textContentName = "textContent";
+const fadeOutName = "fadeOutSpan";
+
+const getTextContentSpan = (index) => document
+  .getElementById("main")
+  .getElementsByClassName(appearTextName)[index]
+  .getElementsByClassName(textContentName)[0];
+
+  const getFadeOutSpan = (index) => document
+  .getElementById("main")
+  .getElementsByClassName(appearTextName)[index]
+  .getElementsByClassName(fadeOutName)[0];
+
+const addModifierToInterval = (intervals, modifier) => {
+  const result = intervals.reduce(({intervals, modifier}, interval, index) => {
+    if (modifier === null || modifier.start == modifier.end) return {intervals: [...intervals, interval], modifier};
+
+    const modifierEndAfterIntervalStart = modifier.end > interval.start;
+    if (!modifierEndAfterIntervalStart) return {intervals: [...intervals, modifier, interval], modifier: null};
+
+    const modifierStartBeforeIntervalEnd = modifier.start < interval.end;
+    if (!modifierStartBeforeIntervalEnd) return {intervals: [...intervals, interval], modifier};
+
+    // Start is before interval end
+    // and end is after interval start
+    // so there is overlap
+
+    const modifierStartAfterIntervalStart = modifier.start > interval.start;
+    const modifierEndBeforeIntervalEnd = modifier.end < interval.end;
+    const modifierStartEqualsIntervalStart = modifier.start == interval.start;
+
+    return {
+      intervals: [
+        ...intervals,
+        ...[modifierStartEqualsIntervalStart ?
+          null :
+          (modifierStartAfterIntervalStart ? 
+            {start: interval.start, end: modifier.start, style: interval.style} :
+            {start: modifier.start, end: interval.start, style: modifier.style}
+          )
+        ].filter((i) => i !== null),
+        {
+          start: modifierStartAfterIntervalStart ? modifier.start : interval.start, 
+          end: modifierEndBeforeIntervalEnd ? modifier.end : interval.end, 
+          style: [...interval.style, ...modifier.style]
+        },
+      ],
+      modifier: modifierEndBeforeIntervalEnd ?
+        {start: modifier.end, end: interval.end, style: interval.style} :
+        {start: interval.end, end: modifier.end, style: modifier.style},
+    };
+
+  }, {intervals: [], modifier});
+
+  if (result.modifier !== null && result.modifier.start !== result.modifier.end) {
+    return [...result.intervals, result.modifier];
+  } else {
+    return result.intervals;
+  }
+}
+
+
+
+const createSpansForRow = (row) => {
+  const {instructions, text, modifiers} = row;
+
+  const instructionModifiers = getModifiersFromInstructions(instructions, text);
+  const instructionAndRowModifiers = [...instructionModifiers, ...modifiers];
+  
+  let intervals = instructionAndRowModifiers.reduce((intervals, modifier) => 
+    addModifierToInterval(intervals, {
+      start: modifier[0] === null ? 0 : modifier[0],
+      end: modifier[1] === null ? text.length : modifier[1],
+      style: [modifier.slice(2)],
+    }), [{start: 0, end: text.length, style: []}]);
+
+  const newChildren = intervals.map((interval) => {
+    const {start, end, style} = interval;
+    const textContentSubSpan = document.createElement("span");
+    textContentSubSpan.textContent = text.substring(start, end);
+    const modDict = Object.fromEntries(style);
+    for (const modifierKey in styleResets) {
+      textContentSubSpan.style[modifierKey] = styleResets[modifierKey];
+    }
+    for (const modifierKey in modDict) {
+      textContentSubSpan.style[modifierKey] = modDict[modifierKey];
+    }
+    return textContentSubSpan;
+  });
+
+  return newChildren;
+}
+
+const updateTextContentSpan = (textContentSpan, fadeOutSpan, row) => {
+  const newChildren = createSpansForRow(row);
+
+  const existingChildren = [...textContentSpan.children];
+  fadeOutSpan.replaceChildren(...existingChildren);
+  fadeOutSpan.style.animationName = 'none';
+  fadeOutSpan.offsetHeight; /* trigger reflow */
+  fadeOutSpan.style.animationName = "disappear";
+
+  textContentSpan.replaceChildren(...newChildren);
+  textContentSpan.style.animationName = 'none';
+  textContentSpan.offsetHeight; /* trigger reflow */
+  textContentSpan.style.animationName = "appear";
+
+  if (row.text === "_") {
+    textContentSpan.parentElement.style.display = "none";
+  } else {
+    textContentSpan.parentElement.style.display = "block";
+  }
+}
+
+function updateHTMLTextAtIndex(row, index) {
+  const {text, modifiers} = row;
+  const textContentSpan = getTextContentSpan(index);
+  const fadeOutSpan = getFadeOutSpan(index);
+  updateTextContentSpan(textContentSpan, fadeOutSpan, row);
+}
+
+function addHTMLText(row) {
+  const {text, modifiers} = row;
+  const elem = document.getElementById("main");
+
+  const newElem = document.createElement("div");
+  elem.appendChild(newElem);
+  newElem.classList.add(appearTextName);
+  newElem.style.animationName = getAnimation(text);  
+
+  const newSpan = document.createElement("span");
+  newElem.appendChild(newSpan);
+  newSpan.textContent = ":";
+  newSpan.style.color = "white";
+
+  const textContentSpan = document.createElement("span");
+  newElem.appendChild(textContentSpan);
+  textContentSpan.classList.add(textContentName);
+
+  const fadeOutSpan = document.createElement("span");
+  newElem.appendChild(fadeOutSpan);
+  fadeOutSpan.classList.add(fadeOutName);
+
+  updateTextContentSpan(textContentSpan, fadeOutSpan, row);
+}
+
+function removeLastHTMLText() {
+  const elem = document.getElementById("main");
+  elem.removeChild(elem.lastChild);
+}
+
+function back() {
+  while (textIndex > 0) {
+    const check = fileText[textIndex - 1];
+    const elem = document.getElementById("main");
+
+    const currentTextHistory = textHistory.pop();
+    const prevTextHistory = textHistory[textHistory.length - 1] || [];
+    updateHTMLFromTextHistory(currentTextHistory, prevTextHistory);
+
+    textIndex--;
+    if (check.trim().length > 0) {
+      break
+    }
+  }
+}
+</script>
+</body>
+</html>

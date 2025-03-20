@@ -1,0 +1,49 @@
+﻿                       good morning
+                       ~replace,.*,
+                          it~replace,.*,
+                        has been~replace,.*,
+                     too long~replace,.*,
+                       since I've~replace,.*,
+                        seen your~replace,.*,
+                                 eyelids~replace,.*,
+                    flutter so-~replace,.*,
+                         like rain~replace,.*,
+                                                ~replace,.*,
+i                                                           f~replace,.*,
+i                                                           f~replace,.*,
+      i                                               f      ~replace,.*,
+            i                                   f            ~replace,.*,
+                  i                        f                 ~replace,.*,
+                     i                  f                    ~replace,.*,
+                        i            f                       ~replace,.*,
+                           i      f                          ~replace,.*,
+                            i    f                            ~replace,.*,
+                             i  f                             ~replace,.*,
+                              if~replace,.*,
+                              you~replace,.*,
+                              would,~replace,o, 
+                              for~replace,o, 
+                               one~replace,o, 
+                              moment,~replace,o, 
+                             stop~replace,o, 
+                             scowling~replace,o, 
+                              down~replace,o, 
+                               on~replace,o, 
+                             those~replace,o, 
+                              lonely~replace,o, 
+                              roses,~replace,o, 
+                              possibly~replace,o, 
+                              you~replace,o, 
+                              could~replace,o, 
+                             grow~replace,o, 
+                               one~replace,o, 
+                              someday~replace,o, 
+                               o~replace,o, 
+                               o
+                               o
+                               o
+                               o
+                               o
+                               o
+                               ~replace,l nely,l nely                                   (isn't it beautiful?)
+                              

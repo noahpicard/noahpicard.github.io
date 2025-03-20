@@ -1,0 +1,59 @@
+these days i mostly look for what isn't there
+no songs to teach me anymore
+I've grown too specific - a philosophy
+unreachable save for fleeting images
+of blue crab cakes
+who can refract my anger when you
+are being both kind and generous hurt
+is something more raw and barren - a quicksand
+of the gut. I leave enduring to consider
+how much you can hold right now the songs
+speaking my name don't talk about anything
+directly. they couldn't possibly there isn't a thing
+to say. an eclipse is defined by it's edges, a gap previously
+illuminated. 
+
+_~clearLineStyle,0~styleLine,0,color,lightgray~styleLineWhere,0,these days,color,black
+_~clearLineStyle,1~styleLine,1,color,lightgray~styleLineWhere,1,teach,color,black
+_~clearLineStyle,2~styleLine,2,color,lightgray~styleLineWhere,2,a philosophy,color,black
+_~clearLineStyle,3~styleLine,3,color,lightgray~styleLineWhere,3,for fleeting images,color,black
+_~clearLineStyle,4~styleLine,4,color,lightgray~styleLineWhere,4,blue,color,black
+_~clearLineStyle,5~styleLine,5,color,lightgray~styleLineWhere,5,can refract my,color,black
+_~clearLineStyle,6~styleLine,6,color,lightgray~styleLineWhere,6,generous hurt,color,black
+_~clearLineStyle,7~styleLine,7,color,lightgray~styleLineWhere,7,something,color,black~styleLineWhere,7,raw and,color,black
+_~clearLineStyle,8~styleLine,8,color,lightgray~styleLineWhere,8,enduring,color,black
+_~clearLineStyle,9~styleLine,9,color,lightgray~styleLineWhere,9,the songs,color,black
+_~clearLineStyle,10~styleLine,10,color,lightgray~styleLineWhere,10,don't talk,color,black
+_~clearLineStyle,11~styleLine,11,color,lightgray~styleLineWhere,11,directly.,color,black~styleLineWhere,11,there isn't a thing,color,black
+_~clearLineStyle,12~styleLine,12,color,lightgray~styleLineWhere,12,to say.,color,black~styleLineWhere,12,a gap,color,black
+_~clearLineStyle,13~styleLine,13,color,lightgray~styleLineWhere,13,illuminated,color,black
+
+_~clearLineStyle,0~styleLine,0,color,lightgray~styleLineWhere,0,look for,color,black
+_~clearLineStyle,1~styleLine,1,color,lightgray~styleLineWhere,1,songs,color,black~styleLineWhere,1,more,color,black
+_~clearLineStyle,2~styleLine,2,color,lightgray~styleLineWhere,2,specific,color,black
+_~clearLineStyle,3~styleLine,3,color,lightgray~styleLineWhere,3,reach,color,black~styleLineWhere,3,for,color,black~styleLineWhere,3,images,color,black
+_~clearLineStyle,4~styleLine,4,color,lightgray~styleLineWhere,4,of blue crab cakes,color,black
+_~clearLineStyle,5~styleLine,5,color,lightgray~styleLineWhere,5,refract,color,black
+_~clearLineStyle,6~styleLine,6,color,lightgray~styleLineWhere,6,being,color,black
+_~clearLineStyle,7~styleLine,7,color,lightgray~styleLineWhere,7,something more raw and barren,color,black
+_~clearLineStyle,8~styleLine,8,color,lightgray~styleLineWhere,8,leave,color,black
+_~clearLineStyle,9~styleLine,9,color,lightgray~styleLineWhere,9,the songs,color,black
+_~clearLineStyle,10~styleLine,10,color,lightgray~styleLineWhere,10,speaking,color,black~styleLineWhere,10,anything,color,black
+_~clearLineStyle,11~styleLine,11,color,lightgray~styleLineWhere,11,directly. they couldn't possibly,color,black
+_~clearLineStyle,12~styleLine,12,color,lightgray~styleLineWhere,12,say. an eclipse is,color,black
+_~clearLineStyle,13~styleLine,13,color,lightgray~styleLineWhere,13,illuminated,color,black
+
+_~clearLineStyle,0~styleLine,0,color,lightgray~styleLineWhere,0,what isn't there,color,black
+_~clearLineStyle,1~styleLine,1,color,lightgray~styleLineWhere,1,anymore,color,black
+_~clearLineStyle,2~styleLine,2,color,lightgray~styleLineWhere,2,I've grown too,color,black
+_~clearLineStyle,3~styleLine,3,color,lightgray~styleLineWhere,3,unreachable save for fleeting images,color,black
+_~clearLineStyle,4~styleLine,4,color,lightgray
+_~clearLineStyle,5~styleLine,5,color,lightgray~styleLineWhere,5,you,color,black
+_~clearLineStyle,6~styleLine,6,color,lightgray~styleLineWhere,6,are being both kind and generous,color,black
+_~clearLineStyle,7~styleLine,7,color,lightgray~styleLineWhere,7,raw and barren,color,black
+_~clearLineStyle,8~styleLine,8,color,lightgray~styleLineWhere,8,I,color,black~styleLineWhere,8,consider,color,black
+_~clearLineStyle,9~styleLine,9,color,lightgray~styleLineWhere,9,how,color,black~styleLineWhere,9,you can,color,black
+_~clearLineStyle,10~styleLine,10,color,lightgray~styleLineWhere,10,speak,color,black~styleLineWhere,10,my name,color,black
+_~clearLineStyle,11~styleLine,11,color,lightgray~styleLineWhere,11,there isn't a thing,color,black
+_~clearLineStyle,12~styleLine,12,color,lightgray~styleLineWhere,12,defined by it's edges,color,black
+_~clearLineStyle,13~styleLine,13,color,lightgray~styleLineWhere,13,.,color,black
