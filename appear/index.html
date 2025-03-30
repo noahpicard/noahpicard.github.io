@@ -99,8 +99,8 @@ body {
 
 <div id="menu">
   <div id="controls">
-    <button onclick="forward();">next</button>
-    <button onclick="back();">back</button>
+    <button id="backButton" disabled onclick="back();">back</button>
+    <button id="nextButton" disabled onclick="forward();">next</button>
   </div>
   <div id="filemenu">
     <input type="file" id="openfile" /><br>
@@ -807,6 +807,12 @@ function forward() {
     updateHTMLFromTextHistory(lastTextHistory, newTextHistory);
 
     textIndex++;
+
+    const nextButton = document.getElementById("nextButton");
+    const backButton = document.getElementById("backButton");
+    nextButton.disabled = !(textIndex < fileText.length);
+    backButton.disabled = !(textIndex > 0);
+
     if (check.trim().length > 0) {
       break
     }
@@ -1013,6 +1019,12 @@ function back() {
     updateHTMLFromTextHistory(currentTextHistory, prevTextHistory);
 
     textIndex--;
+
+    const nextButton = document.getElementById("nextButton");
+    const backButton = document.getElementById("backButton");
+    nextButton.disabled = !(textIndex < fileText.length);
+    backButton.disabled = !(textIndex > 0);
+
     if (check.trim().length > 0) {
       break
     }
