@@ -1,0 +1,15 @@
+Eight planets curl in the dark~style,transform,rotate(0deg)~style,position,fixed~style,left,50vw~style,top,50vh~style,transformOrigin,-3em 50%
+Falling towards / rushing to escape the sun~style,transform,rotate(25.7deg)~style,position,fixed~style,left,50vw~style,top,50vh~style,transformOrigin,-3em 50%
+Dayward movement - and with it ~style,transform,rotate(51.4deg)~style,position,fixed~style,left,50vw~style,top,50vh~style,transformOrigin,-3em 50%
+A centripetal force away from myself~style,transform,rotate(77.1deg)~style,position,fixed~style,left,50vw~style,top,50vh~style,transformOrigin,-3em 50%
+I clutch my bedframe and ~style,transform,rotate(102.8deg)~style,position,fixed~style,left,50vw~style,top,50vh~style,transformOrigin,-3em 50%
+Wait for the ceiling to recede again~style,transform,rotate(128.5deg)~style,position,fixed~style,left,50vw~style,top,50vh~style,transformOrigin,-3em 50%
+That night - dreamt: I am shooing~style,transform,rotate(154.2deg)~style,position,fixed~style,left,50vw~style,top,50vh~style,transformOrigin,-3em 50%
+A stream of new turtle hatchlings~style,transform,rotate(180deg)~style,position,fixed~style,left,50vw~style,top,50vh~style,transformOrigin,-3em 50%
+Wafting palms over sand - holding my teeth~style,transform,rotate(-154.2deg)~style,position,fixed~style,left,50vw~style,top,50vh~style,transformOrigin,-3em 50%
+As each instant my gaze flits away~style,transform,rotate(-128.5deg)~style,position,fixed~style,left,50vw~style,top,50vh~style,transformOrigin,-3em 50%
+A shadow plucks the next ~style,transform,rotate(-102.8deg)~style,position,fixed~style,left,50vw~style,top,50vh~style,transformOrigin,-3em 50%
+Soft-shelled prospector and flashes up~style,transform,rotate(-77.1deg)~style,position,fixed~style,left,50vw~style,top,50vh~style,transformOrigin,-3em 50%
+My eyes chase to sky~style,transform,rotate(-51.4deg)~style,position,fixed~style,left,50vw~style,top,50vh~style,transformOrigin,-3em 50%
+And fixate on lost movement~style,transform,rotate(-25.7deg)~style,position,fixed~style,left,50vw~style,top,50vh~style,transformOrigin,-3em 50%
+

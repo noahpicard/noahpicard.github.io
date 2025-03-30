@@ -32,7 +32,7 @@
 
 
 
-_~setLine,0,Chaos Has It’s Place~setLine,2,                                                                                                       Wiser than your mother~setLine,3,                                                                                                   and father both, you used duct tape to divide~setLine,4,                                                                                                     the room.
+_~setLine,0,Chaos Has It’s Place~setLine,2,                                                                                                       Wiser than your mother~setLine,3,                                                                                                   and father both - you used duct tape to divide~setLine,4,                                                                                                     the room.
 _~setLine,2,~setLine,3,~setLine,4,~setLine,5,
 _~setLine,26,                                                                                                                             By wednesday you had gone so~setLine,27,                                                                                                                           deeply inside that the whole~setLine,28,                                                                                                                            house was clean~setLine,29,                                                                                                                           and I had to roll bowls on linoleum;
 _~setLine,26,~setLine,27,~setLine,28,~setLine,29,
@@ -46,6 +46,6 @@ _~setLine,4,                                                                    
 _~setLine,4,~setLine,5,~setLine,6,~setLine,7,
 _~setLine,30,                                                                                                     It is easiest to show that~setLine,31,                                                                                                      something can be removed;~setLine,32,                                                                                                     an unwanted extension of the original~setLine,33,                                                                                                      permeates.
 _~setLine,30,~setLine,31,~setLine,32,~setLine,33,
-_~setLine,4,                                     I watch you fold into a frog, a turtle, a small songbird~setLine,5,                                    a sleeping paper child~setLine,6,                                    with eye corners moreover crumpled.
+_~setLine,4,                                     I watch you fold into a frog - a turtle - a small songbird~setLine,5,                                    a sleeping paper child~setLine,6,                                    with eye corners moreover crumpled.
 _~setLine,4,~setLine,5,~setLine,6,~setLine,7,
 _~setLine,21,                                                                                                                                                                     The urge faded the way an urge fades.
