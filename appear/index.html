@@ -120,6 +120,18 @@ body {
   </div>
 </div>
 <script>
+document.getRootNode().addEventListener('click', function(e) {
+  console.log(e);
+
+  const width = window.innerWidth;
+  const halfWidth = width / 2;
+  if (e.pageX > halfWidth) {
+    forward();
+  } else {
+    back();
+  }
+})
+
 document.getElementById("openfile").addEventListener('change', function() {
   var fr = new FileReader();
   fr.onload = function() {
