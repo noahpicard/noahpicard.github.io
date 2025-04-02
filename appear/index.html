@@ -10,6 +10,7 @@ body {
   padding: 0;
   margin: 0;
   overflow: auto;
+  user-select: none;
 }
 #main {
   margin-top: 1em;
@@ -107,10 +108,10 @@ body {
 <body onload="run()">
 <div id="main"></div>
 <div id="menu">
-  <div id="controls">
+  <!-- <div id="controls">
     <button id="backButton" disabled onclick="back();">back</button>
     <button id="nextButton" disabled onclick="forward();">next</button>
-  </div>
+  </div> -->
   <div id="filemenu">
     <input type="file" id="openfile" /><br>
     <select id="select_preset" aria-placeholder="or select preset" style="width: 150px;">
@@ -120,6 +121,7 @@ body {
   </div>
 </div>
 <script>
+
 document.getRootNode().addEventListener('click', function(e) {
   console.log(e);
 
