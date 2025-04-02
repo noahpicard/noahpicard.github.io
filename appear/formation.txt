@@ -1,0 +1,95 @@
+Do not be~position,70vw,35vh~rotation,20deg,-2em,50%~color,red
+wandering through~position,70vw,35vh~rotation,80deg,-2em,50%~color,blue
+this dark night~position,70vw,35vh~rotation,140deg,-2em,50%~color,green
+without your~position,70vw,35vh~rotation,200deg,-2em,50%~color,black
+heart beating~position,70vw,35vh~rotation,260deg,-2em,50%~color,orange
+in your arms~position,70vw,35vh~rotation,320deg,-2em,50%~color,purple
+
+afraid of~position,50vw,75vh~rotation,20deg,-2em,50%~color,red
+their hall of furtive glances~position,50vw,75vh~rotation,80deg,-2em,50%~color,blue
+lit only by~position,50vw,75vh~rotation,140deg,-2em,50%~color,green
+glimmering alms~position,50vw,75vh~rotation,200deg,-2em,50%~color,black
+I drop my belongings~position,50vw,75vh~rotation,260deg,-2em,50%~color,orange
+twitching ceaselessly~position,50vw,75vh~rotation,320deg,-2em,50%~color,purple
+
+the way she calls~position,30vw,65vh~rotation,20deg,-2em,50%~color,red
+turns my heart~position,30vw,65vh~rotation,80deg,-2em,50%~color,blue
+a shrinking spark ~position,30vw,65vh~rotation,140deg,-2em,50%~color,green
+I am lost in~position,30vw,65vh~rotation,200deg,-2em,50%~color,black
+the clatterings~position,30vw,65vh~rotation,260deg,-2em,50%~color,orange
+I am descending~position,30vw,65vh~rotation,320deg,-2em,50%~color,purple
+
+there is nothing~position,70vw,65vh~rotation,20deg,-2em,50%~color,red
+against itself~position,70vw,65vh~rotation,80deg,-2em,50%~color,blue
+in time's current~position,70vw,65vh~rotation,140deg,-2em,50%~color,green
+all directions~position,70vw,65vh~rotation,200deg,-2em,50%~color,black
+lurching~position,70vw,65vh~rotation,260deg,-2em,50%~color,orange
+beyond potential~position,70vw,65vh~rotation,320deg,-2em,50%~color,purple
+
+save for love~position,30vw,35vh~rotation,20deg,-2em,50%~color,red
+I forget~position,30vw,35vh~rotation,80deg,-2em,50%~color,blue
+no single moment~position,30vw,35vh~rotation,140deg,-2em,50%~color,green
+I carry my head~position,30vw,35vh~rotation,200deg,-2em,50%~color,black
+forward: riding~position,30vw,35vh~rotation,260deg,-2em,50%~color,orange
+into something bright~position,30vw,35vh~rotation,320deg,-2em,50%~color,purple
+
+in her whispering~position,50vw,25vh~rotation,20deg,-2em,50%~color,red
+the weight of forgiveness~position,50vw,25vh~rotation,80deg,-2em,50%~color,blue
+repatriated~position,50vw,25vh~rotation,140deg,-2em,50%~color,green
+like a top coming to rest~position,50vw,25vh~rotation,200deg,-2em,50%~color,black
+on a lapse of judgement~position,50vw,25vh~rotation,260deg,-2em,50%~color,orange
+filling all spaces~position,50vw,25vh~rotation,320deg,-2em,50%~color,purple
+
+_~positionLine,0,50vw,50vh~rotationLine,0,20deg,-2em,50%
+_~positionLine,7,50vw,50vh~rotationLine,7,80deg,-2em,50%
+_~positionLine,14,50vw,50vh~rotationLine,14,140deg,-2em,50%
+_~positionLine,21,50vw,50vh~rotationLine,21,200deg,-2em,50%
+_~positionLine,28,50vw,50vh~rotationLine,28,260deg,-2em,50%
+_~positionLine,35,50vw,50vh~rotationLine,35,320deg,-2em,50%
+
+_~setLine,0,~setLine,7,~setLine,14,~setLine,21,~setLine,28,~setLine,35,
+
+_~positionLine,1,50vw,50vh~rotationLine,1,20deg,-2em,50%
+_~positionLine,8,50vw,50vh~rotationLine,8,80deg,-2em,50%
+_~positionLine,15,50vw,50vh~rotationLine,15,140deg,-2em,50%
+_~positionLine,22,50vw,50vh~rotationLine,22,200deg,-2em,50%
+_~positionLine,29,50vw,50vh~rotationLine,29,260deg,-2em,50%
+_~positionLine,36,50vw,50vh~rotationLine,36,320deg,-2em,50%
+
+_~setLine,1,~setLine,8,~setLine,15,~setLine,22,~setLine,29,~setLine,36,
+
+_~positionLine,2,50vw,50vh~rotationLine,2,20deg,-2em,50%
+_~positionLine,9,50vw,50vh~rotationLine,9,80deg,-2em,50%
+_~positionLine,16,50vw,50vh~rotationLine,16,140deg,-2em,50%
+_~positionLine,23,50vw,50vh~rotationLine,23,200deg,-2em,50%
+_~positionLine,30,50vw,50vh~rotationLine,30,260deg,-2em,50%
+_~positionLine,37,50vw,50vh~rotationLine,37,320deg,-2em,50%
+
+_~setLine,2,~setLine,9,~setLine,16,~setLine,23,~setLine,30,~setLine,37,
+
+_~positionLine,3,50vw,50vh~rotationLine,3,20deg,-2em,50%
+_~positionLine,10,50vw,50vh~rotationLine,10,80deg,-2em,50%
+_~positionLine,17,50vw,50vh~rotationLine,17,140deg,-2em,50%
+_~positionLine,24,50vw,50vh~rotationLine,24,200deg,-2em,50%
+_~positionLine,31,50vw,50vh~rotationLine,31,260deg,-2em,50%
+_~positionLine,38,50vw,50vh~rotationLine,38,320deg,-2em,50%
+
+_~setLine,3,~setLine,10,~setLine,17,~setLine,24,~setLine,31,~setLine,38,
+
+_~positionLine,4,50vw,50vh~rotationLine,4,20deg,-2em,50%
+_~positionLine,11,50vw,50vh~rotationLine,11,80deg,-2em,50%
+_~positionLine,18,50vw,50vh~rotationLine,18,140deg,-2em,50%
+_~positionLine,25,50vw,50vh~rotationLine,25,200deg,-2em,50%
+_~positionLine,32,50vw,50vh~rotationLine,32,260deg,-2em,50%
+_~positionLine,39,50vw,50vh~rotationLine,39,320deg,-2em,50%
+
+_~setLine,4,~setLine,11,~setLine,18,~setLine,25,~setLine,32,~setLine,39,
+
+_~positionLine,5,50vw,50vh~rotationLine,5,20deg,-2em,50%
+_~positionLine,12,50vw,50vh~rotationLine,12,80deg,-2em,50%
+_~positionLine,19,50vw,50vh~rotationLine,19,140deg,-2em,50%
+_~positionLine,26,50vw,50vh~rotationLine,26,200deg,-2em,50%
+_~positionLine,33,50vw,50vh~rotationLine,33,260deg,-2em,50%
+_~positionLine,40,50vw,50vh~rotationLine,40,320deg,-2em,50%
+
+_~setLine,5,~setLine,12,~setLine,19,~setLine,26,~setLine,33,~setLine,40,
