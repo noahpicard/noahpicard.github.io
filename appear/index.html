@@ -948,8 +948,8 @@ function forward() {
 
     const nextButton = document.getElementById("nextButton");
     const backButton = document.getElementById("backButton");
-    nextButton.disabled = !(textIndex < fileText.length);
-    backButton.disabled = !(textIndex > 0);
+    if (nextButton) nextButton.disabled = !(textIndex < fileText.length);
+    if (backButton) backButton.disabled = !(textIndex > 0);
 
     if (check.trim().length > 0) {
       break
@@ -1164,8 +1164,8 @@ function back() {
 
     const nextButton = document.getElementById("nextButton");
     const backButton = document.getElementById("backButton");
-    nextButton.disabled = !(textIndex < fileText.length);
-    backButton.disabled = !(textIndex > 0);
+    if (nextButton) nextButton.disabled = !(textIndex < fileText.length);
+    if (backButton) backButton.disabled = !(textIndex > 0);
 
     if (check.trim().length > 0) {
       break
