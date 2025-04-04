@@ -1,3 +1,4 @@
+review~underline
 
 
 
@@ -25,16 +26,20 @@
 
 
 
+~color,red
+_~setLine,2,one of the few movies in the world to express with near perfection~positionLine,2,20em,8.5em
+_~setLine,3,the truth about the soul-destroying effects a city has on lovers,~positionLine,3,20em,10em
+_~setLine,4,the pain it can cause them, the monsters that it turns them into.~positionLine,4,20em,11.5em
+_~setLine,3,lovers~setLine,2,~setLine,4,
+_~setLine,3,_~setLine,8,lovers
+_~setLine,8,_~setLine,13,lover
+_~setLine,13,_~setLine,18,over~setLine,3,Silly poetry + Cameraman with existentialism = this movie.
+_~setLine,18,_~setLine,23,over~setLine,3,               Cameraman
+_~setLine,23,_~setLine,28,over~setLine,3,~setLine,8,               Cameraman
+~setLine,8,~setLine,13,               Cameraman
+~setLine,13,~setLine,18,                    man
+~setLine,18,~setLine,23,                     a
+~setLine,23,~setLine,28,                     a                                                                          over
 
 
-
-
-
-
-
-
-
-
-
-
-Hiroshima after World War II. A Japanese architect and a French actress - over many hours - recount previous romances and ponder the devastation wrought by the atomic bomb.
+Hiroshima after World War II. A Japanese architect and a French actress - over many hours - recount previous romances and ponder the devastation of the atomic bomb.

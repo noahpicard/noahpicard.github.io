@@ -108,10 +108,10 @@ body {
 <body onload="run()">
 <div id="main"></div>
 <div id="menu">
-  <!-- <div id="controls">
-    <button id="backButton" disabled onclick="back();">back</button>
-    <button id="nextButton" disabled onclick="forward();">next</button>
-  </div> -->
+  <div id="controls">
+    <button id="backButton" disabled>back</button>
+    <button id="nextButton" disabled>next</button>
+  </div>
   <div id="filemenu">
     <input type="file" id="openfile" /><br>
     <select id="select_preset" aria-placeholder="or select preset" style="width: 150px;">
@@ -121,7 +121,14 @@ body {
   </div>
 </div>
 <script>
-
+document.getElementById("nextButton").addEventListener('click', function(e) {
+  e.stopPropagation();
+  forward();
+});
+document.getElementById("backButton").addEventListener('click', function(e) {
+  e.stopPropagation();
+  back();
+});
 document.getRootNode().addEventListener('click', function(e) {
   console.log(e);
 
