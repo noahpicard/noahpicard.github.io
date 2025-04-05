@@ -12,13 +12,14 @@ def split_text_by_length(text, max_length):
 
 def combine_string_arrays_with_overlap(original, addition, overlap):
   final = []
-  for index in range(max(0, len(original) + len(addition) - overlap)):
+
+  for index in range(max(0, max(0, len(original) - overlap) + len(addition))):
     if index < len(original):
       final.append(original[index])
     else:
       final.append("")
 
-    addition_index = index - (len(original) - overlap)
+    addition_index = index - (max(0, len(original) - overlap))
     if addition_index >= 0:
       final[index] += addition[addition_index]
   return final
@@ -34,8 +35,8 @@ max_row_index = 23
 start_line = 3
 final_line = 28
 
-fall_frames = 5
-overlap_frames = 3
+fall_frames = 10
+overlap_frames = 9
 y_offset = 5
 line_height = 1.5
 
@@ -93,6 +94,7 @@ def main(in_csv, out_path):
 
     # drop the keyword
     fall_instructions = []
+    print(fall_steps)
     for frame_num in range(fall_frames):
       y_index = start_line + ((final_line - start_line) / fall_frames * frame_num)
       set_keyword_line = f'~setLine,{keyword_display_index},{encode_instruction_text(fall_steps[frame_num])}'
@@ -107,7 +109,7 @@ def main(in_csv, out_path):
     instruction_lines = combine_string_arrays_with_overlap(instruction_lines, instruction_lines_for_row, overlap_frames)
 
   with open(out_path, "w+") as outfile:
-    for row in range(final_line):
+    for row in range(display_line_count):
       line = ""
       outfile.write(f'{line}\n')
 

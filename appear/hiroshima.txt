@@ -26,133 +26,180 @@
 
 
 
-_~setLine,4,pain it can cause them\, the monsters that it turns~positionLine,4,300px,11.0em
-_~setLine,5,them into.~positionLine,5,300px,12.5em
-_~setLine,1,~setLine,2,~setLine,3,~setLine,4,~setLine,5,~setLine,3,lovers~positionLine,3,304px,9.5em
-_~setLine,3,lover~positionLine,3,304px,17.0em
-_~setLine,3,lover~positionLine,3,304px,24.5em~setLine,6,Silly poetry + Cameraman with existentialism =~positionLine,6,300px,9.5em
-_~setLine,3,over~positionLine,3,310px,32.0em~setLine,7,this movie.~positionLine,7,300px,11.0em
-_~setLine,3,over~positionLine,3,310px,39.5em~styleLine,3,color,red~setLine,6,~setLine,7,~setLine,6,Cameraman~positionLine,6,304px,9.5em
-_~setLine,6,Camera~positionLine,6,304px,17.0em
-_~setLine,6,Cam~positionLine,6,304px,24.5em~setLine,8,the film has endured due to its lyrical quality in~positionLine,8,300px,8.0em
-_~setLine,6,a~positionLine,6,310px,32.0em~setLine,9,depicting a love affair in post World War II~positionLine,9,300px,9.5em
-_~setLine,6,a~positionLine,6,310px,39.5em~styleLine,6,color,red~setLine,8,~setLine,9,~setLine,9,World War II~positionLine,9,305px,9.5em
-_~setLine,9,World War II~positionLine,9,305px,17.0em
-_~setLine,9,World War II~positionLine,9,305px,24.5em~setLine,10,I might not be a great fan of the French New Wave\,~positionLine,10,300px,9.5em
-_~setLine,9,World War II~positionLine,9,305px,32.0em~setLine,11,but sure I am not a fan of this film. Romantinc\,~positionLine,11,300px,11.0em
-_~setLine,9,World War II~positionLine,9,305px,39.5em~styleLine,9,color,red~setLine,12,poetical but too heavy for my tastes.~positionLine,12,300px,12.5em
-_~setLine,10,~setLine,11,~setLine,12,~setLine,10,French~positionLine,10,305px,9.5em
-_~setLine,10,French~positionLine,10,305px,17.0em
-_~setLine,10,French~positionLine,10,305px,24.5em~setLine,13,a foredoomed romance between a French actress and~positionLine,13,300px,8.0em
-_~setLine,10,French~positionLine,10,305px,32.0em~setLine,14,a Japanese architect~positionLine,14,300px,9.5em
-_~setLine,10,French~positionLine,10,305px,39.5em~styleLine,10,color,red~setLine,13,~setLine,14,~setLine,14,Japanese architect~positionLine,14,305px,9.5em
-_~setLine,14,Japanese architect~positionLine,14,305px,17.0em
-_~setLine,14,Japanese architect~positionLine,14,305px,24.5em~setLine,15,They regard the war\, Hiroshima\, each other\, and~positionLine,15,300px,9.5em
-_~setLine,14,Japanese architect~positionLine,14,305px,32.0em~setLine,16,even themselves with what seems like boredom.~positionLine,16,300px,11.0em
-_~setLine,14,Japanese architect~positionLine,14,305px,39.5em~styleLine,14,color,red~setLine,17,Maybe that's the point though? Or maybe the film~positionLine,17,300px,12.5em
-_~setLine,18,was just lost on me.~positionLine,18,300px,14.0em
-_~setLine,15,~setLine,16,~setLine,17,~setLine,18,~setLine,15,Hiroshima~positionLine,15,305px,9.5em
-_~setLine,15,Hiroshima~positionLine,15,305px,17.0em
-_~setLine,15,Hiroshima~positionLine,15,305px,24.5em~setLine,19,Gorgeous and yearning; offers a still-modern~positionLine,19,300px,9.5em
-_~setLine,15,Hiroshima~positionLine,15,305px,32.0em~setLine,20,thesis: Memory\, like love\, is a commodity that no~positionLine,20,300px,11.0em
-_~setLine,15,Hiroshima~positionLine,15,305px,39.5em~styleLine,15,color,red~setLine,21,one fully possesses.~positionLine,21,300px,12.5em
-_~setLine,19,~setLine,20,~setLine,21,~setLine,19,yearning~positionLine,19,304px,9.5em
-_~setLine,19,yearn~positionLine,19,304px,17.0em
-_~setLine,19,yearn~positionLine,19,304px,24.5em~setLine,22,I'll admit to not caring much about the two people~positionLine,22,300px,9.5em
-_~setLine,19,A~positionLine,19,316px,32.0em~setLine,23,at the center of Resnais' drama.~positionLine,23,300px,11.0em
-_~setLine,19,A~positionLine,19,316px,39.5em~styleLine,19,color,red~setLine,22,~setLine,23,~setLine,22,the~positionLine,22,310px,9.5em
-_~setLine,22,the~positionLine,22,310px,17.0em
-_~setLine,22,the~positionLine,22,310px,24.5em~setLine,24,one cannot help but be moved by these lovelorn~positionLine,24,300px,6.5em
-_~setLine,22,the~positionLine,22,310px,32.0em~setLine,25,people\, struggling hopelessly against the~positionLine,25,300px,8.0em
-_~setLine,22,the~positionLine,22,310px,39.5em~styleLine,22,color,red~setLine,26,onslaught of time and the devastation of being~positionLine,26,300px,9.5em
-_~setLine,27,forgotten.~positionLine,27,300px,11.0em
-_~setLine,24,~setLine,25,~setLine,26,~setLine,27,~setLine,26,devastation~positionLine,26,310px,9.5em
-_~setLine,26,devastation~positionLine,26,310px,17.0em
-_~setLine,26,devastation~positionLine,26,310px,24.5em~setLine,28,The educated audience often uses “art” films in~positionLine,28,300px,9.5em
-_~setLine,26,devastation~positionLine,26,310px,32.0em~setLine,29,much the same self-indulgent way as the mass~positionLine,29,300px,11.0em
-_~setLine,26,devastation~positionLine,26,310px,39.5em~styleLine,26,color,red~setLine,30,audience uses the Hollywood “product\,” finding~positionLine,30,300px,12.5em
-_~setLine,31,wish fulfillment in the form of cheap and easy~positionLine,31,300px,14.0em
-_~setLine,32,congratulation on their sensitivities and their~positionLine,32,300px,15.5em
-_~setLine,33,liberalism.~positionLine,33,300px,17.0em
-_~setLine,28,~setLine,29,~setLine,30,~setLine,31,~setLine,32,~setLine,33,~setLine,28,of~positionLine,28,310px,9.5em
-_~setLine,28,of~positionLine,28,310px,17.0em
-_~setLine,28,of~positionLine,28,310px,24.5em~setLine,34,Spans decades while remaining stubbornly in the~positionLine,34,300px,8.0em
-_~setLine,28,of~positionLine,28,310px,32.0em~setLine,35,present tense\, the way our own memories after ebb~positionLine,35,300px,9.5em
-_~setLine,28,of~positionLine,28,310px,39.5em~styleLine,28,color,red~setLine,36,and flow according to what we’re feeling in the~positionLine,36,300px,11.0em
-_~setLine,37,moment.~positionLine,37,300px,12.5em
-_~setLine,34,~setLine,35,~setLine,36,~setLine,37,~setLine,35,after~positionLine,35,310px,9.5em
-_~setLine,35,after~positionLine,35,310px,17.0em
-_~setLine,35,after~positionLine,35,310px,24.5em~setLine,38,one of the better movies of that genre. It is more~positionLine,38,300px,8.0em
-_~setLine,35,after~positionLine,35,310px,32.0em~setLine,39,realistic and grittier than previous French films~positionLine,39,300px,9.5em
-_~setLine,35,after~positionLine,35,310px,39.5em~styleLine,35,color,red~setLine,40,of even a few years earlier.~positionLine,40,300px,11.0em
-_~setLine,38,~setLine,39,~setLine,40,~setLine,39,previous~positionLine,39,310px,9.5em
-_~setLine,39,previous~positionLine,39,310px,17.0em
-_~setLine,39,previous~positionLine,39,310px,24.5em~setLine,41,the director changes the theme to a love story\,~positionLine,41,300px,6.5em
-_~setLine,39,previous~positionLine,39,310px,32.0em~setLine,42,unhappinness\, lust and human longing - completely~positionLine,42,300px,8.0em
-_~setLine,39,previous~positionLine,39,310px,39.5em~styleLine,39,color,red~setLine,43,giving up on post-war atomic issues~positionLine,43,300px,9.5em
-_~setLine,41,~setLine,42,~setLine,43,~setLine,43,atomic~positionLine,43,310px,9.5em
-_~setLine,43,atomic~positionLine,43,310px,17.0em
-_~setLine,43,atomic~positionLine,43,310px,24.5em~setLine,44,there's something that annoys me big about that~positionLine,44,300px,8.0em
-_~setLine,43,atomic~positionLine,43,310px,32.0em~setLine,45,movie\, maybe the fake way they talk\, or the many~positionLine,45,300px,9.5em
-_~setLine,43,atomic~positionLine,43,310px,39.5em~styleLine,43,color,red~setLine,46,fake laughes\, or the weird obssession they have~positionLine,46,300px,11.0em
-_~setLine,47,for each other\, but something annoys me~positionLine,47,300px,12.5em
-_~setLine,44,~setLine,45,~setLine,46,~setLine,47,~setLine,45,many~positionLine,45,310px,9.5em
-_~setLine,45,many~positionLine,45,310px,17.0em
-_~setLine,45,many~positionLine,45,310px,24.5em~setLine,48,an impressive exercise of film techniques\, mood~positionLine,48,300px,6.5em
-_~setLine,45,many~positionLine,45,310px,32.0em~setLine,49,embodying camera work\, an almost intuitive kind of~positionLine,49,300px,8.0em
-_~setLine,45,many~positionLine,45,310px,39.5em~styleLine,45,color,red~setLine,50,musical accompaniment\, and verismo acting.~positionLine,50,300px,9.5em
-_~setLine,48,~setLine,49,~setLine,50,~setLine,50,and~positionLine,50,310px,9.5em
-_~setLine,50,and~positionLine,50,310px,17.0em
-_~setLine,50,and~positionLine,50,310px,24.5em~setLine,51,I am not one for melodrama\, but this piece had me~positionLine,51,300px,5.0em
-_~setLine,50,and~positionLine,50,310px,32.0em~setLine,52,convinced it was something special. Then it kept~positionLine,52,300px,6.5em
-_~setLine,50,and~positionLine,50,310px,39.5em~styleLine,50,color,red~setLine,53,going. And going. And getting more ridiculous. For~positionLine,53,300px,8.0em
-_~setLine,54,hours. And more ridiculous. It is pretty~positionLine,54,300px,9.5em
-_~setLine,55,innovative for it's time\, however\, but it is a~positionLine,55,300px,11.0em
-_~setLine,56,bore to watch. A barely passable film-watching~positionLine,56,300px,12.5em
-_~setLine,57,experience.~positionLine,57,300px,14.0em
-_~setLine,51,~setLine,52,~setLine,53,~setLine,54,~setLine,55,~setLine,56,~setLine,57,~setLine,54,hours~positionLine,54,310px,9.5em
-_~setLine,54,hours~positionLine,54,310px,17.0em
-_~setLine,54,hours~positionLine,54,310px,24.5em~setLine,58,The first minutes are shocking. Emmanuelle knocks~positionLine,58,300px,6.5em
-_~setLine,54,hours~positionLine,54,310px,32.0em~setLine,59,us off with her beauty while her character reminds~positionLine,59,300px,8.0em
-_~setLine,54,hours~positionLine,54,310px,39.5em~styleLine,54,color,red~setLine,60,us to ponder how we'll never really know~positionLine,60,300px,9.5em
-_~setLine,61,Hiroshima.~positionLine,61,300px,11.0em
-_~setLine,58,~setLine,59,~setLine,60,~setLine,61,~setLine,60,ponder~positionLine,60,310px,9.5em
-_~setLine,60,ponder~positionLine,60,310px,17.0em
-_~setLine,60,ponder~positionLine,60,310px,24.5em~setLine,62,this exists on a different level. like marienbad\,~positionLine,62,300px,8.0em
-_~setLine,60,ponder~positionLine,60,310px,32.0em~setLine,63,i begin to nod off but then wake up at the best~positionLine,63,300px,9.5em
-_~setLine,60,ponder~positionLine,60,310px,39.5em~styleLine,60,color,red~setLine,64,bits. some parts are too beautiful and eerie to~positionLine,64,300px,11.0em
-_~setLine,65,believe. other parts are too stale to digest~positionLine,65,300px,12.5em
-_~setLine,62,~setLine,63,~setLine,64,~setLine,65,~setLine,63,the~positionLine,63,310px,9.5em
-_~setLine,63,the~positionLine,63,310px,17.0em
-_~setLine,63,the~positionLine,63,310px,24.5em~setLine,66,It was not one for entertainment purposes\, but to~positionLine,66,300px,8.0em
-_~setLine,63,the~positionLine,63,310px,32.0em~setLine,67,inform and juxtapose the bomb with a love affair~positionLine,67,300px,9.5em
-_~setLine,63,the~positionLine,63,310px,39.5em~styleLine,63,color,red~setLine,68,in Hiroshima. It was painful at times to see the~positionLine,68,300px,11.0em
-_~setLine,69,harshness.~positionLine,69,300px,12.5em
-_~setLine,66,~setLine,67,~setLine,68,~setLine,69,~setLine,67,bomb~positionLine,67,310px,9.5em
-_~setLine,67,bomb~positionLine,67,310px,17.0em
-_~setLine,67,bomb~positionLine,67,310px,24.5em~setLine,70,the story the actress elaborated on in such a~positionLine,70,300px,9.5em
-_~setLine,67,bomb~positionLine,67,310px,32.0em~setLine,71,great detail nearly put me to sleep.~positionLine,71,300px,11.0em
-_~setLine,67,bomb~positionLine,67,310px,39.5em~styleLine,67,color,red~setLine,70,~setLine,71,~setLine,70,actress~positionLine,70,310px,9.5em
-_~setLine,70,actress~positionLine,70,310px,17.0em
-_~setLine,70,actress~positionLine,70,310px,24.5em~setLine,72,The makers wanted to tell the story and do\, in~positionLine,72,300px,8.0em
-_~setLine,70,actress~positionLine,70,310px,32.0em~setLine,73,fact\, recount it through images and speech. It~positionLine,73,300px,9.5em
-_~setLine,70,actress~positionLine,70,310px,39.5em~styleLine,70,color,red~setLine,74,would be difficult to imagine a silent Hiroshima.~positionLine,74,300px,11.0em
-_~setLine,75,The dialogue is never really explanatory\, but~positionLine,75,300px,12.5em
-_~setLine,76,rather a key component of the story.~positionLine,76,300px,14.0em
-_~setLine,72,~setLine,73,~setLine,74,~setLine,75,~setLine,76,~setLine,73,recount~positionLine,73,310px,9.5em
-_~setLine,73,recount~positionLine,73,310px,17.0em
-_~setLine,73,recount~positionLine,73,310px,24.5em~setLine,77,This French film starts off as a romance set~positionLine,77,300px,9.5em
-_~setLine,73,recount~positionLine,73,310px,32.0em~setLine,78,against the backdrop of Hiroshima\, but then~positionLine,78,300px,11.0em
-_~setLine,73,recount~positionLine,73,310px,39.5em~styleLine,73,color,red~setLine,79,quickly delves into art house boredom. Meh!~positionLine,79,300px,12.5em
-_~setLine,77,~setLine,78,~setLine,79,~setLine,77,romance s~positionLine,77,310px,9.5em
-_~setLine,77,romances~positionLine,77,310px,17.0em
-_~setLine,77,romances~positionLine,77,310px,24.5em~setLine,80,Here -- for the first time since Eisenstein -- we~positionLine,80,300px,6.5em
-_~setLine,77,romances~positionLine,77,310px,32.0em~setLine,81,have a cinematic intelligence so quick\, so subtle\,~positionLine,81,300px,8.0em
-_~setLine,77,romances~positionLine,77,310px,39.5em~styleLine,77,color,red~setLine,82,so original\, so at once passionate and~positionLine,82,300px,9.5em
-_~setLine,83,sophisticated that it can be compared with Joyce\,~positionLine,83,300px,11.0em
-_~setLine,84,with Picasso\, with Berg and Bartók and Stravinksy.~positionLine,84,300px,12.5em
-_~setLine,80,~setLine,81,~setLine,82,~setLine,83,~setLine,84,~setLine,82,and~positionLine,82,310px,9.5em
-_~setLine,82,and~positionLine,82,310px,17.0em
-_~setLine,82,and~positionLine,82,310px,24.5em
-_~setLine,82,and~positionLine,82,310px,32.0em
-_~setLine,82,and~positionLine,82,310px,39.5em~styleLine,82,color,red
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+_~setLine,1,one of the few movies in the world to express with~positionLine,1,453px,6.5em
+_~setLine,2,near perfection the truth about the~positionLine,2,453px,8.0em
+_~setLine,3,soul-destroying effects a city has on lovers\, the~positionLine,3,453px,9.5em
+_~setLine,4,pain it can cause them\, the monsters that it turns~positionLine,4,453px,11.0em
+_~setLine,5,them into.~positionLine,5,453px,12.5em
+_~setLine,1,~setLine,2,~setLine,3,~setLine,4,~setLine,5,~setLine,3,lovers~positionLine,3,687px,9.5em
+_~setLine,3,lovers~positionLine,3,687px,13.25em~setLine,6,Silly poetry + Cameraman with existentialism =~positionLine,6,476px,9.5em
+_~setLine,3,lover~positionLine,3,687px,17.0em~setLine,7,this movie.~positionLine,7,476px,11.0em
+_~setLine,3,lover~positionLine,3,687px,20.75em~setLine,6,~setLine,7,~setLine,6,Cameraman~positionLine,6,568px,9.5em
+_~setLine,3,lover~positionLine,3,687px,24.5em~setLine,6,Cameraman~positionLine,6,568px,13.25em~setLine,8,the film has endured due to its lyrical quality in~positionLine,8,119px,8.0em
+_~setLine,3,lover~positionLine,3,687px,28.25em~setLine,6,Camera~positionLine,6,568px,17.0em~setLine,9,depicting a love affair in post World War II~positionLine,9,119px,9.5em
+_~setLine,3,lover~positionLine,3,687px,32.0em~setLine,6,Camera~positionLine,6,568px,20.75em~setLine,8,~setLine,9,~setLine,9,World War II~positionLine,9,310px,9.5em
+_~setLine,3,over~positionLine,3,687px,35.75em~setLine,6,Cam~positionLine,6,568px,24.5em~setLine,9,World War II~positionLine,9,310px,13.25em~setLine,10,I might not be a great fan of the French New Wave\,~positionLine,10,374px,9.5em
+_~setLine,3,over~positionLine,3,687px,39.5em~setLine,6,Cam~positionLine,6,568px,28.25em~setLine,9,World War II~positionLine,9,310px,17.0em~setLine,11,but sure I am not a fan of this film. Romantinc\,~positionLine,11,374px,11.0em
+_~setLine,3,over~positionLine,3,687px,43.25em~styleLine,3,color,red~setLine,6,Cam~positionLine,6,568px,32.0em~setLine,9,World War II~positionLine,9,310px,20.75em~setLine,12,poetical but too heavy for my tastes.~positionLine,12,374px,12.5em
+_~setLine,6,a~positionLine,6,568px,35.75em~setLine,9,World War II~positionLine,9,310px,24.5em~setLine,10,~setLine,11,~setLine,12,~setLine,10,French~positionLine,10,580px,9.5em
+_~setLine,6,a~positionLine,6,568px,39.5em~setLine,9,World War II~positionLine,9,310px,28.25em~setLine,10,French~positionLine,10,580px,13.25em~setLine,13,a foredoomed romance between a French actress and~positionLine,13,409px,8.0em
+_~setLine,6,a~positionLine,6,568px,43.25em~styleLine,6,color,red~setLine,9,World War II~positionLine,9,310px,32.0em~setLine,10,French~positionLine,10,580px,17.0em~setLine,14,a Japanese architect~positionLine,14,409px,9.5em
+_~setLine,9,World War II~positionLine,9,310px,35.75em~setLine,10,French~positionLine,10,580px,20.75em~setLine,13,~setLine,14,~setLine,14,Japanese architect~positionLine,14,420px,9.5em
+_~setLine,9,World War II~positionLine,9,310px,39.5em~setLine,10,French~positionLine,10,580px,24.5em~setLine,14,Japanese architect~positionLine,14,420px,13.25em~setLine,15,They regard the war\, Hiroshima\, each other\, and~positionLine,15,64px,9.5em
+_~setLine,9,World War II.~positionLine,9,310px,43.25em~styleLine,9,color,red~setLine,10,French~positionLine,10,580px,28.25em~setLine,14,Japanese architect~positionLine,14,420px,17.0em~setLine,16,even themselves with what seems like boredom.~positionLine,16,64px,11.0em
+_~setLine,10,French~positionLine,10,580px,32.0em~setLine,14,Japanese architect~positionLine,14,420px,20.75em~setLine,17,Maybe that's the point though? Or maybe the film~positionLine,17,64px,12.5em
+_~setLine,10,French~positionLine,10,580px,35.75em~setLine,14,Japanese architect~positionLine,14,420px,24.5em~setLine,18,was just lost on me.~positionLine,18,64px,14.0em
+_~setLine,10,French~positionLine,10,580px,39.5em~setLine,14,Japanese architect~positionLine,14,420px,28.25em~setLine,15,~setLine,16,~setLine,17,~setLine,18,~setLine,15,Hiroshima~positionLine,15,200px,9.5em
+_~setLine,10,French~positionLine,10,580px,43.25em~styleLine,10,color,red~setLine,14,Japanese architect~positionLine,14,420px,32.0em~setLine,15,Hiroshima~positionLine,15,200px,13.25em~setLine,19,Gorgeous and yearning; offers a still-modern~positionLine,19,308px,9.5em
+_~setLine,14,Japanese architect~positionLine,14,420px,35.75em~setLine,15,Hiroshima~positionLine,15,200px,17.0em~setLine,20,thesis: Memory\, like love\, is a commodity that no~positionLine,20,308px,11.0em
+_~setLine,14,Japanese architect~positionLine,14,420px,39.5em~setLine,15,Hiroshima~positionLine,15,200px,20.75em~setLine,21,one fully possesses.~positionLine,21,308px,12.5em
+_~setLine,14,Japanese architect~positionLine,14,420px,43.25em~styleLine,14,color,red~setLine,15,Hiroshima~positionLine,15,200px,24.5em~setLine,19,~setLine,20,~setLine,21,~setLine,19,yearning~positionLine,19,401px,9.5em
+_~setLine,15,Hiroshima~positionLine,15,200px,28.25em~setLine,19,yearning~positionLine,19,401px,13.25em~setLine,22,I'll admit to not caring much about the two people~positionLine,22,860px,9.5em
+_~setLine,15,Hiroshima~positionLine,15,200px,32.0em~setLine,19,yearning~positionLine,19,401px,17.0em~setLine,23,at the center of Resnais' drama.~positionLine,23,860px,11.0em
+_~setLine,15,Hiroshima~positionLine,15,200px,35.75em~setLine,19,yearn~positionLine,19,401px,20.75em~setLine,22,~setLine,23,~setLine,22,the~positionLine,22,1085px,9.5em
+_~setLine,15,Hiroshima~positionLine,15,200px,39.5em~setLine,19,yearn~positionLine,19,401px,24.5em~setLine,22,the~positionLine,22,1085px,13.25em~setLine,24,one cannot help but be moved by these lovelorn~positionLine,24,944px,6.5em
+_~setLine,15,Hiroshima~positionLine,15,200px,43.25em~styleLine,15,color,red~setLine,19,yearn~positionLine,19,401px,28.25em~setLine,22,the~positionLine,22,1085px,17.0em~setLine,25,people\, struggling hopelessly against the~positionLine,25,944px,8.0em
+_~setLine,19,yearn~positionLine,19,401px,32.0em~setLine,22,the~positionLine,22,1085px,20.75em~setLine,26,onslaught of time and the devastation of being~positionLine,26,944px,9.5em
+_~setLine,19,A~positionLine,19,401px,35.75em~setLine,22,the~positionLine,22,1085px,24.5em~setLine,27,forgotten.~positionLine,27,944px,11.0em
+_~setLine,19,A~positionLine,19,401px,39.5em~setLine,22,the~positionLine,22,1085px,28.25em~setLine,24,~setLine,25,~setLine,26,~setLine,27,~setLine,26,devastation~positionLine,26,1110px,9.5em
+_~setLine,19,A~positionLine,19,401px,43.25em~styleLine,19,color,red~setLine,22,the~positionLine,22,1085px,32.0em~setLine,26,devastation~positionLine,26,1110px,13.25em~setLine,28,The educated audience often uses “art” films in~positionLine,28,1009px,5.0em
+_~setLine,22,the~positionLine,22,1085px,35.75em~setLine,26,devastation~positionLine,26,1110px,17.0em~setLine,29,much the same self-indulgent way as the mass~positionLine,29,1009px,6.5em
+_~setLine,22,the~positionLine,22,1085px,39.5em~setLine,26,devastation~positionLine,26,1110px,20.75em~setLine,30,audience uses the Hollywood “product\,” finding~positionLine,30,1009px,8.0em
+_~setLine,22,the~positionLine,22,1085px,43.25em~styleLine,22,color,red~setLine,26,devastation~positionLine,26,1110px,24.5em~setLine,31,wish fulfillment in the form of cheap and easy~positionLine,31,1009px,9.5em
+_~setLine,26,devastation~positionLine,26,1110px,28.25em~setLine,32,congratulation on their sensitivities and their~positionLine,32,1009px,11.0em
+_~setLine,26,devastation~positionLine,26,1110px,32.0em~setLine,33,liberalism.~positionLine,33,1009px,12.5em
+_~setLine,26,devastation~positionLine,26,1110px,35.75em~setLine,28,~setLine,29,~setLine,30,~setLine,31,~setLine,32,~setLine,33,~setLine,31,of ~positionLine,31,1190px,9.5em
+_~setLine,26,devastation~positionLine,26,1110px,39.5em~setLine,31,of ~positionLine,31,1190px,13.25em~setLine,34,Spans decades while remaining stubbornly in the~positionLine,34,5px,8.0em
+_~setLine,26,devastation~positionLine,26,1110px,43.25em~styleLine,26,color,red~setLine,31,of ~positionLine,31,1190px,17.0em~setLine,35,present tense\, the way our own memories after ebb~positionLine,35,5px,9.5em
+_~setLine,31,of ~positionLine,31,1190px,20.75em~setLine,36,and flow according to what we’re feeling in the~positionLine,36,5px,11.0em
+_~setLine,31,of ~positionLine,31,1190px,24.5em~setLine,37,moment.~positionLine,37,5px,12.5em
+_~setLine,31,of ~positionLine,31,1190px,28.25em~setLine,34,~setLine,35,~setLine,36,~setLine,37,~setLine,35,after~positionLine,35,275px,9.5em
+_~setLine,31,of ~positionLine,31,1190px,32.0em~setLine,35,after~positionLine,35,275px,13.25em~setLine,38,one of the better movies of that genre. It is more~positionLine,38,709px,8.0em
+_~setLine,31,of ~positionLine,31,1190px,35.75em~setLine,35,after~positionLine,35,275px,17.0em~setLine,39,realistic and grittier than previous French films~positionLine,39,709px,9.5em
+_~setLine,31,of ~positionLine,31,1190px,39.5em~setLine,35,after~positionLine,35,275px,20.75em~setLine,40,of even a few years earlier.~positionLine,40,709px,11.0em
+_~setLine,31,of ~positionLine,31,1190px,43.25em~styleLine,31,color,red~setLine,35,after~positionLine,35,275px,24.5em~setLine,38,~setLine,39,~setLine,40,~setLine,39,previous~positionLine,39,870px,9.5em
+_~setLine,35,after~positionLine,35,275px,28.25em~setLine,39,previous~positionLine,39,870px,13.25em~setLine,41,the director changes the theme to a love story\,~positionLine,41,1090px,6.5em
+_~setLine,35,after~positionLine,35,275px,32.0em~setLine,39,previous~positionLine,39,870px,17.0em~setLine,42,unhappinness\, lust and human longing - completely~positionLine,42,1090px,8.0em
+_~setLine,35,after~positionLine,35,275px,35.75em~setLine,39,previous~positionLine,39,870px,20.75em~setLine,43,giving up on post-war atomic issues~positionLine,43,1090px,9.5em
+_~setLine,35,after~positionLine,35,275px,39.5em~setLine,39,previous~positionLine,39,870px,24.5em~setLine,41,~setLine,42,~setLine,43,~setLine,43,atomic~positionLine,43,1235px,9.5em
+_~setLine,35,after~positionLine,35,275px,43.25em~styleLine,35,color,red~setLine,39,previous~positionLine,39,870px,28.25em~setLine,43,atomic~positionLine,43,1235px,13.25em~setLine,44,there's something that annoys me big about that~positionLine,44,436px,8.0em
+_~setLine,39,previous~positionLine,39,870px,32.0em~setLine,43,atomic~positionLine,43,1235px,17.0em~setLine,45,movie\, maybe the fake way they talk\, or the many~positionLine,45,436px,9.5em
+_~setLine,39,previous~positionLine,39,870px,35.75em~setLine,43,atomic~positionLine,43,1235px,20.75em~setLine,46,fake laughes\, or the weird obssession they have~positionLine,46,436px,11.0em
+_~setLine,39,previous~positionLine,39,870px,39.5em~setLine,43,atomic~positionLine,43,1235px,24.5em~setLine,47,for each other\, but something annoys me~positionLine,47,436px,12.5em
+_~setLine,39,previous~positionLine,39,870px,43.25em~styleLine,39,color,red~setLine,43,atomic~positionLine,43,1235px,28.25em~setLine,44,~setLine,45,~setLine,46,~setLine,47,~setLine,45,many~positionLine,45,720px,9.5em
+_~setLine,43,atomic~positionLine,43,1235px,32.0em~setLine,45,many~positionLine,45,720px,13.25em~setLine,48,an impressive exercise of film techniques\, mood~positionLine,48,377px,6.5em
+_~setLine,43,atomic~positionLine,43,1235px,35.75em~setLine,45,many~positionLine,45,720px,17.0em~setLine,49,embodying camera work\, an almost intuitive kind of~positionLine,49,377px,8.0em
+_~setLine,43,atomic~positionLine,43,1235px,39.5em~setLine,45,many~positionLine,45,720px,20.75em~setLine,50,musical accompaniment\, and verismo acting.~positionLine,50,377px,9.5em
+_~setLine,43,atomic~positionLine,43,1235px,43.25em~styleLine,43,color,red~setLine,45,many~positionLine,45,720px,24.5em~setLine,48,~setLine,49,~setLine,50,~setLine,50,and~positionLine,50,540px,9.5em
+_~setLine,45,many~positionLine,45,720px,28.25em~setLine,50,and~positionLine,50,540px,13.25em~setLine,51,I am not one for melodrama\, but this piece had me~positionLine,51,760px,5.0em
+_~setLine,45,many~positionLine,45,720px,32.0em~setLine,50,and~positionLine,50,540px,17.0em~setLine,52,convinced it was something special. Then it kept~positionLine,52,760px,6.5em
+_~setLine,45,many~positionLine,45,720px,35.75em~setLine,50,and~positionLine,50,540px,20.75em~setLine,53,going. And going. And getting more ridiculous. For~positionLine,53,760px,8.0em
+_~setLine,45,many~positionLine,45,720px,39.5em~setLine,50,and~positionLine,50,540px,24.5em~setLine,54,hours. And more ridiculous. It is pretty~positionLine,54,760px,9.5em
+_~setLine,45,many~positionLine,45,720px,43.25em~styleLine,45,color,red~setLine,50,and~positionLine,50,540px,28.25em~setLine,55,innovative for it's time\, however\, but it is a~positionLine,55,760px,11.0em
+_~setLine,50,and~positionLine,50,540px,32.0em~setLine,56,bore to watch. A barely passable film-watching~positionLine,56,760px,12.5em
+_~setLine,50,and~positionLine,50,540px,35.75em~setLine,57,experience.~positionLine,57,760px,14.0em
+_~setLine,50,and~positionLine,50,540px,39.5em~setLine,51,~setLine,52,~setLine,53,~setLine,54,~setLine,55,~setLine,56,~setLine,57,~setLine,54,hours~positionLine,54,760px,9.5em
+_~setLine,50,and~positionLine,50,540px,43.25em~styleLine,50,color,red~setLine,54, hours~positionLine,54,760px,13.25em~setLine,58,The first minutes are shocking. Emmanuelle knocks~positionLine,58,1000px,6.5em
+_~setLine,54, hours~positionLine,54,760px,17.0em~setLine,59,us off with her beauty while her character reminds~positionLine,59,1000px,8.0em
+_~setLine,54, hours~positionLine,54,760px,20.75em~setLine,60,us to ponder how we'll never really know~positionLine,60,1000px,9.5em
+_~setLine,54, hours~positionLine,54,760px,24.5em~setLine,61,Hiroshima.~positionLine,61,1000px,11.0em
+_~setLine,54, hours~positionLine,54,760px,28.25em~setLine,58,~setLine,59,~setLine,60,~setLine,61,~setLine,60,ponder~positionLine,60,1035px,9.5em
+_~setLine,54, hours~positionLine,54,760px,32.0em~setLine,60,ponder~positionLine,60,1035px,13.25em~setLine,62,this exists on a different level. like marienbad\,~positionLine,62,966px,8.0em
+_~setLine,54, hours~positionLine,54,760px,35.75em~setLine,60,ponder~positionLine,60,1035px,17.0em~setLine,63,i begin to nod off but then wake up at the best~positionLine,63,966px,9.5em
+_~setLine,54, hours~positionLine,54,760px,39.5em~setLine,60,ponder~positionLine,60,1035px,20.75em~setLine,64,bits. some parts are too beautiful and eerie to~positionLine,64,966px,11.0em
+_~setLine,54, hours -~positionLine,54,760px,43.25em~styleLine,54,color,red~setLine,60,ponder~positionLine,60,1035px,24.5em~setLine,65,believe. other parts are too stale to digest~positionLine,65,966px,12.5em
+_~setLine,60,ponder~positionLine,60,1035px,28.25em~setLine,62,~setLine,63,~setLine,64,~setLine,65,~setLine,63,the~positionLine,63,1210px,9.5em
+_~setLine,60,ponder~positionLine,60,1035px,32.0em~setLine,63,the~positionLine,63,1210px,13.25em~setLine,66,It was not one for entertainment purposes\, but to~positionLine,66,1121px,8.0em
+_~setLine,60,ponder~positionLine,60,1035px,35.75em~setLine,63,the~positionLine,63,1210px,17.0em~setLine,67,inform and juxtapose the bomb with a love affair~positionLine,67,1121px,9.5em
+_~setLine,60,ponder~positionLine,60,1035px,39.5em~setLine,63,the~positionLine,63,1210px,20.75em~setLine,68,in Hiroshima. It was painful at times to see the~positionLine,68,1121px,11.0em
+_~setLine,60,ponder~positionLine,60,1035px,43.25em~styleLine,60,color,red~setLine,63,the~positionLine,63,1210px,24.5em~setLine,69,harshness.~positionLine,69,1121px,12.5em
+_~setLine,63,the~positionLine,63,1210px,28.25em~setLine,66,~setLine,67,~setLine,68,~setLine,69,~setLine,67,bomb~positionLine,67,1285px,9.5em
+_~setLine,63,the~positionLine,63,1210px,32.0em~setLine,67,bomb~positionLine,67,1285px,13.25em~setLine,70,the story the actress elaborated on in such a~positionLine,70,542px,9.5em
+_~setLine,63,the~positionLine,63,1210px,35.75em~setLine,67,bomb~positionLine,67,1285px,17.0em~setLine,71,great detail nearly put me to sleep.~positionLine,71,542px,11.0em
+_~setLine,63,the~positionLine,63,1210px,39.5em~setLine,67,bomb~positionLine,67,1285px,20.75em~setLine,70,~setLine,71,~setLine,70,actress~positionLine,70,625px,9.5em
+_~setLine,63,the~positionLine,63,1210px,43.25em~styleLine,63,color,red~setLine,67,bomb~positionLine,67,1285px,24.5em~setLine,70, actress~positionLine,70,625px,13.25em~setLine,72,The makers wanted to tell the story and do\, in~positionLine,72,783px,8.0em
+_~setLine,67,bomb~positionLine,67,1285px,28.25em~setLine,70, actress~positionLine,70,625px,17.0em~setLine,73,fact\, recount it through images and speech. It~positionLine,73,783px,9.5em
+_~setLine,67,bomb~positionLine,67,1285px,32.0em~setLine,70, actress~positionLine,70,625px,20.75em~setLine,74,would be difficult to imagine a silent Hiroshima.~positionLine,74,783px,11.0em
+_~setLine,67,bomb~positionLine,67,1285px,35.75em~setLine,70, actress~positionLine,70,625px,24.5em~setLine,75,The dialogue is never really explanatory\, but~positionLine,75,783px,12.5em
+_~setLine,67,bomb~positionLine,67,1285px,39.5em~setLine,70, actress~positionLine,70,625px,28.25em~setLine,76,rather a key component of the story.~positionLine,76,783px,14.0em
+_~setLine,67,bomb.~positionLine,67,1285px,43.25em~styleLine,67,color,red~setLine,70, actress~positionLine,70,625px,32.0em~setLine,72,~setLine,73,~setLine,74,~setLine,75,~setLine,76,~setLine,73,recount~positionLine,73,815px,9.5em
+_~setLine,70, actress~positionLine,70,625px,35.75em~setLine,73,recount~positionLine,73,815px,13.25em~setLine,77,This French film starts off as a romance set~positionLine,77,736px,9.5em
+_~setLine,70, actress~positionLine,70,625px,39.5em~setLine,73,recount~positionLine,73,815px,17.0em~setLine,78,against the backdrop of Hiroshima\, but then~positionLine,78,736px,11.0em
+_~setLine,70, actress - ~positionLine,70,625px,43.25em~styleLine,70,color,red~setLine,73,recount~positionLine,73,815px,20.75em~setLine,79,quickly delves into art house boredom. Meh!~positionLine,79,736px,12.5em
+_~setLine,73,recount~positionLine,73,815px,24.5em~setLine,77,~setLine,78,~setLine,79,~setLine,77,romance s~positionLine,77,935px,9.5em
+_~setLine,73,recount~positionLine,73,815px,28.25em~setLine,77,romances~positionLine,77,935px,13.25em~setLine,80,Here -- for the first time since Eisenstein -- we~positionLine,80,790px,6.5em
+_~setLine,73,recount~positionLine,73,815px,32.0em~setLine,77,romances~positionLine,77,935px,17.0em~setLine,81,have a cinematic intelligence so quick\, so subtle\,~positionLine,81,790px,8.0em
+_~setLine,73,recount~positionLine,73,815px,35.75em~setLine,77,romances~positionLine,77,935px,20.75em~setLine,82,so original\, so at once passionate and~positionLine,82,790px,9.5em
+_~setLine,73,recount~positionLine,73,815px,39.5em~setLine,77,romances~positionLine,77,935px,24.5em~setLine,83,sophisticated that it can be compared with Joyce\,~positionLine,83,790px,11.0em
+_~setLine,73,recount~positionLine,73,815px,43.25em~styleLine,73,color,red~setLine,77,romances~positionLine,77,935px,28.25em~setLine,84,with Picasso\, with Berg and Bartók and Stravinksy.~positionLine,84,790px,12.5em
+_~setLine,77,romances~positionLine,77,935px,32.0em~setLine,80,~setLine,81,~setLine,82,~setLine,83,~setLine,84,~setLine,82,and~positionLine,82,1005px,9.5em
+_~setLine,77,romances~positionLine,77,935px,35.75em~setLine,82,and~positionLine,82,1005px,13.25em
+_~setLine,77,romances~positionLine,77,935px,39.5em~setLine,82,and~positionLine,82,1005px,17.0em
+_~setLine,77,romances~positionLine,77,935px,43.25em~styleLine,77,color,red~setLine,82,and~positionLine,82,1005px,20.75em
+_~setLine,82,and~positionLine,82,1005px,24.5em
+_~setLine,82,and~positionLine,82,1005px,28.25em
+_~setLine,82,and~positionLine,82,1005px,32.0em
+_~setLine,82,and~positionLine,82,1005px,35.75em
+_~setLine,82,and~positionLine,82,1005px,39.5em
+_~setLine,82,and~positionLine,82,1005px,43.25em~styleLine,82,color,red
+_~setLine,85,(4.8 stars)~positionLine,85,720px,46.25em~styleLine,85,color,orange
