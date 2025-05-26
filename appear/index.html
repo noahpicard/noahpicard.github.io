@@ -1,168 +1,200 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<style>
-body {
-  background-color: #fff;
-  position: relative;
-  width: 100%;
-  padding: 0;
-  margin: 0;
-  overflow: auto;
-  user-select: none;
-}
-#main {
-  margin-top: 1em;
-  margin-left: 0.5em;
-  margin-bottom: 1em;
-  margin-right: 0.5em;
-  
-  display: flex;
-  flex-flow: column wrap;
-}
-@media only screen and (min-width: 992px) {
-  #main {
-    margin: 5em;
-  }
-}
-#menu {
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  display: flex;
-  flex-flow: row wrap;
-  gap: 1px;
-  z-index: 1;
-}
-#controls {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  gap: 1px;
-  margin: 0.5em;
-}
-#filemenu {
-  gap: 1px;
-}
-#openfile {
-  width: 200px;
-}
-.appearText {
-  text-align: left;
-  padding: 0.05em;
-  /*display: block; */
-  white-space: pre;
-  position: relative;
-}
-.textContent {
-  position: absolute;
-  top: 0;
-  left: 0;
-  animation-name: appear;
-  animation-duration: 1s;
-  animation-fill-mode: forwards;
-  /* display: flex;
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        background-color: #fff;
+        position: relative;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        overflow: auto;
+        user-select: none;
+      }
+      #main {
+        margin-top: 1em;
+        margin-left: 0.5em;
+        margin-bottom: 1em;
+        margin-right: 0.5em;
+
+        display: flex;
+        flex-flow: column wrap;
+      }
+      @media only screen and (min-width: 992px) {
+        #main {
+          margin: 5em;
+        }
+      }
+      #menu {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        display: flex;
+        flex-flow: row wrap;
+        gap: 1px;
+        z-index: 1;
+      }
+      #controls {
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        gap: 1px;
+        margin: 0.5em;
+      }
+      #filemenu {
+        gap: 1px;
+      }
+      #openfile {
+        width: 200px;
+      }
+      .appearText {
+        text-align: left;
+        padding: 0.05em;
+        /*display: block; */
+        white-space: pre;
+        position: relative;
+      }
+      .textContent {
+        position: absolute;
+        top: 0;
+        left: 0;
+        animation-name: appear;
+        animation-duration: 1s;
+        animation-fill-mode: forwards;
+        /* display: flex;
   flex-flow: row wrap; */
-}
-.fadeOutSpan {
-  position: absolute;
-  top: 0;
-  left: 0;
-  animation-name: disappear;
-  animation-duration: 1s;
-  animation-fill-mode: forwards;
-  /* display: flex;
+      }
+      .fadeOutSpan {
+        position: absolute;
+        top: 0;
+        left: 0;
+        animation-name: disappear;
+        animation-duration: 1s;
+        animation-fill-mode: forwards;
+        /* display: flex;
   flex-flow: row wrap; */
-}
-.textContentSubSpan {
-  /* display: block;
-  transform: rotate(45deg); */
-}
-.italic {
-    font-style: italic;
-}
-.underline {
-    text-decoration: underline;
-}
-@keyframes appear {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-@keyframes disappear {
-    from {
-        opacity: 1;
-    }
-    to {
-        opacity: 0;
-    }
-}
-</style>
-</head>
-<body onload="run()">
-<div id="main"></div>
-<div id="menu">
-  <div id="controls">
-    <button id="backButton" disabled>back</button>
-    <button id="nextButton" disabled>next</button>
-  </div>
-  <div id="filemenu">
-    <input type="file" id="openfile" /><br>
-    <select id="select_preset" aria-placeholder="or select preset" style="width: 150px;">
-      <option value="preset">presets</option>
-    </select>
-    <a href="appear_help.html">about</a>
-  </div>
-</div>
-<script>
-document.getElementById("nextButton").addEventListener('click', function(e) {
-  e.stopPropagation();
-  forward();
-});
-document.getElementById("backButton").addEventListener('click', function(e) {
-  e.stopPropagation();
-  back();
-});
-document.getRootNode().addEventListener('click', function(e) {
-  console.log(e);
+      }
+      .textContentSubSpan {
 
-  const width = window.innerWidth;
-  const halfWidth = width / 2;
-  if (e.pageX > halfWidth) {
-    forward();
-  } else {
-    back();
-  }
-})
+      }
+      .keyControlDisplay {
+        display: flex;
+        flex-flow: row nowrap;
+        gap: 4px;
+        margin: 4px;
+      }
+      .keyControlDisplayItemContainer {
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        margin: 0.5em;
+      }
+      .keyControlDisplayItemLabel {
+        text-align: center;
+        color: #777;
+      }
+      .keyControlDisplayItem {
+        padding: 0.5em 0.75em;
+        border: #777 1px solid;
+        border-radius: 4px;
+        box-shadow: 0px 1px 2px #aaa;
+        color: #777;
+      }
+      .italic {
+        font-style: italic;
+      }
+      .underline {
+        text-decoration: underline;
+      }
+      @keyframes appear {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      @keyframes disappear {
+        from {
+          opacity: 1;
+        }
+        to {
+          opacity: 0;
+        }
+      }
+    </style>
+  </head>
+  <body onload="run()">
+    <div id="main"></div>
+    <div id="menu">
+      <div id="controls">
+        <button id="backButton" disabled>back</button>
+        <button id="nextButton" disabled>next</button>
+      </div>
+      <div id="filemenu">
+        <input type="file" id="openfile" /><br />
+        <select
+          id="select_preset"
+          aria-placeholder="or select preset"
+          style="width: 150px"
+        >
+          <option value="preset">presets</option>
+        </select>
+        <a href="appear_help.html">about</a>
+      </div>
+    </div>
+    <script>
+      document
+        .getElementById("nextButton")
+        .addEventListener("click", function (e) {
+          e.stopPropagation();
+          forward();
+        });
+      document
+        .getElementById("backButton")
+        .addEventListener("click", function (e) {
+          e.stopPropagation();
+          back();
+        });
+      document.getRootNode().addEventListener("click", function (e) {
+        console.log(e);
 
-document.getElementById("openfile").addEventListener('change', function() {
-  var fr = new FileReader();
-  fr.onload = function() {
-    //document.getElementById("filecontents").textContent = this.result;
-    textIndex = 0;
-    textHistory = [];
-    var rawText = this.result
-    fileText = rawText.split(/\r\n|\n|\r/);
-    document.getElementById("select_preset").value = "Select preset -";
-    document.getElementById("main").replaceChildren();
-    document.getElementById("main").innerHTML = "";
-    forward();
-    // Remove focus from file picker
-    document.getElementById("openfile").blur();
-  }
-  fr.readAsText(this.files[0]);
-})
+        const width = window.innerWidth;
+        const halfWidth = width / 2;
+        if (e.pageX > halfWidth) {
+          forward();
+        } else {
+          back();
+        }
+      });
 
-const presetTexts = {
-  "Select preset -": "",
-  polysolid:
-`polysolid
+      document
+        .getElementById("openfile")
+        .addEventListener("change", function () {
+          var fr = new FileReader();
+          fr.onload = function () {
+            //document.getElementById("filecontents").textContent = this.result;
+            resetFrameHistory();
+            var rawText = this.result;
+            fileText = rawText.split(/\r\n|\n|\r/);
+            document.getElementById("select_preset").value = "Select preset -";
+            document.getElementById("main").replaceChildren();
+            document.getElementById("main").innerHTML = "";
+            forward();
+            // Remove focus from file picker
+            document.getElementById("openfile").blur();
+          };
+          fr.readAsText(this.files[0]);
+        });
+
+      const presetTexts = {
+        "Select preset -": "",
+        polysolid: `polysolid
 
 
 There is always a space 
@@ -199,8 +231,7 @@ my skin back~replace,\\(,((~replace,\\),))
 until I was shucked in the
                                     still
                                     already-breathed air.`,
-  refracted: 
-`through~styleWhere,through,color,purple
+        refracted: `through~styleWhere,through,color,purple
 this~setLine,0,through my~styleWhere,this,color,purple
 crystal~setLine,0,through my own~setLine,1,this prayer~styleWhere,crystal,color,purple
 of~setLine,0,through my own small~setLine,1,this prayer like~setLine,2,crystal atop~styleWhere,of,color,purple
@@ -211,8 +242,7 @@ refracted~setLine,0,through my own small failings / palms re-cup under~setLine,1
 the~setLine,0,through my own small failings / palms re-cup under the~setLine,1,this prayer like smoke curdling wood / extending my~setLine,2,crystal atop wood / each history self-deceiving separation~setLine,3,of ether or the grape and~setLine,4,water whispering a gentle porousness~setLine,5,I press pinkies vainly /~setLine,6,glimpse a flash~setLine,7,refracted and~styleWhere,the,color,purple
 entire~setLine,0,through my own small failings / palms re-cup under the gliding~setLine,1,this prayer like smoke curdling wood / extending my stalactite~setLine,2,crystal atop wood / each history self-deceiving separation by~setLine,3,of ether or the grape and its~setLine,4,water whispering a gentle porousness to~setLine,5,I press pinkies vainly / so~setLine,6,glimpse a flash of~setLine,7,refracted and therefore~setLine,8,the last~styleWhere,entire,color,purple
 universe~setLine,0,through my own small failings / palms re-cup under the gliding water~setLine,1,this prayer like smoke curdling wood / extending my stalactite skin~setLine,2,crystal atop wood / each history self-deceiving separation by seams~setLine,3,of ether or the grape and its skin~setLine,4,water whispering a gentle porousness to me~setLine,5,I press pinkies vainly / so to~setLine,6,glimpse a flash of everything~setLine,7,refracted and therefore held~setLine,8,the last lights~setLine,9,entire opening:~styleWhere,universe,color,purple`,
-  the_kitchen:
-`March 8 2025 - the kitchen of 700 Broderick
+        the_kitchen: `March 8 2025 - the kitchen of 700 Broderick
 you call me back a day later at 12:08
 the near-spring sun slow cooking my pant legs
 a warbling by my kitchen window
@@ -251,8 +281,7 @@ oh great~setLine,2,the sun~setLine,14,you drag your spine~setLine,22,blinking~se
 how about you grandpa? what's new?~setLine,3,a warbling~setLine,13,the redwoods~setLine,22,~setLine,29,~setLine,30,~setLine,35,that's great
 oh - nothing much - you say~setLine,11,the static~setLine,22,blinking~setLine,27,what are you~setLine,29,~setLine,32,broke up~setLine,33,this new woman~setLine,35,
 nothing much~setLine,0,kitchen~setLine,34,in the sun~setLine,36,grandpa?~setLine,37,you say`,
-  answered:
-`I know you asked me already
+        answered: `I know you asked me already
 
 
 
@@ -300,8 +329,7 @@ _~styleLine,4,color,blue~setLine,18,   broadknife carving away
 _~styleLine,3,color,blue~setLine,19,      the dead skin from the
 _~styleLine,2,color,blue~setLine,20,   base of your heel its soft
 _~styleLine,1,color,blue~styleLine,24,color,black~styleLine,23,color,black~styleLine,22,color,black~setLine,21,                             scraping`,
-  status:
-`status
+        status: `status
 
 
 
@@ -418,8 +446,7 @@ _~setLine,2,He was showering~setLine,4,You were making tea~setLine,6,I was drivi
 _~setLine,2,He was pouring tea~setLine,4,You were drinking tea~setLine,6,I was away
 
 _~setLine,2,He was drinking tea~setLine,4,You were drinking tea~setLine,6,`,
-  look_for:
-`these days i mostly look for what isn't there
+        look_for: `these days i mostly look for what isn't there
 no songs to teach me anymore
 I've grown too specific - a philosophy
 unreachable save for fleeting images
@@ -478,8 +505,7 @@ _~clearLineStyle,10~styleLine,10,color,lightgray~styleLineWhere,10,speak,color,b
 _~clearLineStyle,11~styleLine,11,color,lightgray~styleLineWhere,11,there isn't a thing,color,black
 _~clearLineStyle,12~styleLine,12,color,lightgray~styleLineWhere,12,defined by its edges,color,black
 _~clearLineStyle,13~styleLine,13,color,lightgray~styleLineWhere,13,\\.,color,black`,
- chaos_has_its_place:
-`Chaos Has Its Place~underline
+        chaos_has_its_place: `Chaos Has Its Place~underline
 
 
 
@@ -531,8 +557,7 @@ _~setLine,4,                                     I watch you fold into a frog - 
 _~setLine,4,~setLine,5,~setLine,6,~setLine,7,
 _~setLine,21,                                                                                                                                                                     The urge faded the way an urge fades.
 `,
-the_sweetbay_magnolia:
-`
+        the_sweetbay_magnolia: `
 
 
 
@@ -616,8 +641,7 @@ _~setLine,3,my vasculature
 _~setLine,2,like a fishing knife through
 _~setLine,1,time slips forward
 _~setLine,0,frustratingly`,
-what_blinding_light:
-`
+        what_blinding_light: `
 
 
 
@@ -668,8 +692,7 @@ _~setLine,9,                                                                    
 _~setLine,12,                                                                                                                Could you feel the steps escalate?~setLine,25,~setLine,26,~setLine,27,~setLine,28,
 _~setLine,19,                                                                   I know no question except
 _~setLine,9,~setLine,10,~setLine,11,~setLine,12,~setLine,20,                                                                            How can I save you from everything you want?`,
-solarium:
-`Eight planets curl in the dark~style,transform,rotate(0deg)~style,position,fixed~style,left,50vw~style,top,50vh~style,transformOrigin,-3em 50%
+        solarium: `Eight planets curl in the dark~style,transform,rotate(0deg)~style,position,fixed~style,left,50vw~style,top,50vh~style,transformOrigin,-3em 50%
 Falling towards / rushing to escape the sun~style,transform,rotate(25.7deg)~style,position,fixed~style,left,50vw~style,top,50vh~style,transformOrigin,-3em 50%
 Dayward movement - and with it ~style,transform,rotate(51.4deg)~style,position,fixed~style,left,50vw~style,top,50vh~style,transformOrigin,-3em 50%
 A centripetal force away from myself~style,transform,rotate(77.1deg)~style,position,fixed~style,left,50vw~style,top,50vh~style,transformOrigin,-3em 50%
@@ -683,8 +706,7 @@ A shadow plucks the next ~style,transform,rotate(-102.8deg)~style,position,fixed
 Soft-shelled prospector and flashes up~style,transform,rotate(-77.1deg)~style,position,fixed~style,left,50vw~style,top,50vh~style,transformOrigin,-3em 50%
 My eyes chase to sky~style,transform,rotate(-51.4deg)~style,position,fixed~style,left,50vw~style,top,50vh~style,transformOrigin,-3em 50%
 And fixate on lost movement~style,transform,rotate(-25.7deg)~style,position,fixed~style,left,50vw~style,top,50vh~style,transformOrigin,-3em 50%`,
-formation:
-`Do not be~position,70vw,35vh~rotation,20deg,-2em,50%~color,red
+        formation: `Do not be~position,70vw,35vh~rotation,20deg,-2em,50%~color,red
 wandering through~position,70vw,35vh~rotation,80deg,-2em,50%~color,blue
 this dark night~position,70vw,35vh~rotation,140deg,-2em,50%~color,green
 without your~position,70vw,35vh~rotation,200deg,-2em,50%~color,black
@@ -779,8 +801,7 @@ _~positionLine,33,50vw,50vh~rotationLine,33,260deg,-2em,50%
 _~positionLine,40,50vw,50vh~rotationLine,40,320deg,-2em,50%
 
 _~setLine,5,~setLine,12,~setLine,19,~setLine,26,~setLine,33,~setLine,40,`,
-review:
-`
+        review: `
 
 
 
@@ -985,399 +1006,740 @@ _~setLine,82,and~positionLine,82,1005px,35.75em
 _~setLine,82,and~positionLine,82,1005px,39.5em
 _~setLine,82,and~positionLine,82,1005px,43.25em~styleLine,82,color,red
 _~setLine,85,(4.8 stars)~positionLine,85,720px,46.25em~styleLine,85,color,orange`,
-};
+      };
 
-document.getElementById("select_preset").replaceChildren(...Object.keys(presetTexts).map((key) => {
-  const presetOption = document.createElement("option");
-  presetOption.textContent = `${key}`;
-  presetOption.value = key;
-  return presetOption;
-}))
+      document.getElementById("select_preset").replaceChildren(
+        ...Object.keys(presetTexts).map((key) => {
+          const presetOption = document.createElement("option");
+          presetOption.textContent = `${key}`;
+          presetOption.value = key;
+          return presetOption;
+        })
+      );
 
-document.getElementById("select_preset").addEventListener('change', function(e) {
-  e.stopPropagation();
-  textIndex = 0;
-  textHistory = [];
-  var rawText = presetTexts[e.target.value];
-  fileText = rawText.split(/\r\n|\n|\r/);
-  //document.getElementById("openfile").files = [];
-  document.getElementById("main").replaceChildren();
-  document.getElementById("main").innerHTML = "";
-  forward();
-  // Remove focus from preset
-  document.getElementById("select_preset").blur();
-})
-
-var textIndex = 0;
-
-var fileText = [];
-
-var textHistory = [];
-
-function run() {}
-
-function splitTextAndInstructions(rawtext) {
-  const sep = rawtext.split('~')
-  return {
-    text: sep[0],
-    instructions: sep.slice(1).map((item) => item.split(/(?<!\\),/).map((item) => item.replace(/\\,/g, ',')))
-  }
-}
-
-function getAnimation(rawtext) {
-  const text = rawtext.toLowerCase();
-  return "appear";
-}
-
-const styleResets = {
-  color: "black",
-  fontStyle: "normal",
-  textDecoration: "none",
-  transition: "all 1s",
-}
-
-document.onkeydown = checkKey;
-
-function checkKey(e) {
-
-    e = e || window.event;
-
-    if (e.keyCode == '38' || e.key == 'Backspace') {
-        // up arrow
-        back()
-    }
-    else if (e.keyCode == '40' || e.key == ' ' || e.key == 'Enter') {
-        // down arrow
-        forward()
-    }
-    else if (e.keyCode == '37') {
-       // left arrow
-    }
-    else if (e.keyCode == '39') {
-       // right arrow
-    }
-
-}
-
-
-const instructionFunctions = {
-  
-  // Per line
-  setLine: (textHistory, lineNumber, text) => textHistory.map((row, index) => index === parseInt(lineNumber) ? {...row, text} : row),
-  styleLine: (textHistory, lineNumber, styleKey, styleValue) => textHistory.map((row, index) => index === parseInt(lineNumber) ? {...row, modifiers: [...row.modifiers, [null, null, styleKey, styleValue]]} : row),
-  replaceLine: (textHistory, lineNumber, pattern, replacement) => textHistory.map((row, index) => index === parseInt(lineNumber) ? {...row, text: row.text.replaceAll(RegExp(pattern, "g"), replacement)} : row),
-  clearLineStyle: (textHistory, lineNumber) => textHistory.map((row, index) => index === parseInt(lineNumber) ? {...row, modifiers: []} : row),
-  positionLine: (textHistory, lineNumber, xPos, yPos) => textHistory.map((row, index) => index === parseInt(lineNumber) ? {...row, modifiers: [...row.modifiers, [null, null, "position", "fixed"], [null, null, "left", xPos], [null, null, "top", yPos]]} : row),
-  rotationLine: (textHistory, lineNumber, angle, originX, originY) => textHistory.map((row, index) => index === parseInt(lineNumber) ? {...row, modifiers: [...row.modifiers, [null, null, "transformOrigin", `${originX} ${originY}`], [null, null, "transform", `rotate(${angle})`]]} : row),
-  
-
-  // Global
-  replace: (textHistory, pattern, replacement) => textHistory.map((row) => ({...row, text: row.text.replaceAll(RegExp(pattern, "g"), replacement)})),
-  styleLineMatching: (textHistory, pattern, styleKey, styleValue) => textHistory.map((row) => row.text.match(RegExp(pattern, "g")) ? { ...row, modifiers: [ ...row.modifiers, [null, null, styleKey, styleValue]]} : row),
-  styleLineWhere: (textHistory, lineNumber, pattern, styleKey, styleValue) => textHistory.map((row, index) => index === parseInt(lineNumber) ? {...row, modifiers: [...row.modifiers, [...getStartAndEndOfMatch(row.text, pattern), styleKey, styleValue]]} : row),
-};
-
-
-function applyInstruction(textHistory, instruction) {
-  if (!(instruction[0] in instructionFunctions)) {
-    return textHistory;
-  }
-  const result = instructionFunctions[instruction[0]](textHistory, ...instruction.slice(1));
-  return result;
-}
-
-const getStartAndEndOfMatch = (text, pattern) => {
-  const match = RegExp(pattern, "g").exec(text);
-  if (match === null){
-    return [0, 0];
-  }
-  const start = match.index;
-  const end = match.index + match[0].length;
-  return [start, end];
-}
-
-function getModifiersFromInstructions(instructions, text) {
-  const modifierObj = {
-    // Modify a line
-    color: (color) => [null, null, "color", color],
-    italic: () => [null, null, "fontStyle", "italic"],
-    underline: () => [null, null, "textDecoration", "underline"],
-    style: (styleKey, styleValue) => [null, null, styleKey, styleValue],
-    position: (xPos, yPos) => [[null, null, "position", "fixed"], [null, null, "left", xPos], [null, null, "top", yPos]],
-    rotation: (angle, originX, originY) => [[null, null, "transformOrigin", `${originX} ${originY}`], [null, null, "transform", `rotate(${angle})`]],
-    
-    // Modify a range
-    colorAt: (start, end, color) => [start, end, "color", color],
-    italicAt: (start, end) => [start, end, "fontStyle", "italic"],
-    underlineAt: (start, end) => [start, end, "textDecoration", "underline"],
-    styleAt: (start, end, styleKey, styleValue) => [start, end, styleKey, styleValue],
-
-    // Modify a pattern
-    colorWhere: (pattern, color) => [...getStartAndEndOfMatch(text, pattern), "color", color],
-    italicWhere: (pattern) => [...getStartAndEndOfMatch(text, pattern), "fontStyle", "italic"],
-    underlineWhere: (pattern) => [...getStartAndEndOfMatch(text, pattern), "textDecoration", "underline"],
-    styleWhere: (pattern, styleKey, styleValue) => [...getStartAndEndOfMatch(text, pattern), styleKey, styleValue],
-  };
-  
-  const modifiers = instructions.reduce((agg, instruction) => {
-    if (instruction[0] in modifierObj) {
-      let modifier = modifierObj[instruction[0]](...instruction.slice(1));
-      if (modifier.length > 0 && Array.isArray(modifier[0])) {
-        agg.push(...modifier);
-      } else {
-        agg.push(modifier);
+      const loadNewPreset = (preset) => {
+        const rawText = presetTexts[preset];
+        fileText = rawText.split(/\r\n|\n|\r/);
+        //document.getElementById("openfile").files = [];
+        resetFrameHistory();
+        document.getElementById("main").replaceChildren();
+        document.getElementById("main").innerHTML = "";
+        forward();
+        // Remove focus from preset
+        document.getElementById("select_preset").blur();
       }
-    }
-    return agg;
-  }, [])
-  console.log("modifiers", modifiers);
-  return modifiers;
-}
 
-function forward() {
-  while (textIndex < fileText.length) {
-    const check = fileText[textIndex];
+      document
+        .getElementById("select_preset")
+        .addEventListener("change", function (e) {
+          e.stopPropagation();
+          loadNewPreset(e.target.value);
+        });
 
-    const {text, instructions} = splitTextAndInstructions(fileText[textIndex]);
+      var fileText = [];
+      var frameHistory = [];
+      const initialFrame = { textIndex: -1, display: {}, lines: [] };
+      const resetFrameHistory = () => {
+        frameHistory = [initialFrame];
+      };
+      resetFrameHistory();
 
-    console.log("text + instructions", text, instructions);
-
-    const lastTextHistory = textHistory[textHistory.length - 1] || [];
-    const transformedTextHistory = instructions.reduce(applyInstruction, lastTextHistory);
-    console.log("transformedTextHistory", transformedTextHistory);
-    const newTextHistory = [...transformedTextHistory, {text, modifiers: [], instructions}];
-    textHistory.push(newTextHistory);
-
-    updateHTMLFromTextHistory(lastTextHistory, newTextHistory);
-
-    textIndex++;
-
-    const nextButton = document.getElementById("nextButton");
-    const backButton = document.getElementById("backButton");
-    if (nextButton) nextButton.disabled = !(textIndex < fileText.length);
-    if (backButton) backButton.disabled = !(textIndex > 0);
-
-    if (check.trim().length > 0) {
-      break
-    }
-  }
-}
-
-var deepEqual = function (x, y) {
-  if (x === y) {
-    return true;
-  }
-  else if ((typeof x == "object" && x != null) && (typeof y == "object" && y != null)) {
-    if (Object.keys(x).length != Object.keys(y).length)
-      return false;
-
-    for (var prop in x) {
-      if (y.hasOwnProperty(prop))
-      {  
-        if (! deepEqual(x[prop], y[prop]))
-          return false;
+      const getLastFrame = () => frameHistory[frameHistory.length - 1];
+      const getLastFrameLastLine = () => {
+        const lastFrame = getLastFrame();
+        return lastFrame.lines[lastFrame.lines.length - 1];
       }
-      else
-        return false;
-    }
-    
-    return true;
-  }
-  else 
-    return false;
-}
 
-function updateHTMLFromTextHistory(oldTextHistory, newTextHistory) {
-  // Update existing text
-  newTextHistory.slice(0, oldTextHistory.length).forEach((row, index) => {
-    if (!deepEqual(row,oldTextHistory[index])) updateHTMLTextAtIndex(row, index)
-  });
+      const getTextIndex = () => {
+        return getLastFrame().textIndex;
+      };
 
-  // Remove old text if needed
-  if (newTextHistory.length < oldTextHistory.length) oldTextHistory.slice(newTextHistory.length).forEach(removeLastHTMLText);
+      
 
-  // Add new text if needed
-  if (newTextHistory.length > oldTextHistory.length) newTextHistory.slice(oldTextHistory.length).forEach(addHTMLText);
-}
-
-const appearTextName = "appearText";
-const textContentName = "textContent";
-const fadeOutName = "fadeOutSpan";
-
-const getTextContentSpan = (index) => document
-  .getElementById("main")
-  .getElementsByClassName(appearTextName)[index]
-  .getElementsByClassName(textContentName)[0];
-
-  const getFadeOutSpan = (index) => document
-  .getElementById("main")
-  .getElementsByClassName(appearTextName)[index]
-  .getElementsByClassName(fadeOutName)[0];
-
-const addModifierToInterval = (intervals, modifier) => {
-  const result = intervals.reduce(({intervals, modifier}, interval, index) => {
-    if (modifier === null || modifier.start == modifier.end) return {intervals: [...intervals, interval], modifier};
-
-    const modifierEndAfterIntervalStart = modifier.end > interval.start;
-    if (!modifierEndAfterIntervalStart) return {intervals: [...intervals, modifier, interval], modifier: null};
-
-    const modifierStartBeforeIntervalEnd = modifier.start < interval.end;
-    if (!modifierStartBeforeIntervalEnd) return {intervals: [...intervals, interval], modifier};
-
-    // Start is before interval end
-    // and end is after interval start
-    // so there is overlap
-
-    const modifierStartAfterIntervalStart = modifier.start > interval.start;
-    const modifierEndBeforeIntervalEnd = modifier.end < interval.end;
-    const modifierStartEqualsIntervalStart = modifier.start == interval.start;
-
-    return {
-      intervals: [
-        ...intervals,
-        ...[modifierStartEqualsIntervalStart ?
-          null :
-          (modifierStartAfterIntervalStart ? 
-            {start: interval.start, end: modifier.start, style: interval.style} :
-            {start: modifier.start, end: interval.start, style: modifier.style}
-          )
-        ].filter((i) => i !== null),
+      /*
+        frameHistory is composed of frames
+        frames are as follows 
         {
-          start: modifierStartAfterIntervalStart ? modifier.start : interval.start, 
-          end: modifierEndBeforeIntervalEnd ? modifier.end : interval.end, 
-          style: [...interval.style, ...modifier.style]
-        },
-      ],
-      modifier: modifierEndBeforeIntervalEnd ?
-        {start: modifier.end, end: interval.end, style: interval.style} :
-        {start: interval.end, end: modifier.end, style: modifier.style},
-    };
+          lines: [
+            {text: "blah", modifiers: {}, instructions: []},
+            {text: "blah", modifiers: {}, instructions: []},
+            ...
+            {text: "blah", modifiers: {}, instructions: []}]
+          display: {
 
-  }, {intervals: [], modifier});
+          }
+          ... (eventually other stuff I'm sure)
+        }
+      */
 
-  if (result.modifier !== null && result.modifier.start !== result.modifier.end) {
-    return [...result.intervals, result.modifier];
-  } else {
-    return result.intervals;
-  }
-}
+      function run() {}
 
+      function splitTextAndInstructions(rawtext) {
+        const sep = rawtext.split("~");
+        return {
+          text: sep[0],
+          instructions: sep
+            .slice(1)
+            .map((item) =>
+              item.split(/(?<!\\),/).map((item) => item.replace(/\\,/g, ","))
+            ),
+        };
+      }
 
+      function getAnimation(rawtext) {
+        const text = rawtext.toLowerCase();
+        return "appear";
+      }
 
-const updateSpansForRow = (row, existingSpans) => {
-  const {instructions, text, modifiers} = row;
+      const styleResets = {
+        color: "black",
+        fontStyle: "normal",
+        textDecoration: "none",
+        transition: "all 1s",
+      };
 
-  const instructionModifiers = getModifiersFromInstructions(instructions, text);
-  const instructionAndRowModifiers = [...instructionModifiers, ...modifiers];
-  
-  let intervals = instructionAndRowModifiers.reduce((intervals, modifier) => 
-    addModifierToInterval(intervals, {
-      start: modifier[0] === null ? 0 : modifier[0],
-      end: modifier[1] === null ? text.length : modifier[1],
-      style: [modifier.slice(2)],
-    }), [{start: 0, end: text.length, style: []}]);
+      const instructionFunctions = {
+        // Per line
+        setLine: (frame, lineNumber, text) => ({
+          lines: frame.lines.map((row, index) =>
+            index === parseInt(lineNumber) ? { ...row, text } : row
+          ),
+        }),
+        styleLine: (frame, lineNumber, styleKey, styleValue) => ({
+          lines: frame.lines.map((row, index) =>
+            index === parseInt(lineNumber)
+              ? {
+                  ...row,
+                  modifiers: [
+                    ...row.modifiers,
+                    [null, null, styleKey, styleValue],
+                  ],
+                }
+              : row
+          ),
+        }),
+        replaceLine: (frame, lineNumber, pattern, replacement) => ({
+          lines: frame.lines.map((row, index) =>
+            index === parseInt(lineNumber)
+              ? {
+                  ...row,
+                  text: row.text.replaceAll(RegExp(pattern, "g"), replacement),
+                }
+              : row
+          ),
+        }),
+        clearLineStyle: (frame, lineNumber) => ({
+          lines: frame.lines.map((row, index) =>
+            index === parseInt(lineNumber) ? { ...row, modifiers: [] } : row
+          ),
+        }),
+        positionLine: (frame, lineNumber, xPos, yPos) => ({
+          lines: frame.lines.map((row, index) =>
+            index === parseInt(lineNumber)
+              ? {
+                  ...row,
+                  modifiers: [
+                    ...row.modifiers,
+                    [null, null, "position", "fixed"],
+                    [null, null, "left", xPos],
+                    [null, null, "top", yPos],
+                  ],
+                }
+              : row
+          ),
+        }),
+        rotationLine: (frame, lineNumber, angle, originX, originY) => ({
+          lines: frame.lines.map((row, index) =>
+            index === parseInt(lineNumber)
+              ? {
+                  ...row,
+                  modifiers: [
+                    ...row.modifiers,
+                    [null, null, "transformOrigin", `${originX} ${originY}`],
+                    [null, null, "transform", `rotate(${angle})`],
+                  ],
+                }
+              : row
+          ),
+        }),
 
-  const newChildren = intervals.map((interval, spanIndex) => {
-    const {start, end, style} = interval;
+        // Global
+        replace: (frame, pattern, replacement) => ({
+          lines: frame.lines.map((row) => ({
+            ...row,
+            text: row.text.replaceAll(RegExp(pattern, "g"), replacement),
+          })),
+        }),
+        styleLineMatching: (frame, pattern, styleKey, styleValue) => ({
+          lines: frame.lines.map((row) =>
+            row.text.match(RegExp(pattern, "g"))
+              ? {
+                  ...row,
+                  modifiers: [
+                    ...row.modifiers,
+                    [null, null, styleKey, styleValue],
+                  ],
+                }
+              : row
+          ),
+        }),
+        styleLineWhere: (frame, lineNumber, pattern, styleKey, styleValue) => ({
+          lines: frame.lines.map((row, index) =>
+            index === parseInt(lineNumber)
+              ? {
+                  ...row,
+                  modifiers: [
+                    ...row.modifiers,
+                    [
+                      ...getStartAndEndOfMatch(row.text, pattern),
+                      styleKey,
+                      styleValue,
+                    ],
+                  ],
+                }
+              : row
+          ),
+        }),
+      };
 
-    const textContentSubSpan = (spanIndex < existingSpans.length) ? existingSpans[spanIndex] : document.createElement("span");
-    textContentSubSpan.textContent = text.substring(start, end);
-    textContentSubSpan.className = "textContentSubSpan";
-    const modDict = Object.fromEntries(style);
-    for (const modifierKey in styleResets) {
-      textContentSubSpan.style[modifierKey] = styleResets[modifierKey];
-    }
-    for (const modifierKey in modDict) {
-      textContentSubSpan.style[modifierKey] = modDict[modifierKey];
-    }
-    return textContentSubSpan;
-  });
+      function applyInstruction(frame, instruction) {
+        if (!(instruction[0] in instructionFunctions)) {
+          return frame;
+        }
+        const updates = instructionFunctions[instruction[0]](
+          frame,
+          ...instruction.slice(1)
+        );
+        return { ...frame, ...updates };
+      }
 
-  return newChildren;
-}
+      const getStartAndEndOfMatch = (text, pattern) => {
+        const match = RegExp(pattern, "g").exec(text);
+        if (match === null) {
+          return [0, 0];
+        }
+        const start = match.index;
+        const end = match.index + match[0].length;
+        return [start, end];
+      };
 
-const updateTextContentSpan = (textContentSpan, fadeOutSpan, row) => {
-  
-  const existingChildren = [...textContentSpan.children];
-  
-  fadeOutSpan.replaceChildren(...existingChildren.map(c => c.cloneNode(true)));
+      function getModifiersFromInstructions(instructions, text) {
+        const modifierObj = {
+          // Modify a line
+          color: (color) => [null, null, "color", color],
+          italic: () => [null, null, "fontStyle", "italic"],
+          underline: () => [null, null, "textDecoration", "underline"],
+          style: (styleKey, styleValue) => [null, null, styleKey, styleValue],
+          position: (xPos, yPos) => [
+            [null, null, "position", "fixed"],
+            [null, null, "left", xPos],
+            [null, null, "top", yPos],
+          ],
+          rotation: (angle, originX, originY) => [
+            [null, null, "transformOrigin", `${originX} ${originY}`],
+            [null, null, "transform", `rotate(${angle})`],
+          ],
 
-  fadeOutSpan.style.animationName = 'none';
-  fadeOutSpan.offsetHeight; /* trigger reflow */
-  fadeOutSpan.style.animationName = "disappear";
+          // Modify a range
+          colorAt: (start, end, color) => [start, end, "color", color],
+          italicAt: (start, end) => [start, end, "fontStyle", "italic"],
+          underlineAt: (start, end) => [
+            start,
+            end,
+            "textDecoration",
+            "underline",
+          ],
+          styleAt: (start, end, styleKey, styleValue) => [
+            start,
+            end,
+            styleKey,
+            styleValue,
+          ],
 
-  const newChildren = updateSpansForRow(row, existingChildren);
+          // Modify a pattern
+          colorWhere: (pattern, color) => [
+            ...getStartAndEndOfMatch(text, pattern),
+            "color",
+            color,
+          ],
+          italicWhere: (pattern) => [
+            ...getStartAndEndOfMatch(text, pattern),
+            "fontStyle",
+            "italic",
+          ],
+          underlineWhere: (pattern) => [
+            ...getStartAndEndOfMatch(text, pattern),
+            "textDecoration",
+            "underline",
+          ],
+          styleWhere: (pattern, styleKey, styleValue) => [
+            ...getStartAndEndOfMatch(text, pattern),
+            styleKey,
+            styleValue,
+          ],
+        };
 
-  textContentSpan.replaceChildren(...newChildren);
-  textContentSpan.style.animationName = 'none';
-  textContentSpan.offsetHeight; /* trigger reflow */
-  textContentSpan.style.animationName = "appear";
+        const modifiers = instructions.reduce((agg, instruction) => {
+          if (instruction[0] in modifierObj) {
+            let modifier = modifierObj[instruction[0]](...instruction.slice(1));
+            if (modifier.length > 0 && Array.isArray(modifier[0])) {
+              agg.push(...modifier);
+            } else {
+              agg.push(modifier);
+            }
+          }
+          return agg;
+        }, []);
+        console.log("modifiers", modifiers);
+        return modifiers;
+      }
 
-  if (row.text === "_") {
-    textContentSpan.parentElement.style.display = "none";
-  } else {
-    textContentSpan.parentElement.style.display = "initial";
-  }
-}
+      function updateControlButtons() {
+        const nextButton = document.getElementById("nextButton");
+        const backButton = document.getElementById("backButton");
+        if (nextButton)
+          nextButton.disabled = !(getTextIndex() < fileText.length);
+        if (backButton) backButton.disabled = !(frameHistory.length > 1);
+      }
 
-function updateHTMLTextAtIndex(row, index) {
-  const {text, modifiers} = row;
-  const textContentSpan = getTextContentSpan(index);
-  const fadeOutSpan = getFadeOutSpan(index);
-  updateTextContentSpan(textContentSpan, fadeOutSpan, row);
-}
+      function transitionToFrame(newTextIndex) {
+        const check = fileText[newTextIndex];
+        const { text, instructions } = splitTextAndInstructions(
+          fileText[newTextIndex]
+        );
+        const prevFrame = frameHistory[frameHistory.length - 1];
+        const transformedFrame = instructions.reduce(
+          applyInstruction,
+          prevFrame
+        );
+        const newFrame = {
+          ...transformedFrame,
+          textIndex: newTextIndex,
+          lines: [
+            ...transformedFrame.lines,
+            { text, modifiers: [], instructions },
+          ],
+        };
+        frameHistory.push(newFrame);
 
-function addHTMLText(row) {
-  const {text, modifiers} = row;
-  const elem = document.getElementById("main");
+        updateHTMLToNewFrame(prevFrame, newFrame);
+        updateControlButtons();
 
-  const newElem = document.createElement("div");
-  elem.appendChild(newElem);
-  newElem.classList.add(appearTextName);
-  newElem.style.animationName = getAnimation(text);  
+        if (check.trim().length > 0) {
+          return true;
+        }
+        return false;
+      }
 
-  const newSpan = document.createElement("span");
-  newElem.appendChild(newSpan);
-  newSpan.textContent = ":";
-  newSpan.style.color = "white";
+      function forward() {
+        while (getTextIndex() < fileText.length) {
+          const prevFrame = frameHistory[frameHistory.length - 1];
+          newTextIndexHasContent = transitionToFrame(getTextIndex() + 1);
+          if (newTextIndexHasContent) break;
+        }
+      }
 
-  const textContentSpan = document.createElement("span");
-  newElem.appendChild(textContentSpan);
-  textContentSpan.classList.add(textContentName);
+      var deepEqual = function (x, y) {
+        if (x === y) {
+          return true;
+        } else if (
+          typeof x == "object" &&
+          x != null &&
+          typeof y == "object" &&
+          y != null
+        ) {
+          if (Object.keys(x).length != Object.keys(y).length) return false;
 
-  const fadeOutSpan = document.createElement("span");
-  newElem.appendChild(fadeOutSpan);
-  fadeOutSpan.classList.add(fadeOutName);
+          for (var prop in x) {
+            if (y.hasOwnProperty(prop)) {
+              if (!deepEqual(x[prop], y[prop])) return false;
+            } else return false;
+          }
 
-  updateTextContentSpan(textContentSpan, fadeOutSpan, row);
-}
+          return true;
+        } else return false;
+      };
 
-function removeLastHTMLText() {
-  const elem = document.getElementById("main");
-  elem.removeChild(elem.lastChild);
-}
+      const appearTextName = "appearText";
+      const textContentName = "textContent";
+      const fadeOutName = "fadeOutSpan";
 
-function back() {
-  while (textIndex > 0) {
-    const check = fileText[textIndex - 1];
-    const elem = document.getElementById("main");
+      const getTextSpanCount = () =>
+        document
+          .getElementById("main")
+          .getElementsByClassName(appearTextName)
+          .length;
 
-    const currentTextHistory = textHistory.pop();
-    const prevTextHistory = textHistory[textHistory.length - 1] || [];
-    updateHTMLFromTextHistory(currentTextHistory, prevTextHistory);
+      const getTextContentSpan = (index) =>
+        document
+          .getElementById("main")
+          .getElementsByClassName(appearTextName)
+          [index].getElementsByClassName(textContentName)[0];
 
-    textIndex--;
+      const getFadeOutSpan = (index) =>
+        document
+          .getElementById("main")
+          .getElementsByClassName(appearTextName)
+          [index].getElementsByClassName(fadeOutName)[0];
 
-    const nextButton = document.getElementById("nextButton");
-    const backButton = document.getElementById("backButton");
-    if (nextButton) nextButton.disabled = !(textIndex < fileText.length);
-    if (backButton) backButton.disabled = !(textIndex > 0);
+      let keyControlDisplay;
 
-    if (check.trim().length > 0) {
-      break
-    }
-  }
-}
-</script>
-</body>
+      const addKeyControlDisplayItem = (keySymbol, preview) => {
+        const keyControlDisplayItemContainer = document.createElement("span");
+        keyControlDisplayItemContainer.classList.add("keyControlDisplayItemContainer");
+        keyControlDisplay.appendChild(keyControlDisplayItemContainer);
+
+        const keyControlDisplayItem = document.createElement("span");
+        keyControlDisplayItem.textContent = keySymbol;
+        keyControlDisplayItem.classList.add("keyControlDisplayItem");
+        keyControlDisplayItemContainer.appendChild(keyControlDisplayItem);
+
+        const keyControlDisplayItemLabel = document.createElement("span");
+        keyControlDisplayItemLabel.textContent = preview;
+        keyControlDisplayItemLabel.classList.add("keyControlDisplayItemLabel");
+        keyControlDisplayItemContainer.appendChild(keyControlDisplayItemLabel);
+        
+      }
+
+      const updateKeyControlDisplay = () => {
+        const lastFrameLastLine = getLastFrameLastLine();
+        const lastTextContentSpan = getTextContentSpan(getTextSpanCount() - 1);
+
+        if (!keyControlDisplay) {
+          keyControlDisplay = document.createElement("span");
+          keyControlDisplay.classList.add("keyControlDisplay");
+        }
+        keyControlDisplay.replaceChildren();
+
+        const keyInstructions = lastFrameLastLine.instructions.filter(
+          (instruction) => instruction[0] === "goToLineOnKey"
+        );
+        
+        keyInstructions.map((instruction) => addKeyControlDisplayItem(instruction[2], instruction[3]));
+        
+        // include forward instruction
+        if (keyInstructions.length > 0) 
+          lastFrameLastLine.instructions.filter(
+            (instruction) => instruction[0] === "goToLineOnForward"
+          ).map((instruction) => addKeyControlDisplayItem("⟶", instruction[2]));
+
+        lastTextContentSpan.appendChild(keyControlDisplay);
+      }
+
+      function updateHTMLToNewFrame(oldFrame, newFrame) {
+        const { lines: oldLines } = oldFrame;
+        const { lines: newLines } = newFrame;
+
+        // Update existing text
+        newLines.slice(0, oldLines.length).forEach((row, index) => {
+          if (!deepEqual(row, oldLines[index]))
+            updateHTMLTextAtIndex(row, index);
+        });
+
+        // Remove old text if needed
+        if (newLines.length < oldLines.length)
+          oldLines.slice(newLines.length).forEach(removeLastHTMLText);
+
+        // Add new text if needed
+        if (newLines.length > oldLines.length)
+          newLines.slice(oldLines.length).forEach(addHTMLText);
+
+        updateKeyControlDisplay();        
+      }
+
+      
+
+      const addModifierToInterval = (intervals, modifier) => {
+        const result = intervals.reduce(
+          ({ intervals, modifier }, interval, index) => {
+            if (modifier === null || modifier.start == modifier.end)
+              return { intervals: [...intervals, interval], modifier };
+
+            const modifierEndAfterIntervalStart = modifier.end > interval.start;
+            if (!modifierEndAfterIntervalStart)
+              return {
+                intervals: [...intervals, modifier, interval],
+                modifier: null,
+              };
+
+            const modifierStartBeforeIntervalEnd =
+              modifier.start < interval.end;
+            if (!modifierStartBeforeIntervalEnd)
+              return { intervals: [...intervals, interval], modifier };
+
+            // Start is before interval end
+            // and end is after interval start
+            // so there is overlap
+
+            const modifierStartAfterIntervalStart =
+              modifier.start > interval.start;
+            const modifierEndBeforeIntervalEnd = modifier.end < interval.end;
+            const modifierStartEqualsIntervalStart =
+              modifier.start == interval.start;
+
+            return {
+              intervals: [
+                ...intervals,
+                ...[
+                  modifierStartEqualsIntervalStart
+                    ? null
+                    : modifierStartAfterIntervalStart
+                    ? {
+                        start: interval.start,
+                        end: modifier.start,
+                        style: interval.style,
+                      }
+                    : {
+                        start: modifier.start,
+                        end: interval.start,
+                        style: modifier.style,
+                      },
+                ].filter((i) => i !== null),
+                {
+                  start: modifierStartAfterIntervalStart
+                    ? modifier.start
+                    : interval.start,
+                  end: modifierEndBeforeIntervalEnd
+                    ? modifier.end
+                    : interval.end,
+                  style: [...interval.style, ...modifier.style],
+                },
+              ],
+              modifier: modifierEndBeforeIntervalEnd
+                ? {
+                    start: modifier.end,
+                    end: interval.end,
+                    style: interval.style,
+                  }
+                : {
+                    start: interval.end,
+                    end: modifier.end,
+                    style: modifier.style,
+                  },
+            };
+          },
+          { intervals: [], modifier }
+        );
+
+        if (
+          result.modifier !== null &&
+          result.modifier.start !== result.modifier.end
+        ) {
+          return [...result.intervals, result.modifier];
+        } else {
+          return result.intervals;
+        }
+      };
+
+      const updateSpansForRow = (row, existingSpans) => {
+        const { instructions, text, modifiers } = row;
+
+        const instructionModifiers = getModifiersFromInstructions(
+          instructions,
+          text
+        );
+        const instructionAndRowModifiers = [
+          ...instructionModifiers,
+          ...modifiers,
+        ];
+
+        let intervals = instructionAndRowModifiers.reduce(
+          (intervals, modifier) =>
+            addModifierToInterval(intervals, {
+              start: modifier[0] === null ? 0 : modifier[0],
+              end: modifier[1] === null ? text.length : modifier[1],
+              style: [modifier.slice(2)],
+            }),
+          [{ start: 0, end: text.length, style: [] }]
+        );
+
+        const newChildren = intervals.map((interval, spanIndex) => {
+          const { start, end, style } = interval;
+
+          const textContentSubSpan =
+            spanIndex < existingSpans.length
+              ? existingSpans[spanIndex]
+              : document.createElement("span");
+          textContentSubSpan.textContent = text.substring(start, end);
+          textContentSubSpan.className = "textContentSubSpan";
+          const modDict = Object.fromEntries(style);
+          for (const modifierKey in styleResets) {
+            textContentSubSpan.style[modifierKey] = styleResets[modifierKey];
+          }
+          for (const modifierKey in modDict) {
+            textContentSubSpan.style[modifierKey] = modDict[modifierKey];
+          }
+          return textContentSubSpan;
+        });
+
+        return newChildren;
+      };
+
+      const updateTextContentSpan = (textContentSpan, fadeOutSpan, row) => {
+        const existingChildren = [...textContentSpan.children];
+
+        fadeOutSpan.replaceChildren(
+          ...existingChildren.map((c) => c.cloneNode(true))
+        );
+
+        fadeOutSpan.style.animationName = "none";
+        fadeOutSpan.offsetHeight; /* trigger reflow */
+        fadeOutSpan.style.animationName = "disappear";
+
+        const newChildren = updateSpansForRow(row, existingChildren);
+
+        textContentSpan.replaceChildren(...newChildren);
+        textContentSpan.style.animationName = "none";
+        textContentSpan.offsetHeight; /* trigger reflow */
+        textContentSpan.style.animationName = "appear";
+
+        if (row.text === "_") {
+          textContentSpan.parentElement.style.display = "none";
+        } else {
+          textContentSpan.parentElement.style.display = "initial";
+        }
+      };
+
+      function updateHTMLTextAtIndex(row, index) {
+        const { text, modifiers } = row;
+        const textContentSpan = getTextContentSpan(index);
+        const fadeOutSpan = getFadeOutSpan(index);
+        updateTextContentSpan(textContentSpan, fadeOutSpan, row);
+      }
+
+      function addHTMLText(row) {
+        const { text, modifiers } = row;
+        const elem = document.getElementById("main");
+
+        const newElem = document.createElement("div");
+        elem.appendChild(newElem);
+        newElem.classList.add(appearTextName);
+        newElem.style.animationName = getAnimation(text);
+
+        const newSpan = document.createElement("span");
+        newElem.appendChild(newSpan);
+        newSpan.textContent = ":";
+        newSpan.style.color = "white";
+
+        const textContentSpan = document.createElement("span");
+        newElem.appendChild(textContentSpan);
+        textContentSpan.classList.add(textContentName);
+
+        const fadeOutSpan = document.createElement("span");
+        newElem.appendChild(fadeOutSpan);
+        fadeOutSpan.classList.add(fadeOutName);
+
+        updateTextContentSpan(textContentSpan, fadeOutSpan, row);
+      }
+
+      function removeLastHTMLText() {
+        const elem = document.getElementById("main");
+        elem.removeChild(elem.lastChild);
+      }
+
+      function back() {
+        while (frameHistory.length > 1) {
+          const currentFrame = frameHistory.pop();
+          const prevFrame = frameHistory[frameHistory.length - 1];
+          const check = fileText[prevFrame.textIndex];
+
+          updateHTMLToNewFrame(currentFrame, prevFrame);
+          updateControlButtons();
+
+          if (check.trim().length > 0) {
+            break;
+          }
+        }
+      }
+
+      const directionInstructions = {
+        goToLineOnForward: (lineNumber) =>
+          transitionToFrame(parseInt(lineNumber)),
+        goToLineOnBack: (lineNumber) => transitionToFrame(parseInt(lineNumber)),
+        goToLineOnKey: (lineNumber, _) =>
+          transitionToFrame(parseInt(lineNumber)),
+      };
+
+      const followDirectionInsruction = (instruction) => {
+        return directionInstructions[instruction[0]](...instruction.slice(1));
+      };
+
+      const FORWARD = "FORWARD";
+      const BACK = "BACK";
+
+      function checkKey(e) {
+        e = e || window.event;
+
+        console.log("frameHistory", frameHistory);
+
+        const lastFrameLastLine = getLastFrameLastLine();
+        const keyInstructions = lastFrameLastLine.instructions.filter(
+          (instruction) => instruction[0] === "goToLineOnKey"
+        );
+        const forwardInstructions = lastFrameLastLine.instructions.filter(
+          (instruction) => instruction[0] === "goToLineOnForward"
+        );
+        const backInstructions = lastFrameLastLine.instructions.filter(
+          (instruction) => instruction[0] === "goToLineOnBack"
+        );
+
+        const letterKeys = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toLowerCase();
+        if (letterKeys.includes(e.key)) {
+          const matchedInstructions = keyInstructions.filter(
+            (instruction) => instruction[2].toLowerCase() === e.key || instruction[2] === e.key
+          );
+          if (matchedInstructions.length > 0)
+            return followDirectionInsruction(
+              matchedInstructions[matchedInstructions.length - 1]
+            );
+        }
+
+        if (e.keyCode == "38" || e.key == "Backspace" || e.keyCode == "37") {
+          // up arrow or left arrow
+          if (backInstructions.length > 0)
+            return followDirectionInsruction(
+              backInstructions[backInstructions.length - 1]
+            );
+          return back();
+        }
+
+        if (
+          e.keyCode == "40" ||
+          e.key == " " ||
+          e.key == "Enter" ||
+          e.keyCode == "39"
+        ) {
+          // down arrow or right arrow
+          if (forwardInstructions.length > 0)
+            return followDirectionInsruction(
+              forwardInstructions[forwardInstructions.length - 1]
+            );
+          if (keyInstructions.length === 0) return forward();
+        }
+      }
+
+      document.onkeydown = checkKey;
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const autoplay = urlParams.get('autoplay').split(",");
+      let currentAutoplayIndex = 0;
+
+      const nextAutoplayStep = () => {
+        const textIndex = getTextIndex();
+        const maxTextIndex = fileText.length - 1;
+        if (textIndex < maxTextIndex) {
+          return forward();
+        } else {
+          currentAutoplayIndex = (currentAutoplayIndex + 1) % autoplay.length;
+          loadNewPreset(autoplay[currentAutoplayIndex]);
+        }
+      }
+
+      if (autoplay && autoplay.length > 0) {
+        loadNewPreset(autoplay[currentAutoplayIndex]);
+        setInterval(nextAutoplayStep, 2000);
+      }
+      
+    </script>
+  </body>
 </html>
