@@ -1,26 +1,126 @@
-named you many-branches
+named you many-branches~styleContent,fontFamily,"Cormorant Garamond"~styleContent,lineHeight,1.2~styleContent,fontWeight,500
 god swaying breeze-wise
 light dappled capturing patches
 ‘cross lichen smattered sage-yellow
 two scalloped twigs split infinite
 wishbone - to make true is to fragment
 but each bough rebonds to that broader trunk
-dubbed many-branches~goToLineOnKey,8,W,wish~goToLineOnKey,12,E,eggs~goToLineOnKey,16,B,blood
+dubbed many-branches~goToLineOnKey,8,W,wish~goToLineOnKey,13,E,eggs~goToLineOnKey,18,B,blood
+
 this wish, this split thing cracks lightning
 energy both moment and movement
 inextricably interlocated
-in many-branches~goToLineOnKey,12,M,man~goToLineOnKey,16,D,drip~goToLineOnKey,21,L,leaves
+in many-branches~goToLineOnKey,13,M,man~goToLineOnKey,18,D,drip~goToLineOnKey,24,L,leaves
+
 god-made man-made god made eggs &
 their bedfellows nested in that slingshot Y
 my striving too merely fissuring air
-through many-branches~goToLineOnKey,16,B,blood~goToLineOnKey,21,C,clean~goToLineOnKey,1,S,sway
+through many-branches~goToLineOnKey,18,K,knuckles~goToLineOnKey,24,C,clean~goToLineOnKey,30,S,stars
+
 split lip’s blood drips to knuckles clipped
 one heady rush is gulped, one breath taken
 from the bridge linking boy
 to gun to pathways of air 
-spirals many-branches~goToLineOnKey,21,L,leather~goToLineOnKey,1,S,sway~goToLineOnKey,8,C,cracks
+spirals many-branches~goToLineOnKey,24,L,leather~goToLineOnKey,30,P,paper~goToLineOnKey,36,E,eyes
+
 peel clean those leathered leaves
 about a heart, sweet meat settling
 between (new) teeth, a purple flower
 carved by scuttling
-down into many-branches~goToLineOnKey,1,S,sway~goToLineOnKey,8,C,cracks~goToLineOnKey,12,M,made
+down into many-branches~goToLineOnKey,30,R,rust~goToLineOnKey,36,P,paired~goToLineOnKey,42,S,swept
+
+window-captured rust paper stars
+cutlery settles on redwood slab
+unbraiding table splitting threads
+to various domicilies
+marking many-branches~goToLineOnKey,36,T,through~goToLineOnKey,42,F,fickle~goToLineOnKey,47,C,crack
+
+his eyes paired through
+a grid of light in irises
+redoubling back to an original hue
+the lines radiating from pupil
+as scared as many-branches~goToLineOnKey,42,Y,yellow~goToLineOnKey,47,S,slick~goToLineOnKey,53,F,fingers
+
+the same fickle hand swept the yellow
+river butterknife through dynasties as took hold
+at the base of the seed as it split
+upward into many-branches~goToLineOnKey,47,B,base~goToLineOnKey,53,G,glass~goToLineOnKey,59,R,rise
+
+slick neck’s base cracks back
+into place, a lapse in time
+bubbles vacuum through vein
+whose varicose meanderings
+wander many-branches~goToLineOnKey,53,F,fondle~goToLineOnKey,59,O,origin~goToLineOnKey,65,C,casing
+
+fingers glassed fondling green
+mist in a stone, a gift from the river
+the source of whom first drew breath
+in a mantles tight-pack crevasse
+pressure fissuring many-branches~goToLineOnKey,59,L,Latin~goToLineOnKey,65,S,scene~goToLineOnKey,71,A,arched
+
+origin from the Latin oriri – to rise~italicWhere,oriri
+a tongues tangle, the fatty taste imprinted
+from this first dance partner, steps
+wriggling back between helix strands
+replicated across many-branches~goToLineOnKey,65,G,grains~goToLineOnKey,71,P,pale~goToLineOnKey,77,S,something
+
+grains still recasing the scene
+prints from his discarded sneakers
+and the swell of water like a breath
+out too long
+walklines interleaving many-branches~goToLineOnKey,71,N,neck~goToLineOnKey,77,S,spine~goToLineOnKey,82,B,breeze
+
+arched neck bared in pale fluorescence
+his words seep carefully over chin
+avoiding stains as he breathes
+willing skin to retake bone in bondage
+fibers binding many-branches~goToLineOnKey,77,C,carve~goToLineOnKey,82,B,bared~goToLineOnKey,88,L,lilies
+
+she carves his spine something
+curious, circumscribes her love 
+counter clockwise as her sallow
+palms finger into many-branches~goToLineOnKey,82,B,beach~goToLineOnKey,88,W,window~goToLineOnKey,95,G,gift
+
+no breeze on his beach-bared back
+falling forth iron crossed as if 
+beating on the walls of Jericho or
+gripping brick as if making to rebuild
+clay fractures into many-branches~goToLineOnKey,88,W,wilting~goToLineOnKey,95,L,longer~goToLineOnKey,101,S,sage
+
+windowside wilting lilies
+we fill a cup with tea then lips
+then air then rag the turning
+fingers of loosened grips
+the silent breaking sound
+fragmenting along many-branches~goToLineOnKey,95,A,anticipation~goToLineOnKey,101,D,dusting~goToLineOnKey,107,C,crust
+
+anticipation no longer the same gift
+as those two teacups sitting sunside
+filled loose with Tillandsia where
+he had meant them cupboard fresh and slick
+with words following many-branches~goToLineOnKey,101,S,shadow~goToLineOnKey,107,G,golden~goToLineOnKey,113,P,patter
+
+a similar sage shadowy dusting
+atop her carrion outstretch in
+the burlap sack, soon gored
+through by the mulberry tree
+its roots inverting many-branches~goToLineOnKey,107,H,hillside~goToLineOnKey,113,B,broken~goToLineOnKey,119,L,low
+
+this liminal hillside crusted golden
+with waters memory, the rush of car
+and clock counting her remaining breaths
+still quiet crumpling, his roving chest
+whose wrinkles spread many-branches~goToLineOnKey,113,F,feet~goToLineOnKey,119,D,drywall
+
+wishbone broken, feet pattering down
+terra-cotta at sunset, the unscrupulous
+brussel sprouts, all marveling at his fathers
+marbled sweet potato cheesecake
+while outside waving many-branches~goToLineOnKey,119,M,melody
+
+drywall dripping low melody god
+absorbed in the image of light through her
+nestled, warming to this silvery bedsheet, 
+gold humming traffic and Kashi box beside
+hand-in, a rustling like many-branches
+
