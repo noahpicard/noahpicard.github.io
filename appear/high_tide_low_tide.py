@@ -169,11 +169,20 @@ def placeWaveLine(wave_line, index):
 
 def fillFromLines(lines, start, end, color="black"):
   line = ""
-  for i in range(start, end):
-    setLine = f"~setLine,{i},{lines[i] if i < len(lines) else ''}"
+  for index in range(start, end):
+    setLine = f"~setLine,{index},{lines[index] if index < len(lines) else ''}"
     line += setLine
-    line += f"~styleLine,{i},position,relative~styleLine,{i},left,0"
-    line += f"~styleLine,{i},color,{color}"
+    line += f"~styleLine,{index},position,relative~styleLine,{index},left,0"
+    line += f"~styleLine,{index},color,{color}"
+    unwrapLines = "".join([
+      f"~styleLine,{index},textWrap,unset",
+      f"~styleLine,{index},overflowWrap,unset",
+      f"~styleLine,{index},wordWrap,unset",
+      f"~styleLine,{index},wordBreak,unset",
+      f"~styleLine,{index},hyphens,unset",
+      f"~styleLine,{index},whiteSpace,unset"
+    ])
+    line += unwrapLines
   return line
 
 def main(in_csv, out_path):
