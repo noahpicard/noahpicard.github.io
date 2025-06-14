@@ -3,12 +3,12 @@ import sys
 import os
 import pprint
 
-original_poem = """high tide / low tide
+original_poem = """high tide / low tide~styleContent,fontFamily,"Newsreader"~styleContent,lineHeight,1.4~styleContent,fontWeight,400~styleContent,fontWeight,400~styleContent,fontSize,14px
 
 We would always pile up driftwood on those beaches,
 stacking a lopsided tipi in the taupe-y sand
 some semblance of home formed by three struts
-and a kelps tail wrapped width-wise about its topknot
+and a kelps tail wrapped width-wise about its topknot~setAutoplayTime,1500
 
 The winds carved the cliffs jagged,
 skimmed up loose silica
@@ -154,8 +154,18 @@ def getGlobalFilepath(filename):
 def placeWaveLine(wave_line, index):
   clearLines = f"~clearLines,{index},{maxPosition}"
   setLines = f"~setLine,{index},{wave_line}~repeatLine,{index},{maxPosition*3}"
-  styleLines = f"~styleLine,{index},width,100vw,~styleLine,{index},textWrap,auto~styleLine,{index},position,absolute~styleLine,{index},left,-17em"
-  return clearLines + setLines + styleLines + f"~styleLine,{index},color,{'cornflowerblue'}"
+  styleLines = f"~styleLine,{index},width,100vw~styleLine,{index},position,absolute~styleLine,{index},left,-17em"
+  colorLines = f"~styleLine,{index},color,{'cornflowerblue'}"
+  wrapLines = "".join([
+    f"~styleLine,{index},textWrap,auto",
+    f"~styleLine,{index},overflowWrap,break-word",
+    f"~styleLine,{index},wordWrap,break-word",
+    f"~styleLine,{index},wordBreak,break-all",
+    f"~styleLine,{index},wordBreak,break-word",
+    f"~styleLine,{index},hyphens,auto",
+    f"~styleLine,{index},whiteSpace,break-spaces"
+  ])
+  return clearLines + setLines + styleLines + colorLines + wrapLines
 
 def fillFromLines(lines, start, end, color="black"):
   line = ""
@@ -191,13 +201,15 @@ def main(in_csv, out_path):
       line += placeWaveLine(wave_line, j)
       file_lines.append(line)
 
+    last_j = waypoint
     for j_float in range(waypoint, maxPosition, (maxPosition - waypoint) // wave_frames):
       j = int(j_float)
       print("j:", j)
       line = "_"
       line += placeWaveLine(wave_line, j)
-      line += fillFromLines(original_lines[:original_waypoints[i+1]] if i+1 < len(original_waypoints) else original_lines, waypoint, j)
+      line += fillFromLines(original_lines[:original_waypoints[i+1]] if i+1 < len(original_waypoints) else original_lines, last_j, j)
       file_lines.append(line)
+      last_j = j
 
   # run a wave for each following waypoints to fill final
   for i in range(0, len(original_waypoints)):
@@ -211,18 +223,22 @@ def main(in_csv, out_path):
       print("j:", j)
       line = "_"
       line += placeWaveLine(wave_line, j)
+      if i == 0 and j == waypoint:
+        line += "_~setAutoplayTime,1000"
       file_lines.append(line)
 
+    last_j = waypoint
     for j_float in range(waypoint, maxPosition, (maxPosition - waypoint) // wave_frames):
       j = int(j_float)
       print("j:", j)
       line = "_"
       line += placeWaveLine(wave_line, j)
-      line += fillFromLines(final_lines, waypoint, min(j, next_waypoint), color="#23488b")
+      line += fillFromLines(final_lines, last_j, min(j, next_waypoint), color="#23488b")
       line += fillFromLines(original_lines, next_waypoint, j, color="black")
       if waypoint == 1 and j == 1:
         line += "~styleLine,0,color,#23488b"
       file_lines.append(line)
+      last_j = j
 
  
   # print(file_lines)
