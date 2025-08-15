@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNHCR In-Kind Donation</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="https://www.unhcr.org/themes/custom/unhcr_theme/logo.svg" alt="UNHCR Logo" class="logo">
+            <h1>In-Kind Donation Intent</h1>
+        </header>
+        <form id="donation-form">
+            <fieldset>
+                <legend>1. Donor Information</legend>
+                <div class="form-group">
+                    <label>Donor Type</label>
+                    <input type="radio" id="individual" name="donor-type" value="individual" checked> <label for="individual" class="inline">Individual</label>
+                    <input type="radio" id="organization" name="donor-type" value="organization"> <label for="organization" class="inline">Organization</label>
+                </div>
+                <div class="form-group" id="organization-fields" style="display: none;">
+                    <label for="organization-name">Company or Organization Name</label>
+                    <input type="text" id="organization-name" name="organization-name">
+                    <br>
+                    <label for="organization-aka">Is your company or organization known by another name or brand?</label>
+                    <input type="text" id="organization-aka" name="organization-aka">
+                    <br>
+                    <label for="organization-website">Company or Organization Website</label>
+                    <input type="text" id="organization-website" name="organization-website">
+                </div>
+                <div class="form-group">
+                    <label for="contact-first-name">Contact First Name</label>
+                    <input type="text" id="contact-first-name" name="contact-first-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="contact-last-name">Contact Last Name</label>
+                    <input type="text" id="contact-last-name" name="contact-last-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="contact-title">Contact Title</label>
+                    <input type="text" id="contact-title" name="contact-title">
+                </div>
+                <div class="form-group">
+                    <label for="email">Contact Email Address</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Contact Phone</label>
+                    <input type="tel" id="phone" name="phone">
+                </div>
+                <div class="form-group">
+                    <label for="address-street">Street Address</label>
+                    <input type="text" id="address-street" name="address-street">
+                </div>
+                <div class="form-group">
+                    <label for="address-city">City</label>
+                    <input type="text" id="address-city" name="address-city">
+                </div>
+                <div class="form-group">
+                    <label for="address-state">State/Province</label>
+                    <input type="text" id="address-state" name="address-state">
+                </div>
+                <div class="form-group">
+                    <label for="address-zip">ZIP/Postal Code</label>
+                    <input type="text" id="address-zip" name="address-zip">
+                </div>
+                <div class="form-group">
+                    <label for="address-country">Country</label>
+                    <input type="text" id="address-country" name="address-country">
+                </div>
+                <div class="form-group">
+                    <label for="existing-relationship">Does your company or organization have an existing relationship with UNHCR?</label>
+                    <select id="existing-relationship" name="existing-relationship">
+                        <option value="">--None--</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>2. Offer Details</legend>
+                <div class="form-group">
+                    <label for="offer-type">Offer Type</label>
+                    <select id="offer-type" name="offer-type" required>
+                        <option value="">--None--</option>
+                        <option value="goods">Goods</option>
+                        <option value="services">Services</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="donation-category">Donation Category</label>
+                    <select id="donation-category" name="donation-category" required>
+                        <option value="">--None--</option>
+                        <option value="core-relief">Core Relief Items (e.g., tents, blankets)</option>
+                        <option value="medical">Medical Supplies & Equipment</option>
+                        <option value="education">Educational Materials</option>
+                        <option value="logistics">Logistics & Transportation Services</option>
+                        <option value="facilities">Warehouse Facilities</option>
+                        <option value="pro-bono">Pro-bono Professional Services</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description of Product or Service</label>
+                    <textarea id="description" name="description" rows="4" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="donation-usage">How would you like UNHCR to use your donation?</label>
+                    <textarea id="donation-usage" name="donation-usage" rows="3" placeholder="e.g., for a specific region or program"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="quantity">Total Number of Items Available</label>
+                    <input type="number" id="quantity" name="quantity">
+                </div>
+                <div class="form-group">
+                    <label for="donation-measurement">How is your offered donation measured?</label>
+                    <select id="donation-measurement" name="donation-measurement">
+                        <option value="">--None--</option>
+                        <option value="units">Units</option>
+                        <option value="pallets">Pallets</option>
+                        <option value="boxes">Boxes</option>
+                        <option value="containers">Containers</option>
+                        <option value="hours">Hours (for services)</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="accept-partial">May we accept a smaller portion of the offered donation?</label>
+                    <select id="accept-partial" name="accept-partial">
+                        <option value="">--None--</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="value-basis">Value Basis</label>
+                    <select id="value-basis" name="value-basis">
+                        <option value="">--None--</option>
+                        <option value="retail">Retail</option>
+                        <option value="wholesale">Wholesale</option>
+                        <option value="cost">Cost to produce</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="estimated-value">Approximate Total Value (USD)</label>
+                    <input type="number" id="estimated-value" name="estimated-value">
+                </div>
+                <div class="form-group">
+                    <label for="availability">How soon is the offered donation available?</label>
+                    <select id="availability" name="availability">
+                        <option value="">--None--</option>
+                        <option value="immediate">Immediately</option>
+                        <option value="1-2-weeks">In 1-2 weeks</option>
+                        <option value="3-4-weeks">In 3-4 weeks</option>
+                        <option value="month-plus">More than a month</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="donation-reason">Reason for Donating</label>
+                    <select id="donation-reason" name="donation-reason">
+                        <option value="">--None--</option>
+                        <option value="surplus">Surplus stock</option>
+                        <option value="philanthropy">Corporate philanthropy</option>
+                        <option value="disaster-response">Disaster response</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>3. Logistics & Costs</legend>
+                <div class="form-group">
+                    <label for="location">Location of Goods/Services</label>
+                    <input type="text" id="location" name="location" placeholder="City, Country">
+                </div>
+                <div class="form-group">
+                    <label>Transportation</label>
+                    <input type="radio" id="shipping-covered" name="shipping" value="yes"> <label for="shipping-covered" class="inline">I will cover shipping costs</label>
+                    <input type="radio" id="shipping-not-covered" name="shipping" value="no" checked> <label for="shipping-not-covered" class="inline">I will not cover shipping costs</label>
+                </div>
+                <div class="form-group">
+                    <label for="incur-costs">Will UNHCR incur any costs by accepting this donation?</label>
+                    <select id="incur-costs" name="incur-costs">
+                        <option value="">--None--</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="special-handling">Special Handling Requirements</label>
+                    <textarea id="special-handling" name="special-handling" rows="3" placeholder="e.g., refrigeration, security, fragile"></textarea>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>4. Sharing & Comments</legend>
+                <div class="form-group">
+                    <label for="share-offer">If we do not accept your offer, may we share it with our non-profit partner organizations?</label>
+                    <select id="share-offer" name="share-offer">
+                        <option value="">--None--</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="comments">Comments</label>
+                    <textarea id="comments" name="comments" rows="4"></textarea>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>5. Attachments & Confirmation</legend>
+                <div class="form-group">
+                    <label for="file-upload">Attachments</label>
+                    <input type="file" id="file-upload" name="file-upload" multiple>
+                    <small>Upload photos, packing lists, or specification sheets.</small>
+                </div>
+                <div class="form-group">
+                    <input type="checkbox" id="certify" name="certify" required>
+                    <label for="certify" class="inline">I have read and accept the terms and agreement of the UNHCR In-Kind Donation Submission Form.</label>
+                </div>
+            </fieldset>
+
+            <button type="submit">Submit Donation Offer</button>
+        </form>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
