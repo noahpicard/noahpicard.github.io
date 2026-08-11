@@ -1,0 +1,93 @@
+BE YOURSELF~transitionStyle,animationDuration,0s~setAutoplayTime,2~styleContent,fontFamily,"Jaro"~styleContent,lineHeight,1.1~styleBody,background-color,black~style,color,white~styleContent,fontWeight,400~positionContent,margin-left,1.4em~positionContent,margin-right,1.4em~positionContent,margin-top,1.0em~positionContent,margin-bottom,1.0em~positionContent,margin-top,12em~positionContent,heght,90vh~style,fontSize,76px~style,width,800px~style,textWrap,auto~style,overflowWrap,break-word~style,wordWrap,break-word~style,wordBreak,break-all~style,wordBreak,break-word~style,hyphens,auto~style,whiteSpace,break-spaces
+_~setLine,0,BE YOUR SELF
+_~setLine,0,BE YOUR OWN
+_~setLine,0,BE ON YOUR OWN
+_~setLine,0,BEYOND YOUR OWN
+_~setLine,0,BEYOND YOU
+_~setLine,0,BEING ON YOU
+_~setLine,0,BEING ON YOUR BEING
+_~setLine,0,BEYONDING YOUR BEING
+_~setLine,0,ME YAWNING YOUR BEING
+_~setLine,0,ME OWNING YOUR BEING
+_~setLine,0,OWNING YOUR BEING
+_~setLine,0,OWN YOUR BEING
+_~setLine,0,OWN YOUR BE
+_~setLine,0,OWN YOUR FREE
+_~setLine,0,OWN YOUR FREEDOM
+_~setLine,0,DOWN YOUR FREEDOM
+_~setLine,0,DOWN WITH FREEDOM
+_~setLine,0,BE WITH FREEDOM
+_~setLine,0,BE FREEDOM
+_~setLine,0,BE FREED
+_~setLine,0,BE FREE
+_~setLine,0,FREEDOM
+_~setLine,0,FREE THEM
+_~setLine,0,FREED THEM
+_~setLine,0,FRIED THEM
+_~setLine,0,FRIED THEM ALL
+_~setLine,0,TRIED THEM ALL
+_~setLine,0,TIRED THEM ALL
+_~setLine,0,TIRED THE MALL
+_~setLine,0,TIRED AT THE MALL
+_~setLine,0,TRIED AT THE MALL
+_~setLine,0,CRIED AT THE MALL
+_~setLine,0,CRIED AT THEM ALL
+_~setLine,0,CRIED AT THEM ALL WATCHING
+_~setLine,0,YELLED AT THEM ALL WATCHING
+_~setLine,0,SCREECHED AT THEM ALL WATCHING
+_~setLine,0,SCREENED THEM ALL WATCHING
+_~setLine,0,WATCHED THEM ALL SCREENING
+_~setLine,0,WASHED THE MACHINE SCREENING
+_~setLine,0,WASHED THE MACHINE SCREAMING
+_~setLine,0,WASHING MACHINE SCREAMING
+_~setLine,0,WASHED UP MACHINE CREAMING
+_~setLine,0,WHIPPED UP MACHINE CREAMING
+_~setLine,0,WASHING UP MACHINE CREAM
+_~setLine,0,WASHING UP MACHINES WHIPPED CREAM
+_~setLine,0,WHIPPED CREAMING UP WASHING MACHINE
+_~setLine,0,WHIPPED DREAMING UP WALKING MACHINES
+_~setLine,0,WHIPPED UP DREAMING MACHINES WALKING OFF
+_~setLine,0,WOKE UP DREAMING OF WALKING MACHINES
+_~setLine,0,WOKE UP DREAMING THROUGH WALKING MACHINES
+_~setLine,0,WOKE UP WALKING THROUGH DREAMING MACHINES
+_~setLine,0,WOKE UP WALKING DREAMING THROUGH MACHINES
+_~setLine,0,WOKE UP DREAMING THROUGH WALKING
+_~setLine,0,WOKE UP MACHINES DREAMING
+_~setLine,0,WOKE UP MACHINES
+_~setLine,0,AWOKE MACHINES SCREAMING
+_~setLine,0,AWAKE MACHINES SCREAMING
+_~setLine,0,AWARE MACHINES SCREAMING
+_~setLine,0,WHERE MACHINES SCREAMING
+_~setLine,0,WHERE ARE MACHINES SCREAMING
+_~setLine,0,WHERE ARENT MACHINES SCREAMING
+_~setLine,0,WHY ARENT MACHINES SCREAMING
+_~setLine,0,HELLO WORLD
+_~setLine,0,HELL O WORLD
+_~setLine,0,HELL ON WORLD
+_~setLine,0,HELL ON WORD
+_~setLine,0,HELL ON WORD ON WORD ON WORD ON WORD
+_~setLine,0,HELL ONWARD ONWARD ONWARD ONWARD
+_~setLine,0,ELLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLO
+_~setLine,0,ELLLLLLLLLLLLLLLLLLLLLLLLLLLO
+_~setLine,0,ELLLLLLLLLLLLLLLO
+_~setLine,0,ELLLLO
+_~setLine,0,EO
+_~setLine,0,IO
+_~setLine,0,O
+_~setLine,0,YO
+_~setLine,0,YOU
+_~setLine,0,YOUR
+_~setLine,0,YOURS
+_~setLine,0,YOURSELF
+_~setLine,0,YOURS
+_~setLine,0,YOUR
+_~setLine,0,OUR
+_~setLine,0,YOUR
+_~setLine,0,OUR
+_~setLine,0,OURS
+_~setLine,0,YOURS
+_~setLine,0,OURS
+_~setLine,0,YOURS
+_~setLine,0,OURS
+_~setLine,0,OURSELF
+_~setLine,0,BE OURSELF
