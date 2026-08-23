@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Run for Office — An Election Simulator</title>
+<meta name="description" content="Build a candidate, take positions, buy ads, and win 270. A simulated presidential campaign that runs entirely in your browser.">
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>🗳️</text></svg>">
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ===================== TITLE ===================== -->
+  <section class="screen active" id="screen-title">
+    <div class="title-wrap">
+      <div class="kicker">A presidential campaign simulator</div>
+      <h1 class="bigtitle">Run for<br><span class="accent">Office</span></h1>
+      <p class="tagline">Fifty-one contests. Five thousand one hundred simulated voters. Two hundred and seventy
+        electoral votes. Write a biography, take five positions, spend what you have, and find out what the country
+        thinks of you.</p>
+      <div class="title-actions">
+        <button class="btn big" id="btn-start">Start a campaign</button>
+        <button class="btn ghost" id="btn-how">How it works</button>
+      </div>
+      <div class="title-foot">Runs entirely in your browser. Nothing is uploaded.</div>
+    </div>
+  </section>
+
+  <!-- ===================== SETUP: RACE ===================== -->
+  <section class="screen" id="screen-race">
+    <div class="pane narrow">
+      <div class="step-head"><span class="stepno">1</span><h2>The race</h2></div>
+
+      <div class="field">
+        <label>Candidates in the field</label>
+        <div class="seg" id="seg-ncand"></div>
+        <p class="hint">Every candidate is a real competitor in the simulation. Extra candidates split the
+          electorate, and it becomes much easier for nobody to reach 270.</p>
+      </div>
+
+      <div class="field">
+        <label>Campaign rounds before election day</label>
+        <div class="seg" id="seg-rounds"></div>
+        <p class="hint">Each round you receive money and spend it. Polling is published at the end of every round.</p>
+      </div>
+
+      <div class="field">
+        <label>Where the money comes from</label>
+        <div class="opts" id="opt-funding">
+          <button class="opt" data-v="flat">
+            <strong>Flat</strong>
+            <span>Every campaign is handed the same budget. A pure contest of judgement.</span>
+          </button>
+          <button class="opt" data-v="random">
+            <strong>Unequal</strong>
+            <span>Budgets are drawn at random. Somebody starts with three times what somebody else has.</span>
+          </button>
+          <button class="opt" data-v="corporate">
+            <strong>Unequal + corporate money</strong>
+            <span>Random budgets, and every campaign is offered a very large cheque by an interested party.
+              The favour comes due on election night.</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Voter individuality</label>
+        <div class="opts" id="opt-indiv">
+          <button class="opt" data-v="0">
+            <strong>Lockstep</strong>
+            <span>Voters are exactly their demographics. Pure model, blocky maps, brutal landslides.</span>
+          </button>
+          <button class="opt" data-v="1.4">
+            <strong>Realistic</strong>
+            <span>Each voter deviates from their group. Produces margins close to real American elections.</span>
+          </button>
+          <button class="opt" data-v="2.2">
+            <strong>Chaotic</strong>
+            <span>People are unpredictable. Everything is closer and much harder to steer.</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Seed <span class="sub">(optional — same seed, same country)</span></label>
+        <input type="text" id="inp-seed" placeholder="leave blank for random" autocomplete="off">
+      </div>
+
+      <div class="row-actions">
+        <button class="btn ghost" data-back="screen-title">Back</button>
+        <button class="btn" id="btn-race-next">Next: the field</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SETUP: FIELD ===================== -->
+  <section class="screen" id="screen-field">
+    <div class="pane">
+      <div class="step-head"><span class="stepno">2</span><h2>The field</h2></div>
+      <p class="lede">Mark a candidate as <strong>You</strong> to control them yourself. Two or more human
+        candidates play hot-seat, passing the device between turns. Everyone else is run by the computer.</p>
+      <div id="field-list" class="field-list"></div>
+      <div class="row-actions">
+        <button class="btn ghost" data-back="screen-race">Back</button>
+        <button class="btn" id="btn-field-next">Next: biographies</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SETUP: BIO ===================== -->
+  <section class="screen" id="screen-bio">
+    <div class="pane">
+      <div class="step-head"><span class="stepno">3</span><h2>Who are you?</h2></div>
+      <div class="handoff-name" id="bio-who"></div>
+      <p class="lede">Write the biography the country will hear. The analyst reads it for occupation, place,
+        specificity and self-inflicted wounds, and converts that into where you start with each slice of the
+        electorate — before you have said a word about policy.</p>
+      <textarea id="inp-bio" rows="8" placeholder="Two tours with the Marine Corps, then twenty-two years running a hardware store in Dayton, Ohio. I have signed four hundred paychecks. Married thirty-one years, three kids…"></textarea>
+      <div class="bio-meta"><span id="bio-count">0 words</span><button class="btn tiny ghost" id="btn-bio-example">Use an example</button></div>
+      <div id="bio-report" class="report"></div>
+      <div class="row-actions">
+        <button class="btn ghost" data-back="screen-field">Back</button>
+        <button class="btn secondary" id="btn-bio-analyze">Analyze</button>
+        <button class="btn" id="btn-bio-next" disabled>Next: your platform</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SETUP: STANCES ===================== -->
+  <section class="screen" id="screen-stance">
+    <div class="pane">
+      <div class="step-head"><span class="stepno">4</span><h2>Your platform</h2></div>
+      <div class="handoff-name" id="stance-who"></div>
+      <p class="lede">Five issues were drawn for this election. Place yourself on each from &minus;3 to +3.
+        Voters hold their own position on every one, and they vote for whichever candidate points most nearly
+        the same direction they do.</p>
+      <div id="stance-list" class="stance-list"></div>
+      <div class="row-actions">
+        <button class="btn ghost" id="btn-stance-back">Back</button>
+        <button class="btn" id="btn-stance-next">Lock it in</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== HANDOFF ===================== -->
+  <section class="screen" id="screen-handoff">
+    <div class="pane narrow center">
+      <div class="handoff-dot" id="handoff-dot"></div>
+      <div class="handoff-kicker" id="handoff-kicker">Pass the device</div>
+      <div class="handoff-big" id="handoff-title">Pass the device</div>
+      <div class="handoff-sub" id="handoff-sub"></div>
+      <button class="btn big" id="btn-handoff">I'm ready</button>
+    </div>
+  </section>
+
+  <!-- ===================== GAME ===================== -->
+  <section class="screen wide" id="screen-game">
+    <header class="topbar">
+      <div class="tb-left">
+        <span class="tb-round" id="tb-round">Round 1</span>
+        <span class="tb-phase" id="tb-phase">Campaigning</span>
+      </div>
+      <div class="tb-mid" id="tb-turn"></div>
+      <div class="tb-right">
+        <button class="btn tiny ghost" id="btn-method">Methodology</button>
+        <button class="btn tiny ghost" id="btn-quit">Quit</button>
+      </div>
+    </header>
+
+    <div class="game-grid">
+      <div class="col-map">
+        <div class="mapcard">
+          <div class="mapcard-head">
+            <div>
+              <h3 id="map-title">Projected electoral votes</h3>
+              <div class="map-sub" id="map-sub">Polling average · margin of error ±0.0</div>
+            </div>
+            <div class="map-modes" id="map-modes"></div>
+          </div>
+          <div class="evbar" id="evbar"></div>
+          <div class="mapwrap">
+            <svg id="usmap" viewBox="0 0 975 610" preserveAspectRatio="xMidYMid meet" role="img" aria-label="United States electoral map"></svg>
+            <div class="maptip" id="maptip" hidden></div>
+          </div>
+          <div class="legend" id="legend"></div>
+        </div>
+        <div class="feedcard">
+          <h3>The news</h3>
+          <div class="feed" id="feed"></div>
+        </div>
+      </div>
+
+      <div class="col-side">
+        <div class="tabs" id="tabs">
+          <button class="tab active" data-tab="act">Campaign</button>
+          <button class="tab" data-tab="poll">Standings</button>
+          <button class="tab" data-tab="cross">Crosstabs</button>
+          <button class="tab" data-tab="plat">Platforms</button>
+        </div>
+        <div class="tabpanes">
+          <div class="tabpane active" id="pane-act"></div>
+          <div class="tabpane" id="pane-poll"></div>
+          <div class="tabpane" id="pane-cross"></div>
+          <div class="tabpane" id="pane-plat"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ELECTION NIGHT ===================== -->
+  <section class="screen wide" id="screen-final">
+    <div class="final-wrap">
+      <div class="final-head">
+        <h2 id="final-title">Election Night</h2>
+        <div class="final-sub" id="final-sub">Polls are closing.</div>
+      </div>
+      <div class="evbar big" id="final-evbar"></div>
+      <div class="final-grid">
+        <div class="mapwrap final-mapwrap">
+          <svg id="finalmap" viewBox="0 0 975 610" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Election results map"></svg>
+          <div class="maptip" id="finaltip" hidden></div>
+        </div>
+        <div class="final-side">
+          <div class="callbox" id="callbox"></div>
+          <div class="final-scoreboard" id="final-scoreboard"></div>
+        </div>
+      </div>
+      <div id="final-epilogue" class="epilogue" hidden></div>
+      <div class="row-actions center" id="final-actions" hidden>
+        <button class="btn" id="btn-again">Run again</button>
+        <button class="btn ghost" id="btn-final-method">How the votes were counted</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ===================== MODAL ===================== -->
+<div class="modal" id="modal" hidden>
+  <div class="modal-box">
+    <button class="modal-x" id="modal-x" aria-label="Close">&times;</button>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<script src="js/mapdata.js"></script>
+<script src="js/data.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/bio.js"></script>
+<script src="js/ai.js"></script>
+<script src="js/game.js"></script>
+<script src="js/ui.js"></script>
+</body>
+</html>
