@@ -3,6 +3,15 @@
 A presidential campaign simulator that runs entirely in the browser — plain
 HTML, CSS and JavaScript, no build step, no backend, no network calls.
 
+**A note on the framing.** The interface is written in-world, as though it were
+real government-issued campaign software: it says "Presidential Campaign
+Software", it calls its help panel "Official Guidance", and it signs off with
+"Secured by your trustworthy government · No data is saved". That last line is
+deliberate irony and part of the piece — the game is built for projection as an
+art installation. Technically it is exactly what this README describes: a
+simulation, running locally, storing nothing and sending nothing. There is no
+server to send anything to.
+
 Open `index.html`, or visit the folder on the site.
 
 ## What it is
@@ -42,7 +51,8 @@ Full details are in the in-game "Methodology" panel.
 | `js/bio.js` | The biography analyst |
 | `js/ai.js` | Computer opponent strategy |
 | `js/game.js` | Game construction and round flow |
-| `js/ui.js` | Screens, map rendering, campaign interface, election night |
+| `js/ui.js` | Screens, map rendering, campaign interface, advisor, toasts, election night |
+| `img/flag.svg` | The flag used, zoomed and panned, behind the title screen |
 
 The map geometry is derived from `us-atlas` (US Census cartographic boundary
 files, public domain), projected to Albers USA and simplified with

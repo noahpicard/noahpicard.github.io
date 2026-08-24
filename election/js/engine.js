@@ -354,7 +354,7 @@ let BIAS_CAP = 1.15;
 function pushBias(G, opts) {
   const { action, statesList, focus, targetIdx, sign, magnitude, spillMag } = opts;
   const inSet = new Set(statesList);
-  let sum = 0, cnt = 0;
+  let sum = 0, wsum = 0;
 
   for (const ab of STATE_IDS) {
     const primary = inSet.has(ab);
@@ -365,20 +365,27 @@ function pushBias(G, opts) {
       if (w <= 0) continue;
       const d = sign * mag * w * BIAS_SCALE;
       voter.bias[targetIdx] = clamp(voter.bias[targetIdx] + d, -BIAS_CAP, BIAS_CAP);
-      if (primary) { sum += d; cnt++; }
+      // Weight the reported movement by reach, so a buy narrowed to one group
+      // is described by what it did to THAT group rather than diluted across
+      // the four fifths of the state it deliberately ignored.
+      if (primary) { sum += d * w; wsum += w; }
     }
   }
-  return cnt ? sum / cnt : 0;
+  return wsum ? sum / wsum : 0;
 }
 
+/* Thresholds are set from the measured distribution of delivered movement at
+   the current BIAS_SCALE — roughly the 95th, 75th, 50th and 25th percentiles
+   of a successful buy. Retune these whenever BIAS_SCALE moves, or every
+   result will read as "essentially nothing". */
 const MOVE_WORDS = [
-  { min: 0.42,  word: 'a decisive surge',      cls: 'huge' },
-  { min: 0.24,  word: 'a strong move',         cls: 'strong' },
-  { min: 0.11,  word: 'a solid gain',          cls: 'solid' },
-  { min: 0.035, word: 'a modest bump',         cls: 'modest' },
-  { min: -0.035,word: 'essentially nothing',   cls: 'flat' },
-  { min: -0.14, word: 'a small setback',       cls: 'bad' },
-  { min: -999,  word: 'a real backfire',       cls: 'awful' }
+  { min: 0.090,  word: 'a decisive surge',      cls: 'huge' },
+  { min: 0.048,  word: 'a strong move',         cls: 'strong' },
+  { min: 0.027,  word: 'a solid gain',          cls: 'solid' },
+  { min: 0.011,  word: 'a modest bump',         cls: 'modest' },
+  { min: -0.006, word: 'essentially nothing',   cls: 'flat' },
+  { min: -0.030, word: 'a small setback',       cls: 'bad' },
+  { min: -999,   word: 'a real backfire',       cls: 'awful' }
 ];
 function moveWord(v) { return MOVE_WORDS.find(m => v >= m.min) || MOVE_WORDS[MOVE_WORDS.length - 1]; }
 
@@ -600,3 +607,210 @@ function flavourFor(G, action, cand, ctx) {
   };
   return T[action.id] || `${cand.name} campaigns in ${ctx.where}. Result: ${w}.`;
 }
+
+/* ==========================================================================
+   IMPACT FORECAST
+   What the campaign expects an action to do, before it is paid for. The
+   numbers here are read off the same expressions runAction() uses, so the
+   forecast cannot drift away from what actually happens.
+   ========================================================================== */
+
+/* Forecast adverbs are pinned to the same thresholds as MOVE_WORDS, so a
+   promise of "strongly" is answered by a result reading "a strong move".
+   Both are expressed in delivered-movement units. */
+const MAG_WORDS = [
+  { min: 0.090, word: 'very strongly' },
+  { min: 0.048, word: 'strongly' },
+  { min: 0.027, word: 'solidly' },
+  { min: 0.011, word: 'modestly' },
+  { min: -99,   word: 'slightly' }
+];
+const magWord = (m) => (MAG_WORDS.find(x => m >= x.min) || MAG_WORDS[MAG_WORDS.length - 1]).word;
+
+/* The movement a push of this magnitude is expected to report — the same
+   reach-weighted mean pushBias() computes, evaluated ahead of time. */
+function expectedMove(G, action, statesList, focus, mag) {
+  let sw = 0, sww = 0;
+  for (const ab of statesList) {
+    for (const v of G.states[ab].voters) {
+      const w = reachWeight(action, v, focus);
+      if (w <= 0) continue;
+      sw += w; sww += w * w;
+    }
+  }
+  return sw ? mag * BIAS_SCALE * (sww / sw) : 0;
+}
+
+/* Name the slice of the electorate an action actually lands on. */
+function audienceOf(action, focus) {
+  if (!action.ageWeight) {
+    if (focus && focus.age) return AGE_LABEL[focus.age].toLowerCase() + ' voters';
+    return 'voters generally';
+  }
+  const parts = [];
+  if (focus && focus.age) parts.push(AGE_LABEL[focus.age].toLowerCase());
+  else {
+    const aw = action.ageWeight;
+    const top = AGES.slice().sort((a, b) => aw[b] - aw[a]);
+    if (aw[top[0]] >= aw[top[2]] * 1.6) parts.push(AGE_LABEL[top[0]].toLowerCase());
+  }
+  if (focus && focus.gender) parts.push(GENDER_LABEL[focus.gender].toLowerCase());
+  else if (action.genderWeight) {
+    const gw = action.genderWeight;
+    const top = GENDERS.slice().sort((a, b) => gw[b] - gw[a]);
+    if (gw[top[0]] >= gw[top[2]] * 1.5) parts.push(GENDER_LABEL[top[0]].toLowerCase());
+  }
+  if (!parts.length) return 'voters across the board';
+  return parts.join(' ') + ' voters';
+}
+
+/* Share of a state's electorate the spend meaningfully touches. */
+function reachShare(G, action, statesList, focus) {
+  if (!action.ageWeight || !statesList || !statesList.length) return null;
+  const ws = [];
+  for (const ab of statesList) for (const v of G.states[ab].voters) ws.push(reachWeight(action, v, focus));
+  if (!ws.length) return null;
+  const max = Math.max(...ws);
+  if (max <= 0) return null;
+  // "Reached" means receiving at least half the push the best-reached voter gets.
+  return ws.filter(w => w >= max * 0.5).length / ws.length;
+}
+
+function describeImpact(G, ci, spec) {
+  const cand = G.candidates[ci];
+  const action = ACTION_BY_ID[spec.actionId];
+  const intensity = spec.intensity || 1;
+  const charisma = cand.traits.charisma;
+  const disciplineBonus = 1 - cand.traits.discipline * 0.5;
+  const momentum = cand.momentum || 1;
+  const rows = [];
+  let headline = '';
+
+  const cost = action.cost * intensity;
+  if (cost) rows.push({ label: 'Cost', value: '$' + cost + 'M of $' + Math.round(cand.cash) + 'M on hand' });
+
+  /* ---- money actions ---- */
+  if (action.id === 'vip') {
+    const d = decayFor(cand, 'vip', action);
+    const take = Math.round(16 * intensity * d * cand.traits.warChest);
+    headline = `Expected to raise roughly <b>$${take}M</b> — about $${Math.max(0, take - cost)}M more than it costs.`;
+    rows.push({ label: 'Typical return', value: '$' + take + 'M ± $' + Math.round(4.5 * intensity) + 'M' });
+    rows.push({ label: 'Risk', value: Math.round(action.backfire * disciplineBonus * 100) + '% chance of bad press', warn: true });
+    if (d < 0.95) rows.push({ label: 'Donor fatigue', value: Math.round(d * 100) + '% of first-time yield' });
+    return { headline, rows };
+  }
+  if (action.id === 'corp') {
+    const corp = spec.corp;
+    if (!corp) return null;
+    headline = `A cheque for <b>$${corp.cash}M</b> today, and a debt to ${esc2(corp.name)} that comes due the moment you win.`;
+    rows.push({ label: 'Immediate cash', value: '$' + corp.cash + 'M, plus 10% every round' });
+    rows.push({ label: 'Immediate cost', value: 'standing drops with young voters and women', warn: true });
+    rows.push({ label: 'Ongoing risk', value: '28% chance per round the press connects it to you', warn: true });
+    return { headline, rows };
+  }
+
+  /* ---- policy change ---- */
+  if (action.id === 'policy') {
+    const ti = spec.topicIndex, dir = spec.direction;
+    const t = G.topics[ti];
+    const nv = clamp(cand.stances[ti] + dir, -3, 3);
+    const penalty = 0.055 * (cand.flips + 1);
+    headline = `Moves you to <b>${nv > 0 ? '+' : ''}${nv}</b> on ${esc2(t.name)} — closer to every voter who already ` +
+               `agrees, and further from the ones who liked where you were.`;
+    rows.push({ label: 'New position', value: (nv > 0 ? '+' : '') + nv + ' · ' + (dir > 0 ? t.pro : t.con) });
+    rows.push({ label: 'Flip-flop cost', value: 'about ' + (penalty * 100).toFixed(1) + ' bias points nationwide', warn: true });
+    rows.push({ label: 'Times you have moved', value: String(cand.flips) + (cand.flips >= 2 ? ' — the press has noticed' : '') });
+    return { headline, rows };
+  }
+
+  /* ---- celebrity ---- */
+  if (action.id === 'celeb') {
+    const celeb = spec.celeb;
+    if (!celeb) return null;
+    const d = decayFor(cand, 'celeb', action);
+    const raw = action.power * Math.pow(intensity, 0.75) * charisma * d * momentum;
+    const aw = { young: 0.6, middle: 0.6, old: 0.6 }; aw[celeb.age] = celeb.mult;
+    const gw = { male: 0.85, female: 0.85, nonbinary: 0.85 };
+    if (celeb.gender) gw[celeb.gender] = celeb.mult * 0.85; else { gw.male = gw.female = gw.nonbinary = 1.0; }
+    const mag = expectedMove(G, { ageWeight: aw, genderWeight: gw }, STATE_IDS, null, raw);
+    const who = AGE_LABEL[celeb.age].toLowerCase() + (celeb.gender ? ' ' + GENDER_LABEL[celeb.gender].toLowerCase() : '') + ' voters';
+    headline = `May <b>${magWord(mag)} increase</b> preference for you among ${who}, nationwide.`;
+    rows.push({ label: 'Audience', value: who });
+    rows.push({ label: 'Everyone else', value: 'mild drift away from you' });
+    rows.push({ label: 'Risk', value: Math.round(action.backfire * disciplineBonus * 100) + '% chance it becomes the story', warn: true });
+    return { headline, rows };
+  }
+
+  /* ---- opposition research ---- */
+  if (action.id === 'oppo') {
+    const ti = spec.targetIdx;
+    if (ti == null) return null;
+    const d = decayFor(cand, 'oppo|' + ti, action);
+    const raw = action.power * Math.pow(intensity, 0.75) * charisma * d * momentum;
+    const mag = expectedMove(G, { ageWeight:{young:1,middle:1.1,old:1.15}, genderWeight:{male:1,female:1,nonbinary:1} },
+                             STATE_IDS, null, raw);
+    headline = `May <b>${magWord(mag)} decrease</b> preference for <b>${esc2(G.candidates[ti].name)}</b> nationwide. ` +
+               `It does not raise your own numbers.`;
+    rows.push({ label: 'Target', value: G.candidates[ti].name });
+    rows.push({ label: 'Reach', value: 'all fifty states and DC' });
+    rows.push({ label: 'Risk', value: Math.round(action.backfire * disciplineBonus * 100) + '% chance it lands on you instead', warn: true });
+    if (d < 0.95) rows.push({ label: 'Repeat use', value: Math.round(d * 100) + '% of full effect' });
+    return { headline, rows };
+  }
+
+  /* ---- debate prep ---- */
+  if (action.id === 'debate') {
+    const d = decayFor(cand, 'debate', action);
+    const raw = action.power * Math.pow(intensity, 0.75) * charisma * d;
+    const mag = expectedMove(G, { ageWeight:{young:0.9,middle:1.1,old:1.1}, genderWeight:{male:1,female:1,nonbinary:1} },
+                             STATE_IDS, null, raw);
+    headline = `May <b>${magWord(mag)} increase</b> preference for you everywhere at once, and makes everything ` +
+               `you do next round land harder.`;
+    rows.push({ label: 'Reach', value: 'all fifty states and DC' });
+    rows.push({ label: 'Next round', value: '+' + Math.round(11 * intensity * d) + '% to every action' });
+    rows.push({ label: 'Risk', value: Math.round(action.backfire * disciplineBonus * 100) + '% chance of over-rehearsing', warn: true });
+    return { headline, rows };
+  }
+
+  /* ---- geographic ads and ground game ---- */
+  const statesList = (spec.states && spec.states.length) ? spec.states : (spec.state ? [spec.state] : []);
+  if (!statesList.length) return null;
+  const focus = (spec.focusAge || spec.focusGender)
+    ? { age: spec.focusAge || null, gender: spec.focusGender || null } : null;
+  const attack = spec.mode === 'anti';
+  const targetIdx = attack ? spec.targetIdx : ci;
+  if (attack && targetIdx == null) return null;
+
+  const spread = Math.pow(statesList.length, 0.62);
+  const key = [action.id, statesList.slice().sort().join('+'),
+               focus ? (focus.age || '*') + '/' + (focus.gender || '*') : '*',
+               attack ? 'anti' + targetIdx : 'pro'].join('|');
+  const d = decayFor(cand, key, action);
+  const raw = action.power * Math.pow(intensity, 0.75) * charisma * d * momentum / spread;
+  const mag = expectedMove(G, action, statesList, focus, raw);
+  const aud = audienceOf(action, focus);
+  const where = statesList.length === 1 ? STATES[statesList[0]].name : statesList.length + ' states';
+  const ev = statesList.reduce((a, ab) => a + STATES[ab].ev, 0);
+
+  headline = attack
+    ? `May <b>${magWord(mag)} decrease</b> preference for <b>${esc2(G.candidates[targetIdx].name)}</b> among ${aud} in ${where}.`
+    : `May <b>${magWord(mag)} increase</b> preference for you among ${aud} in ${where}.`;
+
+  rows.push({ label: 'Electoral votes at stake', value: String(ev) });
+  const share = reachShare(G, action, statesList, focus);
+  if (share != null) rows.push({ label: 'Electorate reached', value: Math.round(share * 100) + '% of those states' });
+  if (statesList.length > 1) {
+    rows.push({ label: 'Split across stops', value: Math.round(100 / spread) + '% of full force each', warn: true });
+  }
+  const uses = cand.uses[key] || 0;
+  if (uses > 0) {
+    rows.push({ label: 'Repeat here', value: 'buy #' + (uses + 1) + ' — ' + Math.round(d * 100) + '% of full effect', warn: d < 0.6 });
+  }
+  if (action.spill) rows.push({ label: 'National spillover', value: Math.round(action.spill * 100) + '% bleeds everywhere' });
+  const bf = action.backfire * disciplineBonus * (attack ? 1.25 : 1);
+  rows.push({ label: 'Risk of backfire', value: Math.round(bf * 100) + '%', warn: bf > 0.12 });
+  return { headline, rows };
+}
+
+/* Local escape so the engine can build display strings without the UI. */
+function esc2(x) { return String(x).replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c])); }
