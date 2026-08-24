@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Run for Office — election night, but it's about you
+   Run for President™ — election night, but it's about you
    ========================================================================== */
 
 :root{
@@ -42,9 +42,36 @@ button{font-family:inherit}
 .pane.center{text-align:center}
 
 /* ---------- title ---------- */
-#screen-title{display:none; place-items:center}
+#screen-title{display:none; place-items:center; position:relative; overflow:hidden}
 #screen-title.active{display:grid}
-.title-wrap{max-width:660px; text-align:center; padding:20px}
+.title-wrap{max-width:660px; text-align:center; padding:20px; position:relative; z-index:1}
+
+/* A zoomed-in flag drifting diagonally behind the title, darkened almost to
+   texture. One flag at official 1:1.9 proportions, scaled well past the
+   viewport and panned corner to corner — never tiled, so there is no seam to
+   hide. Height-driven sizing keeps it covering the screen at any aspect. */
+.flagbg{position:absolute; inset:0; z-index:0; overflow:hidden; pointer-events:none}
+.flagbg::before{
+  content:''; position:absolute; inset:0;
+  background:url(../img/flag.svg) no-repeat 30% 12%;
+  background-size:auto 150%;
+  filter:brightness(.92) saturate(.95);
+  animation:flagdrift 150s ease-in-out infinite alternate;
+}
+.flagbg::after{
+  content:''; position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse 78% 62% at 50% 44%,
+      rgba(14,17,22,.90) 0%, rgba(14,17,22,.84) 42%, rgba(14,17,22,.76) 100%),
+    linear-gradient(to bottom, rgba(14,17,22,.55), rgba(14,17,22,0) 22%, rgba(14,17,22,0) 76%, rgba(14,17,22,.75));
+}
+/* Pans from stars-and-stripes toward open stripes. The range stops short of
+   the corners so the canton never fills the screen. */
+@keyframes flagdrift{ from{background-position:30% 12%} to{background-position:94% 94%} }
+@media (prefers-reduced-motion: reduce){ .flagbg::before{animation:none} }
+
+.bigtitle .tm{font-size:.26em; vertical-align:.95em; margin-left:.06em; letter-spacing:0;
+              font-family:var(--sans); font-weight:500; opacity:.82}
 .kicker{font-family:var(--mono); font-size:11px; letter-spacing:.22em; text-transform:uppercase;
         color:var(--ink3); margin-bottom:18px}
 .bigtitle{font-family:var(--serif); font-size:clamp(52px,11vw,104px); line-height:.92; margin:0 0 22px;
@@ -53,6 +80,7 @@ button{font-family:inherit}
 .tagline{color:var(--ink2); font-size:17px; max-width:540px; margin:0 auto 30px}
 .title-actions{display:flex; gap:12px; justify-content:center; flex-wrap:wrap}
 .title-foot{margin-top:26px; font-size:12px; color:var(--ink3); font-family:var(--mono)}
+.tagline,.kicker,.title-foot{text-shadow:0 1px 14px rgba(10,12,16,.9)}
 
 /* ---------- buttons ---------- */
 .btn{
@@ -105,6 +133,7 @@ input:focus, textarea:focus{outline:none; border-color:var(--accent)}
 .row-actions{display:flex; gap:10px; justify-content:flex-end; margin-top:26px;
              padding-top:20px; border-top:1px solid var(--line)}
 .row-actions.center{justify-content:center; border:0}
+.row-actions[hidden]{display:none}
 
 /* ---------- field list ---------- */
 .field-list{display:grid; gap:11px}
@@ -308,6 +337,22 @@ select:focus{outline:none; border-color:var(--accent)}
 .endturn{margin-top:14px; display:grid; gap:7px}
 .endturn .btn{width:100%}
 
+/* ---------- state inspector ---------- */
+.sec-h.insp-h{display:flex; justify-content:space-between; align-items:center; gap:8px;
+              color:var(--accent); font-size:11px; letter-spacing:.13em}
+.insp-meta{font-size:12px; color:var(--ink3); margin:-2px 0 12px; font-family:var(--mono)}
+.insp-sub{font-family:var(--mono); font-size:10px; letter-spacing:.15em; text-transform:uppercase;
+          color:var(--ink3); margin:14px 0 8px}
+.crossrow .cl.mine{margin:5px 0 0; font-size:11.5px; color:var(--ink2); align-items:center}
+.crossrow .cl.mine .d{width:9px; height:9px; border-radius:2px; display:inline-block; margin-right:6px}
+.delta{font-family:var(--mono); font-size:11px; margin-left:6px; font-weight:700}
+.delta.up{color:var(--good)} .delta.down{color:var(--bad)} .delta.flat{color:var(--ink3)}
+.press{font-family:var(--mono); font-weight:700}
+.press.up{color:var(--good)} .press.down{color:var(--bad)} .press.flat{color:var(--ink3)}
+.insp-foot{font-size:11px; color:var(--ink3); line-height:1.55; margin-top:14px;
+           padding-top:10px; border-top:1px solid var(--line)}
+.insp-foot em{color:var(--ink2); font-style:normal; font-weight:600}
+
 /* ---------- tables ---------- */
 .tbl{width:100%; border-collapse:collapse; font-size:13px}
 .tbl th{text-align:left; font-family:var(--mono); font-size:10px; letter-spacing:.12em;
@@ -343,6 +388,8 @@ select:focus{outline:none; border-color:var(--accent)}
 .final-head{text-align:center; margin-bottom:20px}
 .final-head h2{font-family:var(--serif); font-size:clamp(34px,5vw,52px); margin:0 0 6px; font-weight:600}
 .final-sub{color:var(--ink2); font-size:15px; min-height:24px}
+#btn-skip{margin-top:10px}
+#btn-skip[hidden]{display:none}
 .final-grid{display:grid; grid-template-columns:minmax(0,1fr) 350px; gap:18px; align-items:start}
 .final-mapwrap{padding:8px}
 .final-side{display:grid; gap:14px}
@@ -361,6 +408,9 @@ select:focus{outline:none; border-color:var(--accent)}
 .epilogue p:last-child{margin-bottom:0}
 .epilogue .corp-line{background:#2a1a1a; border:1px solid #55302f; border-radius:8px; padding:14px 16px;
                      color:#f0b9b9; font-size:14.5px; margin-top:14px}
+
+#confetti{position:fixed; inset:0; width:100%; height:100%; z-index:90; pointer-events:none; display:none}
+#confetti.on{display:block}
 
 /* ---------- modal ---------- */
 .modal{position:fixed; inset:0; background:rgba(6,8,12,.8); z-index:100; display:grid; place-items:center; padding:20px}

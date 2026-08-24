@@ -39,8 +39,23 @@ const UI = {
   currentPoll: null,
   mapBuilt: false,
   hoverLock: false,
-  pendingAfterHandoff: null
+  pendingAfterHandoff: null,
+  inspect: null,        // state being examined in the sidebar
+  skipFinal: false,
+  finalTimer: null,
+  finalStep: null
 };
+
+/* Whose point of view the crosstabs are written from: the player taking the
+   current turn, or failing that the first human in the field. */
+function viewerIdx() {
+  const G = UI.G;
+  if (!G) return 0;
+  const c = G.candidates[UI.turnIdx];
+  if (c && c.isHuman) return UI.turnIdx;
+  const h = G.candidates.findIndex(x => x.isHuman);
+  return h >= 0 ? h : 0;
+}
 
 /* ==========================================================================
    SCREEN PLUMBING
@@ -483,7 +498,7 @@ function paintMap(svg, data, mode) {
     const margin = sorted[0] - (sorted[1] || 0);
     const strength = 0.42 + 0.58 * Math.min(1, margin / 0.30);
     node.setAttribute('fill', mix(MAP_BG, G.candidates[w].color, strength));
-    node.classList.toggle('sel', UI.sel.states.includes(ab) || UI.sel.state === ab);
+    node.classList.toggle('sel', UI.sel.states.includes(ab) || UI.sel.state === ab || UI.inspect === ab);
   });
 }
 
@@ -507,14 +522,23 @@ function tooltipHTML(ab) {
 
 function onStateClick(ab) {
   const a = UI.sel.actionId ? ACTION_BY_ID[UI.sel.actionId] : null;
-  if (!a) return;
+  // With no campaign action armed, a click is a question rather than an order:
+  // open the state up in the sidebar.
+  if (!a || (a.targeting !== 'state' && a.targeting !== 'multi-state')) {
+    UI.inspect = (UI.inspect === ab) ? null : ab;
+    renderCrossPane();
+    if (UI.inspect) goTab('cross');
+    refreshMap();
+    return;
+  }
   if (a.targeting === 'state') { UI.sel.state = ab; UI.sel.states = [ab]; }
-  else if (a.targeting === 'multi-state') {
+  else {
     const i = UI.sel.states.indexOf(ab);
     if (i >= 0) UI.sel.states.splice(i, 1);
     else if (UI.sel.states.length < 4) UI.sel.states.push(ab);
     UI.sel.state = UI.sel.states[0] || null;
-  } else return;
+  }
+  UI.inspect = ab;
   renderActionPane();
   renderCrossPane();
   refreshMap();
@@ -573,10 +597,14 @@ function advanceTurn() {
   if (UI.turnIdx >= G.candidates.length) { finishRound(); return; }
   const cand = G.candidates[UI.turnIdx];
   resetSelection();
+  // Baseline for the "this turn" deltas in the state inspector.
+  G.turnStart = simulate(G);
 
   if (cand.isHuman) {
     const multi = G.candidates.filter(c => c.isHuman).length > 1;
-    const go = () => { renderAll(); show('screen-game'); };
+    // A new turn starts on the Campaign tab — you should never come back from
+    // studying a state to find the spending controls hidden.
+    const go = () => { renderAll(); goTab('act'); show('screen-game'); };
     if (multi) handoff(cand.name,
       `${G.phase === 'final-push' ? 'The final push' : 'Round ' + G.round + ' of ' + G.settings.rounds}. ` +
       `Your turn to spend. $${Math.round(cand.cash)}M on hand.`, go, cand.color);
@@ -995,20 +1023,20 @@ function renderPollPane() {
 /* ---------- crosstabs ---------- */
 function renderCrossPane() {
   const G = UI.G, pane = $('#pane-cross');
-  // Crosstabs are estimates too — they come from the same survey as the poll.
   const truth = simulate(G);
   const tot = demoTotals(truth);
-  const bar = (shares) => `<div class="sharebar">` + shares.map((s, k) =>
-    `<div style="width:${(s * 100).toFixed(2)}%;background:${G.candidates[k].color}" title="${esc(G.candidates[k].name)} ${(s*100).toFixed(0)}%"></div>`).join('') + `</div>`;
+  const me = viewerIdx();
+  const bar = (shares) => `<div class="sharebar">` + shares.map((sh, k) =>
+    `<div style="width:${(sh * 100).toFixed(2)}%;background:${G.candidates[k].color}" title="${esc(G.candidates[k].name)} ${(sh*100).toFixed(0)}%"></div>`).join('') + `</div>`;
 
-  let h = `<div class="sec-h">By age</div>`;
+  let h = `<div class="sec-h">Nationally · by age</div>`;
   const grand = AGES.reduce((a, g) => a + tot.age[g].total, 0);
   for (const ag of AGES) {
     const t = tot.age[ag];
     h += `<div class="crossrow"><div class="cl"><span>${AGE_LABEL[ag]}</span>
       <span class="pop">${(t.total / grand * 100).toFixed(0)}% of voters</span></div>${bar(t.shares)}</div>`;
   }
-  h += `<div class="sec-h">By gender</div>`;
+  h += `<div class="sec-h">Nationally · by gender</div>`;
   const grandG = GENDERS.reduce((a, g) => a + tot.gender[g].total, 0);
   for (const g of GENDERS) {
     const t = tot.gender[g];
@@ -1016,23 +1044,84 @@ function renderCrossPane() {
       <span class="pop">${(t.total / grandG * 100).toFixed(1)}% of voters</span></div>${bar(t.shares)}</div>`;
   }
 
-  if (UI.sel.state || (UI.sel.states && UI.sel.states.length)) {
-    const ab = UI.sel.state || UI.sel.states[0];
-    const st = truth.byState[ab];
-    h += `<div class="sec-h">${STATES[ab].name} — selected</div>`;
-    for (const ag of AGES) {
-      const row = st.cross.age[ag], t = row.reduce((a, b) => a + b, 0) || 1;
-      h += `<div class="crossrow"><div class="cl"><span>${AGE_SHORT[ag]}</span><span class="pop">${t} of 100</span></div>${bar(row.map(v => v / t))}</div>`;
-    }
-    for (const g of GENDERS) {
-      const row = st.cross.gender[g], t = row.reduce((a, b) => a + b, 0) || 1;
-      if (!t) continue;
-      h += `<div class="crossrow"><div class="cl"><span>${GENDER_LABEL[g]}</span><span class="pop">${t} of 100</span></div>${bar(row.map(v => v / t))}</div>`;
-    }
-  } else {
-    h += `<p class="muted" style="margin-top:14px;font-size:12.5px">Click a state on the map to break it down.</p>`;
-  }
+  const ab = UI.inspect || UI.sel.state || (UI.sel.states && UI.sel.states[0]);
+  h += ab ? stateInspectorHTML(G, truth, ab, me, bar)
+          : `<p class="muted" style="margin-top:16px;font-size:12.5px">Click any state on the map to break it
+             down by age and gender, and to see what your last actions did there.</p>`;
   pane.innerHTML = h;
+
+  const clr = $('#btn-clear-state', pane);
+  if (clr) clr.addEventListener('click', () => { UI.inspect = null; renderCrossPane(); refreshMap(); });
+}
+
+/* The per-state breakdown, with each cell's movement since this turn began —
+   which, on your own turn, is exactly what your last actions bought you. */
+function stateInspectorHTML(G, truth, ab, me, bar) {
+  const st = truth.byState[ab];
+  const prev = G.turnStart ? G.turnStart.byState[ab] : null;
+  const dm = G.states[ab].demo;
+  const cand = G.candidates[me];
+  const order = st.counts.map((c, k) => ({ c, k })).sort((a, b) => b.c - a.c);
+
+  // Mean bias toward the viewer inside each demographic slice: the residue of
+  // every ad, visit and endorsement aimed at these people.
+  const press = { age: {}, gender: {} };
+  const cnt = { age: {}, gender: {} };
+  for (const a of AGES) { press.age[a] = 0; cnt.age[a] = 0; }
+  for (const g of GENDERS) { press.gender[g] = 0; cnt.gender[g] = 0; }
+  for (const v of G.states[ab].voters) {
+    press.age[v.age] += v.bias[me]; cnt.age[v.age]++;
+    press.gender[v.gender] += v.bias[me]; cnt.gender[v.gender]++;
+  }
+
+  const chip = (now, before) => {
+    if (before == null) return '';
+    const d = now - before;
+    if (Math.abs(d) < 0.5) return `<span class="delta flat">—</span>`;
+    return `<span class="delta ${d > 0 ? 'up' : 'down'}">${d > 0 ? '▲' : '▼'}${Math.abs(d).toFixed(0)}pt</span>`;
+  };
+  const pressTag = (sum, n) => {
+    if (!n) return '';
+    const v = sum / n;
+    const cls = v > 0.03 ? 'up' : v < -0.03 ? 'down' : 'flat';
+    return `<span class="press ${cls}">${v >= 0 ? '+' : '−'}${Math.abs(v).toFixed(2)}</span>`;
+  };
+  /* counts are voters inside this slice of this state, not percentages — the
+     group is only as big as its share of the hundred, so everything shown has
+     to be normalised against the group total. */
+  const row = (label, counts, before, popShare, sum, n) => {
+    const tot = counts.reduce((x, y) => x + y, 0) || 1;
+    const mine = counts[me] / tot * 100;
+    const was = before ? before[me] / (before.reduce((x, y) => x + y, 0) || 1) * 100 : null;
+    return `<div class="crossrow"><div class="cl"><span>${label}</span>
+        <span class="pop">${popShare}</span></div>
+      ${bar(counts.map(c => c / tot))}
+      <div class="cl mine"><span><span class="d" style="background:${cand.color}"></span>${esc(cand.name)}
+        ${mine.toFixed(0)}%${chip(mine, was)}</span>
+        <span class="pop">ad pressure ${pressTag(sum, n)}</span></div></div>`;
+  };
+
+  let h = `<div class="sec-h insp-h">${STATES[ab].name}
+      <button class="btn tiny ghost" id="btn-clear-state">Clear</button></div>
+    <div class="insp-meta">${STATES[ab].ev} electoral votes · ${STATES[ab].pop.toFixed(1)}M people ·
+      leading ${esc(G.candidates[order[0].k].name)} by ${order[0].c - (order[1] ? order[1].c : 0)}</div>`;
+
+  h += `<div class="insp-sub">By age</div>`;
+  for (const a of AGES) {
+    h += row(AGE_LABEL[a], st.cross.age[a], prev ? prev.cross.age[a] : null,
+             `${Math.round(dm.age[a] * 100)}% of the state`, press.age[a], cnt.age[a]);
+  }
+  h += `<div class="insp-sub">By gender</div>`;
+  for (const g of GENDERS) {
+    if (!cnt.gender[g]) continue;
+    h += row(GENDER_LABEL[g], st.cross.gender[g], prev ? prev.cross.gender[g] : null,
+             `${(dm.gender[g] * 100).toFixed(1)}% of the state`, press.gender[g], cnt.gender[g]);
+  }
+  h += `<div class="insp-foot">▲▼ is the change in ${esc(cand.name)}'s share of that group, in points, since
+    this turn began.
+    <em>Ad pressure</em> is the average bias those voters now carry toward ${esc(cand.name)} — everything your
+    advertising, visits and endorsements have left behind, on the −${'' + BIAS_CAP.toFixed(1)}…+${BIAS_CAP.toFixed(1)} scale the vote is computed on.</div>`;
+  return h;
 }
 
 /* ---------- platforms ---------- */
@@ -1065,6 +1154,18 @@ function renderPlatPane() {
 /* ==========================================================================
    ELECTION NIGHT
    ========================================================================== */
+
+/* Reveal pacing. Safe states come in quickly and in clumps; the closer the
+   race gets to the end of the board, the longer the network sits on each
+   call. Crossing 270 buys an extra beat. */
+function revealPace(i, total) {
+  const left = total - i;
+  if (left > 27) return { batch: 3, delay: 420 };
+  if (left > 12) return { batch: 1, delay: 660 };
+  if (left > 4)  return { batch: 1, delay: 1050 };
+  return { batch: 1, delay: 1500 };
+}
+
 function goToElection() {
   const G = UI.G;
   const F = runElection(G);
@@ -1077,43 +1178,165 @@ function goToElection() {
   $('#final-scoreboard').innerHTML = '';
   $('#final-epilogue').hidden = true;
   $('#final-actions').hidden = true;
+  $('#btn-skip').hidden = false;
+  UI.skipFinal = false;
 
   const running = G.candidates.map(() => 0);
+  const crossed = G.candidates.map(() => false);
   renderEVBar($('#final-evbar'), running, 538);
 
-  const order = F.order.slice().reverse();  // safest last? no: reveal safe first
   const seq = F.order.slice();
   let i = 0;
+
+  const callState = (ab) => {
+    const d = F.res.byState[ab];
+    $$(`[data-ab="${ab}"]`, $('#finalmap')).forEach(n => {
+      n.classList.remove('uncalled');
+      const strength = 0.42 + 0.58 * Math.min(1, d.margin / 0.30);
+      n.setAttribute('fill', mix(MAP_BG, G.candidates[d.winner].color, strength));
+    });
+    running[d.winner] += STATES[ab].ev;
+    const c = el('div', 'call', `<span class="d" style="background:${G.candidates[d.winner].color}"></span>
+      <span>${STATES[ab].name} — ${esc(G.candidates[d.winner].name)}</span>
+      <span class="ev">${STATES[ab].ev} EV · +${(d.margin * 100).toFixed(1)}</span>`);
+    const calls = $('#calls');
+    calls.insertBefore(c, calls.firstChild);
+    while (calls.children.length > 14) calls.removeChild(calls.lastChild);
+  };
+
   const step = () => {
-    if (i >= seq.length) { setTimeout(() => concludeElection(F), 700); return; }
-    // call a few at a time early, one at a time at the end
-    const batch = i < 30 ? 3 : i < 45 ? 2 : 1;
-    for (let b = 0; b < batch && i < seq.length; b++, i++) {
-      const ab = seq[i];
-      const d = F.res.byState[ab];
-      const node = $$(`[data-ab="${ab}"]`, $('#finalmap'));
-      node.forEach(n => {
-        n.classList.remove('uncalled');
-        const strength = 0.42 + 0.58 * Math.min(1, d.margin / 0.30);
-        n.setAttribute('fill', mix(MAP_BG, G.candidates[d.winner].color, strength));
-      });
-      running[d.winner] += STATES[ab].ev;
-      const c = el('div', 'call', `<span class="d" style="background:${G.candidates[d.winner].color}"></span>
-        <span>${STATES[ab].name} — ${esc(G.candidates[d.winner].name)}</span>
-        <span class="ev">${STATES[ab].ev} EV · +${(d.margin * 100).toFixed(1)}</span>`);
-      const calls = $('#calls');
-      calls.insertBefore(c, calls.firstChild);
-      while (calls.children.length > 14) calls.removeChild(calls.lastChild);
+    if (UI.skipFinal) {
+      while (i < seq.length) callState(seq[i++]);
+      renderEVBar($('#final-evbar'), running, 538);
+      $('#btn-skip').hidden = true;
+      concludeElection(F);
+      return;
+    }
+    if (i >= seq.length) {
+      $('#btn-skip').hidden = true;
+      UI.finalTimer = setTimeout(() => concludeElection(F), 900);
+      return;
+    }
+    const pace = revealPace(i, seq.length);
+    let justCrossed = -1;
+    for (let b = 0; b < pace.batch && i < seq.length; b++, i++) {
+      callState(seq[i]);
+      const w = F.res.byState[seq[i]].winner;
+      if (!crossed[w] && running[w] >= 270) { crossed[w] = true; justCrossed = w; }
     }
     renderEVBar($('#final-evbar'), running, 538);
+
     const lead = running.map((v, k) => ({ v, k })).sort((a, b) => b.v - a.v)[0];
-    $('#final-sub').textContent = lead.v >= 270
-      ? `${G.candidates[lead.k].name} has crossed 270.`
-      : `${seq.length - i} states still out. ${G.candidates[lead.k].name} leads with ${lead.v}.`;
-    setTimeout(step, i < 30 ? 240 : i < 45 ? 380 : 620);
+    if (justCrossed >= 0) {
+      $('#final-sub').innerHTML = `<strong style="color:${G.candidates[justCrossed].color}">` +
+        `${esc(G.candidates[justCrossed].name)} has crossed 270.</strong>`;
+    } else {
+      $('#final-sub').textContent = `${seq.length - i} state${seq.length - i === 1 ? '' : 's'} still out. ` +
+        `${G.candidates[lead.k].name} leads with ${lead.v}.`;
+    }
+    UI.finalTimer = setTimeout(step, pace.delay + (justCrossed >= 0 ? 1400 : 0));
   };
-  setTimeout(step, 900);
+  UI.finalStep = step;
+  UI.finalTimer = setTimeout(step, 1100);
 }
+
+/* ==========================================================================
+   CONFETTI
+   ========================================================================== */
+const Confetti = (() => {
+  let cv, ctx, parts = [], raf = null, stopAt = 0;
+
+  const resize = () => {
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    cv.width = Math.floor(innerWidth * dpr);
+    cv.height = Math.floor(innerHeight * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  };
+
+  const spawn = (x, y, vx, vy, colors) => {
+    for (let n = 0; n < 1; n++) {
+      parts.push({
+        x, y, vx, vy,
+        w: 6 + Math.random() * 7,
+        h: 4 + Math.random() * 6,
+        rot: Math.random() * Math.PI * 2,
+        vr: (Math.random() - 0.5) * 0.34,
+        tilt: Math.random() * Math.PI,
+        vt: 0.06 + Math.random() * 0.12,
+        col: colors[Math.floor(Math.random() * colors.length)],
+        life: 1
+      });
+    }
+  };
+
+  const frame = () => {
+    ctx.clearRect(0, 0, innerWidth, innerHeight);
+    for (const p of parts) {
+      p.vy += 0.17;            // gravity
+      p.vx *= 0.992;
+      p.vy *= 0.996;
+      p.x += p.vx;
+      p.y += p.vy;
+      p.rot += p.vr;
+      p.tilt += p.vt;
+      if (p.y > innerHeight + 40) p.life = 0;
+      if (p.life <= 0) continue;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      // squash horizontally to fake a fluttering ribbon
+      ctx.scale(Math.cos(p.tilt), 1);
+      ctx.fillStyle = p.col;
+      ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+      ctx.restore();
+    }
+    parts = parts.filter(p => p.life > 0);
+    if (parts.length || performance.now() < stopAt) {
+      raf = requestAnimationFrame(frame);
+    } else {
+      cv.classList.remove('on');
+      ctx.clearRect(0, 0, innerWidth, innerHeight);
+      raf = null;
+    }
+  };
+
+  return {
+    fire(colors) {
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      cv = $('#confetti');
+      ctx = cv.getContext('2d');
+      cv.classList.add('on');
+      resize();
+      addEventListener('resize', resize);
+      const W = innerWidth, H = innerHeight;
+
+      // two cannons from the bottom corners, angled inward and up
+      for (let n = 0; n < 90; n++) {
+        const s = 15 + Math.random() * 11;
+        const a = -Math.PI / 2.5 + (Math.random() - 0.5) * 0.55;
+        spawn(-10, H + 10, Math.cos(a) * s * -1 + s * 1.15, Math.sin(a) * s, colors);
+      }
+      for (let n = 0; n < 90; n++) {
+        const s = 15 + Math.random() * 11;
+        const a = -Math.PI / 2.5 + (Math.random() - 0.5) * 0.55;
+        spawn(W + 10, H + 10, -(Math.cos(a) * s * -1 + s * 1.15), Math.sin(a) * s, colors);
+      }
+      // and a slow drift from above for the next few seconds
+      stopAt = performance.now() + 3400;
+      const rain = setInterval(() => {
+        if (performance.now() > stopAt) { clearInterval(rain); return; }
+        for (let n = 0; n < 5; n++) {
+          spawn(Math.random() * W, -20, (Math.random() - 0.5) * 2.4, 2 + Math.random() * 3, colors);
+        }
+      }, 90);
+
+      if (!raf) raf = requestAnimationFrame(frame);
+    }
+  };
+})();
+
+/* Lighten a colour toward white, for confetti variety. */
+function tint(hex, t) { return mix(hex, '#ffffff', t); }
 
 function concludeElection(F) {
   const G = UI.G;
@@ -1186,7 +1409,17 @@ function concludeElection(F) {
   ep.innerHTML = e;
   ep.hidden = false;
   $('#final-actions').hidden = false;
+
+  const wc = w.color;
+  Confetti.fire([wc, tint(wc, 0.45), '#f2c14e', '#ffffff', tint(wc, 0.2)]);
 }
+
+$('#btn-skip').addEventListener('click', () => {
+  UI.skipFinal = true;
+  if (UI.finalTimer) { clearTimeout(UI.finalTimer); UI.finalTimer = null; }
+  $('#btn-skip').hidden = true;
+  if (UI.finalStep) UI.finalStep();     // drains the rest of the board at once
+});
 
 $('#btn-again').addEventListener('click', () => location.reload());
 $('#btn-final-method').addEventListener('click', () => openModal(methodologyHTML(UI.G)));

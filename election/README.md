@@ -1,4 +1,4 @@
-# Run for Office
+# Run for President™
 
 A presidential campaign simulator that runs entirely in the browser — plain
 HTML, CSS and JavaScript, no build step, no backend, no network calls.
