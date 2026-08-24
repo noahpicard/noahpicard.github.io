@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Run for President™ — An Election Simulator</title>
-<meta name="description" content="Build a candidate, take positions, buy ads, and win 270. A simulated presidential campaign that runs entirely in your browser.">
+<title>Run for President™ — Presidential Campaign Software</title>
+<meta name="description" content="Official presidential campaign software. Declare your candidacy, take your positions, allocate your funds, and win 270 electoral votes.">
 <link rel="stylesheet" href="css/style.css">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>🗳️</text></svg>">
 </head>
@@ -16,16 +16,18 @@
   <section class="screen active" id="screen-title">
     <div class="flagbg" aria-hidden="true"></div>
     <div class="title-wrap">
-      <div class="kicker">A presidential campaign simulator</div>
+      <div class="kicker">Presidential Campaign Software</div>
       <h1 class="bigtitle">Run for<br><span class="accent">President<span class="tm">™</span></span></h1>
-      <p class="tagline">Fifty-one contests. Five thousand one hundred simulated voters. Two hundred and seventy
-        electoral votes. Write a biography, take five positions, spend what you have, and find out what the country
-        thinks of you.</p>
+      <p class="tagline">Public office belongs to those who step forward. This great country is waiting for
+        someone willing to say what they believe and put in the work — and that someone could be you. Declare your
+        candidacy, tell the nation who you are, take your positions, and spend what you have where it counts.
+        <strong>Two hundred and seventy electoral votes stand between you and the change you want to make.</strong>
+        All you have to do is get the votes.</p>
       <div class="title-actions">
         <button class="btn big" id="btn-start">Start a campaign</button>
-        <button class="btn ghost" id="btn-how">How it works</button>
+        <button class="btn ghost" id="btn-how">Official Guidance</button>
       </div>
-      <div class="title-foot">Runs entirely in your browser. Nothing is uploaded.</div>
+      <div class="title-foot">Secured by your trustworthy government · No data is saved</div>
     </div>
   </section>
 
@@ -37,7 +39,7 @@
       <div class="field">
         <label>Candidates in the field</label>
         <div class="seg" id="seg-ncand"></div>
-        <p class="hint">Every candidate is a real competitor in the simulation. Extra candidates split the
+        <p class="hint">Every candidate on the ballot is a real competitor. Extra candidates split the
           electorate, and it becomes much easier for nobody to reach 270.</p>
       </div>
 
@@ -165,7 +167,7 @@
       </div>
       <div class="tb-mid" id="tb-turn"></div>
       <div class="tb-right">
-        <button class="btn tiny ghost" id="btn-method">Methodology</button>
+        <button class="btn tiny ghost" id="btn-method">Official Guidance</button>
         <button class="btn tiny ghost" id="btn-quit">Quit</button>
       </div>
     </header>
@@ -240,6 +242,37 @@
 </div>
 
 <!-- ===================== MODAL ===================== -->
+<div id="toasts" aria-live="polite"></div>
+
+<div id="advisor" hidden>
+  <button class="adv-x" id="adv-x" aria-label="Dismiss advisor">&times;</button>
+  <div class="adv-body">
+    <div class="adv-mascot" aria-hidden="true">
+      <svg viewBox="0 0 100 100" role="img">
+        <path d="M18 96c2-18 14-29 32-29s30 11 32 29z" fill="#4a3527"/>
+        <path d="M26 96c1-12 9-20 24-20s23 8 24 20z" fill="#5b4231"/>
+        <ellipse cx="50" cy="45" rx="28" ry="27" fill="#fafafc"/>
+        <ellipse cx="50" cy="40" rx="25" ry="21" fill="#ffffff"/>
+        <path d="M22 34c6-6 14-9 21-8l-1 8c-6-1-13 1-19 5z" fill="#c9c9d4"/>
+        <path d="M78 34c-6-6-14-9-21-8l1 8c6-1 13 1 19 5z" fill="#c9c9d4"/>
+        <circle cx="38" cy="45" r="7" fill="#1b2029"/>
+        <circle cx="40.5" cy="42.5" r="2.6" fill="#ffffff"/>
+        <circle cx="62" cy="45" r="7" fill="#1b2029"/>
+        <circle cx="64.5" cy="42.5" r="2.6" fill="#ffffff"/>
+        <path d="M50 54c6 0 11 3 11 7 0 5-5 11-11 15-6-4-11-10-11-15 0-4 5-7 11-7z" fill="#f2c14e"/>
+        <path d="M50 68c3.5-2.4 6.5-5.4 7.8-8.2-2.3 1.4-5 2.2-7.8 2.2s-5.5-.8-7.8-2.2c1.3 2.8 4.3 5.8 7.8 8.2z" fill="#d99b26"/>
+        <rect x="60" y="82" width="16" height="4" fill="#b22234"/>
+        <rect x="60" y="86" width="16" height="4" fill="#f4f4f7"/>
+        <rect x="60" y="82" width="7" height="8" fill="#3c3b6e"/>
+      </svg>
+    </div>
+    <div class="adv-text">
+      <div class="adv-name">LIBBY <span>Campaign Advisory Assistant</span></div>
+      <div class="adv-msg" id="adv-msg"></div>
+    </div>
+  </div>
+</div>
+
 <canvas id="confetti" aria-hidden="true"></canvas>
 
 <div class="modal" id="modal" hidden>

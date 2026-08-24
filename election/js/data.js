@@ -161,16 +161,26 @@ const CELEBRITIES = [
 
 /* Corporate backers, with the favour they collect if their candidate wins. */
 const CORPORATIONS = [
-  { name:'Vantablack Petroleum',      cash: 40, favour:'a permanent federal drilling easement across four national parks' },
-  { name:'Cygnus Pharmaceutical',     cash: 37, favour:'a twenty-year patent extension on every drug in its pipeline' },
-  { name:'Meridian Defense Systems',  cash: 45, favour:'a no-bid contract to operate the national logistics grid' },
-  { name:'Halcyon Data Group',        cash: 36, favour:'unrestricted access to the federal biometric database' },
-  { name:'Fenwick Agricultural',      cash: 32, favour:'sole licensing rights to the national seed reserve' },
-  { name:'Orrin Financial Holdings',  cash: 42, favour:'a seat on the board of the Federal Reserve' },
-  { name:'Brightline Media Trust',    cash: 34, favour:'ownership of every remaining local newspaper in the country' },
-  { name:'Stellar Orbital Freight',   cash: 38, favour:'exclusive commercial rights to low Earth orbit' },
-  { name:'Copperhead Utilities',      cash: 35, favour:'permanent rate-setting authority over the eastern power grid' },
-  { name:'Novaris Compute',           cash: 43, favour:'a federal exemption from every AI safety rule ever written' }
+  { name:'Vantablack Petroleum',      cash: 40, favour:'a permanent federal drilling easement across four national parks' ,
+    consequence:'Within eighteen months the easement is quietly extended to nine more parks. The maps are reprinted without them. A generation of schoolchildren grows up not knowing the land was ever public.' },
+  { name:'Cygnus Pharmaceutical',     cash: 37, favour:'a twenty-year patent extension on every drug in its pipeline' ,
+    consequence:'Three generics scheduled for release are pulled from the market. The price of insulin triples over the following year. The earnings call describes the administration as \u201ca constructive partner.\u201d' },
+  { name:'Meridian Defense Systems',  cash: 45, favour:'a no-bid contract to operate the national logistics grid' ,
+    consequence:'The logistics grid runs on their software, so the audits run on their software too. Congress requests the cost overruns four times and is told, four times, that the figures are proprietary.' },
+  { name:'Halcyon Data Group',        cash: 36, favour:'unrestricted access to the federal biometric database' ,
+    consequence:'Every face photographed at a protest is matched against the database within the hour. The company insists this is a search feature. Attendance at demonstrations falls by two thirds.' },
+  { name:'Fenwick Agricultural',      cash: 32, favour:'sole licensing rights to the national seed reserve' ,
+    consequence:'The seed reserve stops being a reserve. Farmers who saved their own seed for four generations begin receiving letters from lawyers, and the varieties that do not sell simply stop existing.' },
+  { name:'Orrin Financial Holdings',  cash: 42, favour:'a seat on the board of the Federal Reserve' ,
+    consequence:'Their man on the Fed board is careful, courteous, and votes his own book every single time. Interest rates move in ways that surprise economists and nobody at Orrin.' },
+  { name:'Brightline Media Trust',    cash: 34, favour:'ownership of every remaining local newspaper in the country' ,
+    consequence:'Two hundred local papers are consolidated into one wire desk. Town councils, school boards and county courts go uncovered. People do not notice the news is gone, only that nothing seems to happen anymore.' },
+  { name:'Stellar Orbital Freight',   cash: 38, favour:'exclusive commercial rights to low Earth orbit' ,
+    consequence:'Every satellite launched now pays them a toll. Weather and climate observation, being unprofitable, is deprioritised. The forecasts get worse and no one can say precisely why.' },
+  { name:'Copperhead Utilities',      cash: 35, favour:'permanent rate-setting authority over the eastern power grid' ,
+    consequence:'Rates rise nineteen percent the first winter. When a cold snap takes the grid down for six days, the penalty written into their charter is a fine they can pay out of one afternoon of revenue.' },
+  { name:'Novaris Compute',           cash: 43, favour:'a federal exemption from every AI safety rule ever written' ,
+    consequence:'The exemption is total and retroactive. The systems they deploy into hospitals, courts and benefit offices answer to no standard at all, and the people those systems decide against have nowhere to appeal to.' }
 ];
 
 /* AI opponent archetypes. `weights` biases which actions they reach for. */

@@ -391,7 +391,9 @@ function startGame() {
   beginRound(G);
   addFeed(null, 'flat', `The race begins. ${G.candidates.length} candidates, ${G.settings.rounds} rounds of campaigning, ` +
     `and five issues: ${G.topics.map(t => t.name).join(', ')}.`);
+  Advisor.reset();
   advanceTurn();
+  if (G.candidates.some(c => c.isHuman)) setTimeout(() => Advisor.welcome(), 900);
 }
 
 /* ==========================================================================
@@ -604,7 +606,10 @@ function advanceTurn() {
     const multi = G.candidates.filter(c => c.isHuman).length > 1;
     // A new turn starts on the Campaign tab — you should never come back from
     // studying a state to find the spending controls hidden.
-    const go = () => { renderAll(); goTab('act'); show('screen-game'); };
+    const go = () => {
+      renderAll(); goTab('act'); show('screen-game');
+      if (G.round > 1 || G.phase === 'final-push') setTimeout(() => Advisor.turnStart(), 500);
+    };
     if (multi) handoff(cand.name,
       `${G.phase === 'final-push' ? 'The final push' : 'Round ' + G.round + ' of ' + G.settings.rounds}. ` +
       `Your turn to spend. $${Math.round(cand.cash)}M on hand.`, go, cand.color);
@@ -643,6 +648,7 @@ function finishRound() {
   refreshMap();
   renderAll();
   showRoundModal(poll);
+  if (G.candidates.some(c => c.isHuman)) setTimeout(() => Advisor.roundResult(poll), 400);
 }
 
 function showRoundModal(poll) {
@@ -690,14 +696,41 @@ function startFinalPush() {
   addFeed(null, 'flat', 'Forty-eight hours left. No more money is coming in — whatever is in the account is what there is.');
   renderAll();
   advanceTurn();
+  if (G.candidates.some(c => c.isHuman)) setTimeout(() => Advisor.finalPush(), 700);
 }
 
 /* ==========================================================================
    REPORTS / FEED
    ========================================================================== */
-function pushReport(rep) {
-  const G = UI.G, c = G.candidates[rep.ci];
+function pushReport(rep, toast) {
+  const G = UI.G;
   for (const h of rep.headlines) addFeed(rep.ci, rep.cls, h, rep);
+  if (toast) showToast(rep);
+}
+
+/* The wire item, thrown up big and centred so a spend actually lands. */
+let toastSeq = 0;
+function showToast(rep) {
+  const G = UI.G, c = G.candidates[rep.ci];
+  const box = $('#toasts');
+  const t = el('div', 'toast ' + (rep.cls || 'flat'));
+  const bits = [];
+  if (rep.cost) bits.push(`$${rep.cost}M spent`);
+  if (rep.cash) bits.push(`$${Math.round(rep.cash)}M raised`);
+  if (Math.abs(rep.move || 0) > 0.0005) bits.push(moveWord(rep.move).word);
+  t.innerHTML = `<div class="t-head"><span class="t-who" style="color:${c.color}">${esc(c.name)}</span>
+      <span class="t-tag">${G.phase === 'final-push' ? 'Final push' : 'Round ' + G.round}</span></div>
+    <div class="t-body">${rep.headlines[0] || ''}</div>
+    ${bits.length ? `<div class="t-move">${bits.join(' &nbsp;·&nbsp; ')}</div>` : ''}`;
+  box.appendChild(t);
+  while (box.children.length > 3) box.removeChild(box.firstChild);
+  const id = ++toastSeq;
+  setTimeout(() => {
+    if (!t.isConnected) return;
+    t.classList.add('out');
+    setTimeout(() => t.remove(), 340);
+  }, 4200);
+  t.addEventListener('click', () => { t.classList.add('out'); setTimeout(() => t.remove(), 340); });
 }
 
 function addFeed(ci, cls, text, rep) {
@@ -775,6 +808,7 @@ function renderActionPane() {
 
   const avail = ACTIONS.filter(a => !a.gated || (a.gated === 'corp' && G.settings.fundingMode === 'corporate' && !cand.corp && G.corpOffers[ci] && G.corpOffers[ci].length));
   let html = `<div class="cash-line"><span class="lb">War chest</span><span class="amt">$${Math.round(cand.cash)}M</span></div>`;
+  html += briefingHTML(G, ci, cand);
   html += `<div class="actgrid">` + avail.map(a => {
     const dis = a.cost > cand.cash;
     return `<button class="actbtn${UI.sel.actionId === a.id ? ' on' : ''}" data-a="${a.id}" ${dis ? 'disabled' : ''}>
@@ -796,8 +830,42 @@ function renderActionPane() {
     renderActionPane(); refreshMap();
   }));
   $('#btn-endturn').addEventListener('click', () => { resetSelection(); refreshMap(); advanceTurn(); });
+  $$('.brief .tg', pane).forEach(b => b.addEventListener('click', () => {
+    const ab = b.dataset.go;
+    if (!UI.sel.actionId) { UI.inspect = ab; renderCrossPane(); goTab('cross'); refreshMap(); return; }
+    onStateClick(ab);
+  }));
 
   if (UI.sel.actionId) renderActionConfig($('#cfg-slot'), ci);
+}
+
+/* The standing instruction: spend it, spend it here, and more is coming. */
+function briefingHTML(G, ci, cand) {
+  const targets = stateValues(G, ci, simulate(G)).slice(0, 4);
+  const last = G.phase === 'final-push';
+  const roundsLeft = last ? 0 : G.settings.rounds - G.round;
+
+  let money;
+  if (last) {
+    money = `<strong>No further funds will be issued.</strong> Anything still in the account when the polls open
+      is wasted — spend all $${Math.round(cand.cash)}M.`;
+  } else {
+    money = `You will receive a further <strong>$${Math.round(cand.income)}M</strong> at the start of every
+      remaining round${roundsLeft > 0 ? ` — ${roundsLeft} more ${roundsLeft === 1 ? 'round' : 'rounds'}, about
+      $${Math.round(cand.income * roundsLeft)}M still to come` : ''}. Money carries no advantage into election
+      day, so there is no reason to hold any back.`;
+  }
+
+  return `<div class="brief">
+    <h5>Your orders this round</h5>
+    <p><strong>Spend everything.</strong> Put it into states where the race is <strong>close</strong> and the
+      electoral votes are <strong>plentiful</strong> — a buy in a state you already lead by thirty points does
+      nothing at all.</p>
+    <p>${money}</p>
+    <div class="targets">${targets.map(t =>
+      `<button class="tg" data-go="${t.ab}"><b>${t.ab}</b> ${STATES[t.ab].ev} EV ·
+        ${t.gap >= 0 ? '+' : ''}${t.gap}</button>`).join('')}</div>
+  </div>`;
 }
 
 function renderActionConfig(slot, ci) {
@@ -898,6 +966,24 @@ function renderActionConfig(slot, ci) {
 
   const price = a.cost * UI.sel.intensity;
   const ready = actionReady(a);
+
+  // What the campaign expects this to do, before it is paid for.
+  if (ready) {
+    const fc = describeImpact(G, ci, {
+      actionId: UI.sel.actionId, intensity: UI.sel.intensity, state: UI.sel.state,
+      states: UI.sel.states.slice(), focusAge: UI.sel.focusAge, focusGender: UI.sel.focusGender,
+      mode: UI.sel.mode, targetIdx: UI.sel.targetIdx, topicIndex: UI.sel.topicIndex,
+      direction: UI.sel.direction, celeb: UI.sel.celeb, corp: UI.sel.corp
+    });
+    if (fc) {
+      h += `<div class="impact"><h6>Projected impact</h6>
+        <div class="headline">${fc.headline}</div>
+        <div class="rows">${fc.rows.map(r =>
+          `<div class="r${r.warn ? ' warn' : ''}"><span>${esc(r.label)}</span><span>${esc(r.value)}</span></div>`
+        ).join('')}</div></div>`;
+    }
+  }
+
   h += `<div class="cfg-go"><span class="price">${a.cost ? '$' + price + 'M' : 'No cost'}</span>
     <button class="btn" id="btn-do" ${ready && price <= cand.cash ? '' : 'disabled'}>Do it</button></div></div>`;
 
@@ -976,7 +1062,8 @@ function doAction(ci) {
     }
     return;
   }
-  pushReport(rep);
+  pushReport(rep, true);
+  Advisor.onAction(rep);
   const keep = UI.sel.actionId;
   resetSelection();
   UI.sel.actionId = keep;
@@ -1169,6 +1256,8 @@ function revealPace(i, total) {
 function goToElection() {
   const G = UI.G;
   const F = runElection(G);
+  $('#advisor').hidden = true;
+  $('#toasts').innerHTML = '';
   show('screen-final');
   buildMap($('#finalmap'), $('#finaltip'), false);
   $$('path.st, rect.st', $('#finalmap')).forEach(n => n.classList.add('uncalled'));
@@ -1392,15 +1481,12 @@ function concludeElection(F) {
       ${(F.res.pvShare[F.pvWinner] * 100).toFixed(1)}% and lost the election. Expect that number to be quoted for
       the next four years.</p>`;
   }
-  // the corporate reveal
-  if (w.corp) {
+  // The corporate reveal — only for the candidate who actually took office.
+  // A losing campaign's backer bought nothing, so there is nothing to report.
+  if (!F.contingent && w.corp) {
     e += `<div class="corp-line"><strong>${esc(w.name)} won while backed by ${esc(w.corp.name)}</strong>, who has
-      achieved additional power through ${esc(w.corp.favour)}.</div>`;
-  }
-  const otherCorp = G.candidates.filter((c, k) => c.corp && k !== F.winner);
-  if (otherCorp.length) {
-    e += `<p class="muted" style="font-size:13px;margin-top:12px">Also bought and did not win:
-      ${otherCorp.map(c => `${esc(c.corp.name)} (${esc(c.name)})`).join(', ')}.</p>`;
+      achieved additional power through ${esc(w.corp.favour)}.
+      ${w.corp.consequence ? `<span class="corp-after">${esc(w.corp.consequence)}</span>` : ''}</div>`;
   }
   // closest state
   const closest = STATE_IDS.map(ab => ({ ab, m: F.res.byState[ab].margin })).sort((a, b) => a.m - b.m)[0];
@@ -1410,8 +1496,11 @@ function concludeElection(F) {
   ep.hidden = false;
   $('#final-actions').hidden = false;
 
-  const wc = w.color;
-  Confetti.fire([wc, tint(wc, 0.45), '#f2c14e', '#ffffff', tint(wc, 0.2)]);
+  // No celebration when the college deadlocks — nobody has won anything yet.
+  if (!F.contingent) {
+    const wc = w.color;
+    Confetti.fire([wc, tint(wc, 0.45), '#f2c14e', '#ffffff', tint(wc, 0.2)]);
+  }
 }
 
 $('#btn-skip').addEventListener('click', () => {
@@ -1439,10 +1528,10 @@ $('#btn-quit').addEventListener('click', () => { if (confirm('Abandon the campai
 function methodologyHTML(G) {
   const seedLine = G ? `<p class="muted">This election's seed: <code>${esc(G.seed)}</code> — reuse it to replay the
     same country.</p>` : '';
-  return `<h3>How this works</h3>
+  return `<h3>Official Guidance</h3>
   ${seedLine}
   <h4>The electorate</h4>
-  <p>Every state gets <strong>100 simulated voters</strong>, 5,100 in all. Each voter is assigned an age bucket
+  <p>Every state is polled at <strong>100 registered voters</strong>, 5,100 in all. Each voter is assigned an age bucket
   (young 18–34, middle 35–64, older 65+) and a gender (male, female, nonbinary) by quota, so the hundred voters
   match that state's demographic mix. States differ: Utah is young, Maine is old.</p>
 
@@ -1471,6 +1560,12 @@ vote = argmax<sub>k</sub>  (voter · candidate<sub>k</sub>) / (‖voter‖ ‖ca
   <p>Because the identity block is ±3, a bias of even half a point is worth roughly as much as a full step on an
   issue. Advertising is powerful — that is the point of the game.</p>
 
+  <h4>Funding and the round</h4>
+  <p>Funds are issued at the start of every round and do not carry any advantage into election day — an unspent
+  balance on the morning of the vote has bought you nothing. Spend each round's allocation inside that round,
+  in states where the margin is narrow and the electoral votes are many. Your advisory assistant will identify
+  those states for you as the race develops.</p>
+
   <h4>Campaigning</h4>
   <ul>
     <li>Each action touches voters with a weight set by its <em>reach profile</em>: print mail barely reaches
@@ -1492,13 +1587,135 @@ vote = argmax<sub>k</sub>  (voter · candidate<sub>k</sub>) / (‖voter‖ ‖ca
   day approaches. Your projected electoral vote can be wrong, and often is.</p>
 
   <h4>Election night</h4>
-  <p>The count is the true simulation with a final turnout jitter (σ ≈ 2.8 points per state) layered on. States
+  <p>The count is the true tally with a final turnout variation (σ ≈ 2.8 points per state) layered on. States
   are winner-take-all — including Maine and Nebraska, which the real system splits. 538 electoral votes,
   270 to win; if the field fragments and nobody gets there, the election goes to the House.</p>
 
-  <h4>About the "AI" analyst</h4>
-  <p>The biography reader is a local lexicon-and-heuristics model, not a language model. This page is static
-  files with no backend and no API key, so nothing you type leaves your browser. It looks for occupational
-  signals, place names, numbers and proper nouns, empty campaign filler and volunteered liabilities, and turns
-  them into a starting favourability across the nine age × gender cells.</p>`;
+  <h4>The biography analyst</h4>
+  <p>Your biography is assessed on this machine and nowhere else — there is no server, no account and no
+  transmission of any kind. The analyst reads for occupational signals, place names, numbers and proper nouns,
+  empty campaign filler and volunteered liabilities, and converts them into your opening favourability across
+  the nine age × gender cells.</p>
+
+  <h4>Your data</h4>
+  <p>Secured by your trustworthy government. No data is saved.</p>`;
 }
+
+/* ==========================================================================
+   LIBBY — the campaign advisory assistant
+
+   Volunteers guidance the way an over-eager office assistant would: what to
+   spend on, where it would matter, what just happened, and what changed on
+   the map since last time. Everything it says is read off the live board, so
+   it never congratulates you for something that did not happen.
+   ========================================================================== */
+const Advisor = (() => {
+  let box, msgEl, hideTimer = null, dismissed = false;
+  let lastEV = null, sinceTip = 0;
+
+  const TIPS = [
+    'Every dollar you do not spend this round is a dollar the other campaigns already spent. Money does not carry any advantage into election day.',
+    'Buying the same advertisement in the same state twice runs into diminishing returns. The second purchase is worth about three quarters of the first.',
+    'A blitz costs three times a modest buy and delivers about two and a quarter times the effect. Spreading the money around usually beats concentrating it.',
+    'Narrowing an advertisement to one age group multiplies its effect on those voters and wastes most of the rest. Use it where a group is close to turning.',
+    'Print and mail reach older voters almost exclusively. An internet blitz barely reaches anyone over sixty-five. Match the medium to the people you need.',
+    'Attacking an opponent lowers their support without raising yours. In a two-way race that is the same thing. In a crowded field it is not.',
+    'Click any state on the map to see how each age and gender group there is breaking, and what your spending has already done to them.',
+    'Safe states are worth nothing extra. A hundred-thousand-dollar buy in a state you already lead by thirty points is a hundred thousand dollars gone.',
+    'Debate preparation raises your standing a little now and makes everything you buy next round land harder. It rewards spending it early.',
+    'Changing a policy position moves you toward voters who already agree and away from the ones who liked where you stood. The cost grows every time you do it.'
+  ];
+
+  const el_ = () => { box = $('#advisor'); msgEl = $('#adv-msg'); };
+
+  function say(html, hold) {
+    if (dismissed) return;
+    if (!box) el_();
+    msgEl.innerHTML = html;
+    box.hidden = false;
+    // restart the entrance animation so a new message reads as a new message
+    box.style.animation = 'none';
+    void box.offsetWidth;
+    box.style.animation = '';
+    if (hideTimer) clearTimeout(hideTimer);
+    hideTimer = setTimeout(() => { if (box) box.hidden = true; }, hold || 11000);
+  }
+
+  /* The states where money would actually change the outcome, for the viewer. */
+  function bestTargets(n) {
+    const G = UI.G, me = viewerIdx();
+    if (!G) return [];
+    return stateValues(G, me, simulate(G)).slice(0, n);
+  }
+
+  return {
+    reset() { dismissed = false; lastEV = null; sinceTip = 0; },
+    dismiss() { dismissed = true; if (box) box.hidden = true; },
+
+    welcome() {
+      const G = UI.G;
+      say(`Welcome aboard. I am <strong>LIBBY</strong>, and I will be advising this campaign.<br><br>
+        You have <strong>${G.settings.rounds} rounds</strong> before the country votes, and money arrives at the
+        start of every one of them — so spend what you have now. Put it into the states where you are
+        <strong>close</strong>, not the ones you already own.`, 15000);
+    },
+
+    turnStart() {
+      const G = UI.G, me = viewerIdx(), cand = G.candidates[me];
+      const t = bestTargets(3);
+      if (!t.length) return;
+      const names = t.map(x => `<strong>${STATES[x.ab].name}</strong>`).join(', ');
+      say(`You have <strong>$${Math.round(cand.cash)}M</strong> to spend this round, and more arrives next round —
+        holding money back gains you nothing. The closest races worth your money right now are ${names}.`, 13000);
+    },
+
+    onAction(rep) {
+      sinceTip++;
+      const G = UI.G;
+      if (rep.cls === 'awful' || rep.cls === 'bad') {
+        say(`That one got away from us. It happens — a strong biography buys message discipline, and there is
+          always the next buy. Try a different state or a different medium.`, 9000);
+        return;
+      }
+      if (rep.cls === 'huge' || rep.cls === 'strong') {
+        const where = rep.states && rep.states.length === 1 ? STATES[rep.states[0]].name : 'the map';
+        say(`Now <em>that</em> moved numbers. ${esc(where)} is looking considerably better than it did five
+          minutes ago. Excellent work.`, 8000);
+        return;
+      }
+      if (sinceTip >= 3) { sinceTip = 0; say(TIPS[Math.floor(Math.random() * TIPS.length)], 12000); }
+    },
+
+    /* Called after each round's polling lands: report what actually changed. */
+    roundResult(poll) {
+      const G = UI.G, me = viewerIdx(), cand = G.candidates[me];
+      const ev = poll.ev[me];
+      const won = STATE_IDS.filter(ab => poll.byState[ab].winner === me);
+
+      if (lastEV != null) {
+        const d = ev - lastEV;
+        const gained = won.filter(ab => !lastWon.includes(ab));
+        const lost = lastWon.filter(ab => !won.includes(ab));
+        let m = '';
+        if (gained.length) m += `We picked up <strong>${gained.map(a => STATES[a].name).join(', ')}</strong>. `;
+        if (lost.length) m += `We lost <strong>${lost.map(a => STATES[a].name).join(', ')}</strong>. `;
+        if (d > 8) m += `That is <strong>+${d} electoral votes</strong> on the projection. Keep doing what you are doing.`;
+        else if (d < -8) m += `That is <strong>${d} electoral votes</strong>. We need to change something.`;
+        else if (!m) m = `The map barely moved this round. Try concentrating on fewer states, or targeting a
+          demographic that is close to turning.`;
+        else m += `Projection now <strong>${ev}</strong>.`;
+        say(m, 13000);
+      }
+      lastEV = ev; lastWon = won.slice();
+    },
+
+    finalPush() {
+      const G = UI.G, cand = G.candidates[viewerIdx()];
+      say(`Last chance. No more money is coming after this — whatever is left in the account is
+        <strong>$${Math.round(cand.cash)}M of nothing</strong> once the polls open. Spend all of it.`, 14000);
+    }
+  };
+})();
+let lastWon = [];
+
+$('#adv-x').addEventListener('click', () => Advisor.dismiss());
