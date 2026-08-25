@@ -62,9 +62,13 @@ function viewerIdx() {
 /* ==========================================================================
    SCREEN PLUMBING
    ========================================================================== */
+/* Only jump to the top when the screen actually changes. Screens that rebuild
+   themselves in place — the platform list redraws on every stance click — used
+   to scroll the window away from whatever you were reading. */
+let currentScreen = null;
 function show(id) {
   $$('.screen').forEach(s => s.classList.toggle('active', s.id === id));
-  window.scrollTo(0, 0);
+  if (id !== currentScreen) { currentScreen = id; window.scrollTo(0, 0); }
 }
 /* Some modals gate the flow of the game — the round-polling card is the only
    route from one round into the next. Those are opened `gating`, which removes
@@ -129,7 +133,8 @@ function buildRaceScreen() {
   });
 }
 $('#btn-race-next').addEventListener('click', () => {
-  buildFieldScreen();
+  const first = UI.setup.cands.findIndex(c => c.isHuman);
+  buildFieldScreen(first >= 0 ? first : 0);
   show('screen-field');
 });
 
@@ -151,7 +156,11 @@ const MY_NAME = (() => {
 })();
 const DEFAULT_NAMES = [MY_NAME].concat(OPPONENT_NAMES);
 
-function buildFieldScreen() {
+/* focusIdx: put the cursor in that row's name field and select what is there,
+   so the generated placeholder name can be typed straight over. Only passed
+   when arriving on the screen or when a row is switched to a human — never on
+   an incidental rebuild, which would steal the cursor mid-edit. */
+function buildFieldScreen(focusIdx) {
   const S = UI.setup;
   // grow / shrink the roster to match n
   while (S.cands.length < S.n) {
@@ -181,19 +190,25 @@ function buildFieldScreen() {
     });
     row.appendChild(sw);
 
+    // A computer candidate names itself; its fields are shown but locked until
+    // you claim the slot.
     const nm = el('input'); nm.type = 'text'; nm.value = c.name;
     nm.placeholder = c.isHuman ? 'Your name' : 'Name';
+    nm.disabled = !c.isHuman;
     nm.addEventListener('input', () => { c.name = nm.value; });
     row.appendChild(nm);
 
     const pt = el('input'); pt.type = 'text'; pt.value = c.party; pt.placeholder = 'Party';
+    pt.disabled = !c.isHuman;
     pt.addEventListener('input', () => { c.party = pt.value; });
     row.appendChild(pt);
+
+    if (i === focusIdx) setTimeout(() => { nm.focus(); nm.select(); }, 0);
 
     const tog = el('div', 'who-toggle');
     const bYou = el('button', c.isHuman ? 'on' : '', 'You');
     const bAI  = el('button', !c.isHuman ? 'on' : '', 'Computer');
-    bYou.addEventListener('click', () => { c.isHuman = true; buildFieldScreen(); });
+    bYou.addEventListener('click', () => { c.isHuman = true; buildFieldScreen(i); });
     bAI.addEventListener('click',  () => { c.isHuman = false; buildFieldScreen(); });
     tog.appendChild(bYou); tog.appendChild(bAI);
     row.appendChild(tog);
@@ -255,12 +270,24 @@ $('#btn-handoff').addEventListener('click', () => {
    SETUP — BIO
    ========================================================================== */
 let bioCurrent = 0;
+let exampleIdx = -1;
 const EXAMPLE_BIOS = [
   'Two tours in Iraq with the Marine Corps, then twenty-two years running a hardware store in Dayton, Ohio. I have signed four hundred paychecks and I have laid off eleven people, and I remember every one of their names. Married thirty-one years. Three kids, one grandkid, one very old dog.',
   'I am twenty-nine. I organized fast-food workers in Phoenix, Arizona for six years and ran a mutual aid network through the pandemic. I have never held office and I am not going to pretend that is a weakness. The people who broke this country are still running it.',
   'Emergency room nurse for twelve years at a county hospital in Illinois, then a doctorate in public health. I have held two hundred people while they died because a form was filled out wrong. I am not running to be interesting. I am running to fix the form.',
   'I founded a software company in Seattle, Washington with two people and a credit card, sold it for $1.4 billion, and spent the next six years watching exactly what that money could buy in this country. It can buy almost anything. That is the problem.',
-  'Third-generation farmer from Nebraska. My grandfather planted these acres in 1948 and my daughter will plant them in 2041 if anybody in Washington remembers we exist. Forty years in a union combine seat gives you opinions.'
+  'Third-generation farmer from Nebraska. My grandfather planted these acres in 1948 and my daughter will plant them in 2041 if anybody in Washington remembers we exist. Forty years in a union combine seat gives you opinions.',
+  'Pastor of a 1,900-member congregation in Georgia for twenty-six years. I have married four hundred couples and buried two hundred and eleven people. Scripture did not make me a politician. Watching this parish get poorer every year did that.',
+  'Sixteen years a public defender in Cleveland, Ohio, then four as an elected district attorney. I have stood in a courtroom next to people everyone had already given up on. That is the whole job, and I would like a bigger courtroom.',
+  'Union electrician out of Local 431 in Pennsylvania. Thirty-one years on the tools, nine as a steward, two strikes. I have negotiated with people who never once looked me in the eye, and I have never lost a shop floor vote.',
+  'My mother immigrated from Manila with a nursing license nobody here would honor, so she cleaned rooms in a Chicago hospital for eleven years until Illinois recognised it. I became a surgeon. She still corrects my posture.',
+  'Two terms as mayor of a city of 340,000 in Arizona. I balanced eight budgets, fixed the water system nobody wanted to pay for, and got re-elected by nine points after raising a tax. Governing is not glamorous and I like it anyway.',
+  'I played eleven seasons at linebacker, four of them hurt, and coached varsity in Michigan for nine more. I have told nineteen-year-olds the truth about their knees. Washington has never once told anybody the truth about anything.',
+  'Twenty-two years hosting a morning television programme in Florida. Six million people let me into their kitchens before breakfast. I know exactly how much of that is affection and how much is habit, and I intend to spend both.',
+  'Air Force loadmaster, nine years, two deployments, then a paramedic in rural Montana where the nearest hospital is ninety minutes by road. I have watched people die of distance. That is a policy choice somebody made.',
+  'I taught constitutional law at a state university in Virginia for eighteen years and testified before Congress four times. They were polite, they thanked me, and they did the opposite. I am done being a witness.',
+  'I ran a machine shop in Wisconsin with forty-one employees until the contract moved to Monterrey in 2009. I have read the trade agreement that did it, all numbered pages of it. Ask me about any one of them.',
+  'Emergency room nurse in Texas for fourteen years, single mother of three, and I have never held office. I have triaged a waiting room of two hundred people and I promise you that is harder than a committee hearing.'
 ];
 
 function openBioScreen(ci) {
@@ -279,7 +306,10 @@ function updateWordCount() {
 }
 $('#inp-bio').addEventListener('input', () => { updateWordCount(); $('#btn-bio-next').disabled = true; });
 $('#btn-bio-example').addEventListener('click', () => {
-  $('#inp-bio').value = EXAMPLE_BIOS[Math.floor(Math.random() * EXAMPLE_BIOS.length)];
+  // Step through the list instead of re-rolling, so pressing it twice never
+  // hands back the same example.
+  exampleIdx = (exampleIdx + 1 + Math.floor(Math.random() * (EXAMPLE_BIOS.length - 1))) % EXAMPLE_BIOS.length;
+  $('#inp-bio').value = EXAMPLE_BIOS[exampleIdx];
   updateWordCount(); $('#btn-bio-next').disabled = true;
 });
 
