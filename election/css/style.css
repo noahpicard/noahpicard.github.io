@@ -532,10 +532,11 @@ select:focus{outline:none; border-color:var(--accent)}
 .adv-x:hover{color:var(--ink)}
 .adv-name{font-family:var(--mono); font-size:13px; letter-spacing:.16em; color:var(--accent);
           margin-bottom:7px; padding-right:20px}
-.adv-name span{letter-spacing:.08em; font-size:10.5px; color:var(--ink3); margin-left:8px}
+.adv-name span{display:block; letter-spacing:.09em; font-size:10.5px; color:var(--ink3); margin-top:4px}
 .adv-msg{font-size:18px; line-height:1.45; color:var(--ink)}
 .adv-msg strong{color:var(--accent)}
 .adv-msg .adv-list{margin:8px 0 0; padding-left:20px}
+.adv-msg .muted{display:inline-block; margin-top:8px}
 .adv-msg .adv-list li{margin-bottom:3px}
 
 #adv-launcher{

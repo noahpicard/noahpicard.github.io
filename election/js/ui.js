@@ -1621,7 +1621,7 @@ vote = argmax<sub>k</sub>  (voter · candidate<sub>k</sub>) / (‖voter‖ ‖ca
 }
 
 /* ==========================================================================
-   LIBBY — the campaign advisory assistant
+   CIVIS — Civic Information & Voter Interface System
 
    Lives permanently in the corner. Speaks up at the moments that matter, and
    is there to be clicked any time you want a hint. Everything it says is read
@@ -1688,10 +1688,10 @@ const Advisor = (() => {
 
     welcome() {
       const G = UI.G;
-      say(`I am <strong>LIBBY</strong>. I will be advising this campaign.<br><br>
+      say(`<strong>CIVIS</strong> is online and assigned to this campaign.<br><br>
         <strong>${G.settings.rounds} rounds</strong> until the country votes, and money arrives every round —
         so spend what you have. Put it where you are <strong>close</strong>, not where you already win.<br><br>
-        <span class="muted">Click me any time for a hint.</span>`, 13000);
+        <span class="muted">Query this system at any time for guidance.</span>`, 13000);
     },
 
     turnStart() {
@@ -1705,12 +1705,12 @@ const Advisor = (() => {
     onAction(rep) {
       sinceTip++;
       if (rep.cls === 'awful' || rep.cls === 'bad') {
-        say(`That got away from us. Try a different state, or a different medium.`, 7000);
+        say(`That expenditure underperformed. Advise a different state, or a different medium.`, 7000);
         return;
       }
       if (rep.cls === 'huge' || rep.cls === 'strong') {
         const w = rep.states && rep.states.length === 1 ? STATES[rep.states[0]].name : 'The map';
-        say(`Now <em>that</em> moved numbers. ${esc(w)} looks considerably better than it did.`, 7000);
+        say(`Significant movement recorded. ${esc(w)} is materially improved.`, 7000);
         return;
       }
       if (sinceTip >= 3) { sinceTip = 0; Advisor.nudge(); }
@@ -1728,9 +1728,9 @@ const Advisor = (() => {
         let m = '';
         if (gained.length) m += `Picked up <strong>${gained.map(a => STATES[a].name).join(', ')}</strong>. `;
         if (lost.length) m += `Lost <strong>${lost.map(a => STATES[a].name).join(', ')}</strong>. `;
-        if (d > 8) m += `<strong>+${d} electoral votes.</strong> Keep going.`;
-        else if (d < -8) m += `<strong>${d} electoral votes.</strong> Something needs to change.`;
-        else if (!m) m = `The map barely moved. Concentrate on fewer states, or target a group that is close to turning.`;
+        if (d > 8) m += `<strong>+${d} electoral votes.</strong> Current allocation is working.`;
+        else if (d < -8) m += `<strong>${d} electoral votes.</strong> Revision of strategy advised.`;
+        else if (!m) m = `Negligible movement. Concentrate on fewer states, or target a group close to turning.`;
         else m += `Projection <strong>${ev}</strong>.`;
         say(m, 11000);
       }
@@ -1739,8 +1739,8 @@ const Advisor = (() => {
 
     finalPush() {
       const cand = UI.G.candidates[viewerIdx()];
-      say(`Last chance. Nothing more is coming — the <strong>$${Math.round(cand.cash)}M</strong> left buys nothing
-        once the polls open. Spend all of it.`, 12000);
+      say(`Final disbursement period. No further funds will be issued; the
+        <strong>$${Math.round(cand.cash)}M</strong> remaining purchases nothing once polls open. Expend in full.`, 12000);
     }
   };
 })();
