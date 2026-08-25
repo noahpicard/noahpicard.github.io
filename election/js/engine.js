@@ -1,5 +1,5 @@
 /* ==========================================================================
-   engine.js — deterministic RNG, world generation, voter model, simulation
+   engine.js: deterministic RNG, world generation, voter model, simulation
    ========================================================================== */
 
 /* ---------- deterministic RNG (mulberry32 over an xmur3 seed) ---------- */
@@ -375,7 +375,7 @@ function pushBias(G, opts) {
 }
 
 /* Thresholds are set from the measured distribution of delivered movement at
-   the current BIAS_SCALE — roughly the 95th, 75th, 50th and 25th percentiles
+   the current BIAS_SCALE, roughly the 95th, 75th, 50th and 25th percentiles
    of a successful buy. Retune these whenever BIAS_SCALE moves, or every
    result will read as "essentially nothing". */
 const MOVE_WORDS = [
@@ -452,7 +452,7 @@ function runAction(G, ci, spec) {
     rep.move = m;
     rep.cls = 'modest';
     rep.policy = { ti, old, nv };
-    rep.headlines.push(`${cand.name} now scores ${nv > 0 ? '+' : ''}${nv} on ${topic.name} — a step ${dir > 0 ? 'toward "' + topic.pro + '"' : 'toward "' + topic.con + '"'}. ${cand.flips > 1 ? 'The word "flip-flop" appears in ' + cand.flips + ' separate columns.' : 'One columnist calls it "an evolution."'}`);
+    rep.headlines.push(`${cand.name} now scores ${nv > 0 ? '+' : ''}${nv} on ${topic.name}, a step ${dir > 0 ? 'toward "' + topic.pro + '"' : 'toward "' + topic.con + '"'}. ${cand.flips > 1 ? 'The word "flip-flop" appears in ' + cand.flips + ' separate columns.' : 'One columnist calls it "an evolution."'}`);
     return rep;
   }
 
@@ -547,7 +547,7 @@ function runAction(G, ci, spec) {
 }
 
 /* Result copy. The wording alludes to the size of the movement without ever
-   printing the raw number — the player has to read the room. */
+   printing the raw number. The player has to read the room. */
 function flavourFor(G, action, cand, ctx) {
   const rng = G.rng;
   const w = moveWord(ctx.move).word;
@@ -555,15 +555,15 @@ function flavourFor(G, action, cand, ctx) {
   const T = {
     tv: ctx.attack
       ? `A 30-second spot against ${ctx.target.name} saturates ${ctx.where}${aud}. ${ctx.back ? 'Local anchors call it "a low blow" on air, and it turns into ' + w + ' for you.' : 'Focus groups call it "devastating." Overnight tracking shows ' + w + '.'}`
-      : `Broadcast buy across ${ctx.where}${aud}. ${ctx.back ? 'The spot is mistimed against a beloved local broadcast and produces ' + w + '.' : 'The tag line tests well and the trackers move — ' + w + '.'}`,
+      : `Broadcast buy across ${ctx.where}${aud}. ${ctx.back ? 'The spot is mistimed against a beloved local broadcast and produces ' + w + '.' : 'The tag line tests well and the trackers move: ' + w + '.'}`,
     print: ctx.attack
       ? `Mailers hitting ${ctx.where}${aud} print ${ctx.target.name}'s worst quote at 48-point. ${ctx.back ? 'Two papers run corrections. ' + w[0].toUpperCase() + w.slice(1) + '.' : 'Steady, unglamorous, ' + w + '.'}`
-      : `Direct mail and a full page in the ${rng.pick(['Herald','Gazette','Sentinel','Tribune','Register'])} across ${ctx.where}${aud}. ${ctx.back ? 'The photo they printed is unflattering — ' + w + '.' : 'Quiet and reliable: ' + w + '.'}`,
+      : `Direct mail and a full page in the ${rng.pick(['Herald','Gazette','Sentinel','Tribune','Register'])} across ${ctx.where}${aud}. ${ctx.back ? 'The photo they printed is unflattering. ' + w[0].toUpperCase() + w.slice(1) + '.' : 'Quiet and reliable: ' + w + '.'}`,
     internet: ctx.attack
-      ? `An attack cut on ${ctx.target.name} is pushed hard through feeds in ${ctx.where}${aud}. ${ctx.back ? 'It gets community-noted within the hour — ' + w + '.' : 'It gets stitched, remixed and quote-posted into ' + w + '.'}`
-      : `Short-form blitz across ${ctx.where}${aud}. ${ctx.back ? 'The agency uses a sound that is nine months stale and the comments are merciless: ' + w + '.' : 'The algorithm decides it likes you today — ' + w + '.'}`,
-    visit: `${ctx.intensity > 1 ? 'A fleet of clones tours' : 'A clone of you tours'} ${ctx.where}${aud}. ${ctx.back ? 'A rope-line answer about ' + rng.pick(['the local team','a factory that closed in 2011','the price of a sandwich']) + ' plays badly on the evening news — ' + w + '.' : 'Rooms are full and the local coverage is warm: ' + w + '.'}`,
-    ground: `Clones of you knock ${(3 + Math.round(rng.float() * 9))}0,000 doors in ${ctx.where}${aud}. ${ctx.back ? 'One of them argues with a homeowner on a doorbell camera — ' + w + '.' : 'Slow, cheap, and it adds up to ' + w + '.'}`
+      ? `An attack cut on ${ctx.target.name} is pushed hard through feeds in ${ctx.where}${aud}. ${ctx.back ? 'It gets community-noted within the hour. ' + w[0].toUpperCase() + w.slice(1) + '.' : 'It gets stitched, remixed and quote-posted into ' + w + '.'}`
+      : `Short-form blitz across ${ctx.where}${aud}. ${ctx.back ? 'The agency uses a sound that is nine months stale and the comments are merciless: ' + w + '.' : 'The algorithm decides it likes you today: ' + w + '.'}`,
+    visit: `${ctx.intensity > 1 ? 'A fleet of clones tours' : 'A clone of you tours'} ${ctx.where}${aud}. ${ctx.back ? 'A rope-line answer about ' + rng.pick(['the local team','a factory that closed in 2011','the price of a sandwich']) + ' plays badly on the evening news. ' + w[0].toUpperCase() + w.slice(1) + '.' : 'Rooms are full and the local coverage is warm: ' + w + '.'}`,
+    ground: `Clones of you knock ${(3 + Math.round(rng.float() * 9))}0,000 doors in ${ctx.where}${aud}. ${ctx.back ? 'One of them argues with a homeowner on a doorbell camera. ' + w[0].toUpperCase() + w.slice(1) + '.' : 'Slow, cheap, and it adds up to ' + w + '.'}`
   };
   return T[action.id] || `${cand.name} campaigns in ${ctx.where}. Result: ${w}.`;
 }
@@ -587,7 +587,7 @@ const MAG_WORDS = [
 ];
 const magWord = (m) => (MAG_WORDS.find(x => m >= x.min) || MAG_WORDS[MAG_WORDS.length - 1]).word;
 
-/* The movement a push of this magnitude is expected to report — the same
+/* The movement a push of this magnitude is expected to report. This is the same
    reach-weighted mean pushBias() computes, evaluated ahead of time. */
 function expectedMove(G, action, statesList, focus, mag) {
   let sw = 0, sww = 0;
@@ -665,11 +665,11 @@ function describeImpact(G, ci, spec) {
     const t = G.topics[ti];
     const nv = clamp(cand.stances[ti] + dir, -3, 3);
     const penalty = 0.055 * (cand.flips + 1);
-    headline = `Moves you to <b>${nv > 0 ? '+' : ''}${nv}</b> on ${esc2(t.name)} — closer to every voter who already ` +
+    headline = `Moves you to <b>${nv > 0 ? '+' : ''}${nv}</b> on ${esc2(t.name)}. Closer to every voter who already ` +
                `agrees, and further from the ones who liked where you were.`;
     rows.push({ label: 'New position', value: (nv > 0 ? '+' : '') + nv + ' · ' + (dir > 0 ? t.pro : t.con) });
     rows.push({ label: 'Flip-flop cost', value: 'about ' + (penalty * 100).toFixed(1) + ' bias points nationwide', warn: true });
-    rows.push({ label: 'Times you have moved', value: String(cand.flips) + (cand.flips >= 2 ? ' — the press has noticed' : '') });
+    rows.push({ label: 'Times you have moved', value: String(cand.flips) + (cand.flips >= 2 ? ', and the press has noticed' : '') });
     return { headline, rows };
   }
 
@@ -740,7 +740,7 @@ function describeImpact(G, ci, spec) {
   }
   const uses = cand.uses[key] || 0;
   if (uses > 0) {
-    rows.push({ label: 'Repeat here', value: 'buy #' + (uses + 1) + ' — ' + Math.round(d * 100) + '% of full effect', warn: d < 0.6 });
+    rows.push({ label: 'Repeat here', value: 'buy #' + (uses + 1) + ', ' + Math.round(d * 100) + '% of full effect', warn: d < 0.6 });
   }
   if (action.spill) rows.push({ label: 'National spillover', value: Math.round(action.spill * 100) + '% bleeds everywhere' });
   const bf = action.backfire * disciplineBonus * (attack ? 1.25 : 1);

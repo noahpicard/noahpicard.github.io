@@ -1,8 +1,8 @@
 /* ==========================================================================
-   data.js — static content: topic pool, demographics, actions, flavour lists
+   data.js: static content. Topic pool, demographics, actions, flavour lists
    ========================================================================== */
 
-/* Age buckets and genders — the two demographic axes. */
+/* Age buckets and genders, the two demographic axes. */
 const AGES    = ['young', 'middle', 'old'];
 const GENDERS = ['male', 'female', 'nonbinary'];
 
@@ -113,7 +113,7 @@ const ACTIONS = [
   },
   {
     id:'visit', name:'Campaign Visits', icon:'🚌', cost: 10, group:'clones',
-    blurb:'Deploy AI clones of yourself onto the campaign trail, live on a stage. Send more clones to cover more ground — each one is a little less convincing than the last.',
+    blurb:'Deploy AI clones of yourself onto the campaign trail, live on a stage. Send more clones to cover more ground, though each one is a little less convincing than the last.',
     targeting:'multi-state', ageWeight:{ young:0.9, middle:1.2, old:1.15 }, genderWeight:{ male:1.0, female:1.0, nonbinary:1.0 },
     power: 0.78, noise: 0.20, backfire: 0.07, decay: 0.68, canAttack:false, spill: 0.06
   },
@@ -129,7 +129,7 @@ const ACTIONS = [
   },
   {
     id:'oppo', name:'Smear Campaign', icon:'🔎', cost: 11, group:'policy',
-    blurb:'Dig something up on a rival and hand it to a reporter. Always aimed at them — sometimes the shovel hits your own foot.',
+    blurb:'Dig something up on a rival and hand it to a reporter. Always aimed at them, and sometimes the shovel hits your own foot.',
     targeting:'opponent-national', power: 0.72, noise: 0.36, backfire: 0.20, decay: 0.66, canAttack:true
   },
   {
@@ -203,11 +203,11 @@ const AI_FIRST = ['Marcus','Deborah','Ellis','Corinne','Hollis','Yvette','Rafael
 const AI_LAST  = ['Whitaker','Ferro','Castellan','Nkemdi','Okonjo','Brandt','Vasquez','Lindqvist','Ashby','Moreau',
                   'Tanaka','Delacroix','Halloran','Osei','Vandermeer','Petrossian','Kowalski','Reyes','Blackwood','Amari'];
 
-/* Party labels are cosmetic — the simulation only cares about stances. */
+/* Party labels are cosmetic. Only stances affect the count. */
 const PARTY_NAMES = ['Progress Party','National Union','Liberty Front','Commonwealth Alliance','Homestead Party',
                      'Civic Renewal','The Independents','Sunrise Coalition','Heartland League','New Republic Party'];
 
-/* Candidate colours — chosen to stay distinguishable on a choropleth. */
+/* Candidate colours, chosen to stay distinguishable on a choropleth. */
 const CANDIDATE_COLORS = [
   { name:'Blue',   hex:'#2b6cd4' },
   { name:'Red',    hex:'#d1373a' },

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   game.js — game construction and round flow
+   game.js: game construction and round flow
    ========================================================================== */
 
 const BASE_START_CASH  = 85;

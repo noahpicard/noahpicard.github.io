@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Run for President™ — election night, but it's about you
+   Run for President™: election night, but it's about you
    ========================================================================== */
 
 :root{
@@ -48,7 +48,7 @@ button{font-family:inherit}
 
 /* A zoomed-in flag drifting diagonally behind the title, darkened almost to
    texture. One flag at official 1:1.9 proportions, scaled well past the
-   viewport and panned corner to corner — never tiled, so there is no seam to
+   viewport and panned corner to corner. Never tiled, so there is no seam to
    hide. Height-driven sizing keeps it covering the screen at any aspect. */
 .flagbg{position:absolute; inset:0; z-index:0; overflow:hidden; pointer-events:none}
 .flagbg::before{
@@ -135,6 +135,7 @@ input:disabled{background:rgba(255,255,255,.02); color:var(--ink3); border-color
 .row-actions{display:flex; gap:10px; justify-content:flex-end; margin-top:26px;
              padding-top:20px; border-top:1px solid var(--line)}
 .row-actions.center{justify-content:center; border:0}
+#final-actions{margin-bottom:26px}
 .row-actions[hidden]{display:none}
 
 /* ---------- field list ---------- */
@@ -514,7 +515,7 @@ select:focus{outline:none; border-color:var(--accent)}
 
 
 /* ==========================================================================
-   ACTION TOAST — every spend gets a moment of its own
+   ACTION TOAST: every spend gets a moment of its own
    ========================================================================== */
 #toasts{position:fixed; top:0; left:0; right:0; z-index:80; display:flex; flex-direction:column;
         align-items:center; gap:12px; padding:80px 16px 0; pointer-events:none}
@@ -547,8 +548,8 @@ select:focus{outline:none; border-color:var(--accent)}
 
 /* ==========================================================================
    CAMPAIGN ADVISOR
-   Sits against the left edge, vertically centred and laid out horizontally —
-   avatar first, speech bubble beside it — so it stays clear of the news feed
+   Sits against the left edge, vertically centred and laid out horizontally,
+   avatar first and speech bubble beside it, so it stays clear of the news feed
    along the bottom. Click the avatar any time for a hint.
    ========================================================================== */
 #advisor-wrap{
@@ -617,7 +618,7 @@ select:focus{outline:none; border-color:var(--accent)}
 }
 
 /* ==========================================================================
-   WHAT TO DO — the collapsible standing instruction
+   WHAT TO DO: the collapsible standing instruction
    ========================================================================== */
 .brief{background:linear-gradient(180deg,#2a2a1e,#242419); border:1px solid #4a4529;
        border-radius:10px; margin-bottom:15px; overflow:hidden}
@@ -667,7 +668,7 @@ select:focus{outline:none; border-color:var(--accent)}
 
 
 /* ==========================================================================
-   TURN CLOCK — a quiet bar under the top bar that drains over the turn
+   TURN CLOCK: a quiet bar under the top bar that drains over the turn
    ========================================================================== */
 .turnbar{position:absolute; left:0; right:0; bottom:0; height:3px; background:rgba(255,255,255,.04)}
 .turnbar[hidden]{display:none}
@@ -675,7 +676,7 @@ select:focus{outline:none; border-color:var(--accent)}
               transition:width .25s linear}
 .turnbar.low .turnbar-fill{background:var(--bad); opacity:.9}
 
-/* Keep the map from eating the fold so the news feed stays visible — the
+/* Keep the map from eating the fold so the news feed stays visible. The
    opponents' moves land there live during your turn. */
 #usmap{max-height:52vh}
 .feed{max-height:min(340px, 34vh); scroll-behavior:smooth; margin-top:0}

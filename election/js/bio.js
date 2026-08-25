@@ -1,5 +1,5 @@
 /* ==========================================================================
-   bio.js — the biography analyst
+   bio.js: the biography analyst
 
    NOTE ON "AI": this game ships as static files with no backend and no API
    key, so the analyst is a local lexicon-and-heuristics model rather than a
@@ -147,7 +147,7 @@ function analyzeBio(text, rng) {
   /* Overall opening favourability: a national bias seed everyone shares. */
   const nationalSeed = (substance - 0.52) * 0.62;
 
-  /* Per-demographic seed, in bias units. Kept modest — a good biography is a
+  /* Per-demographic seed, in bias units. Kept modest, because a good biography is a
      head start, not a win. */
   const seed = {};
   for (const a of AGES) for (const g of GENDERS) {
@@ -191,7 +191,7 @@ function writeDossier(d) {
       `weakest to ${AGE_LABEL[bestAge[2]].toLowerCase()} voters. On the gender axis the pull is toward ` +
       `${GENDER_LABEL[bestGen[0]].toLowerCase()}.</p>`);
   } else {
-    L.push(`<p><strong>Where it lands:</strong> the appeal is broad and shallow — no age group dislikes it, none of them ` +
+    L.push(`<p><strong>Where it lands:</strong> the appeal is broad and shallow. No age group dislikes it, and none of them ` +
       `are moved by it either.</p>`);
   }
 
@@ -200,7 +200,7 @@ function writeDossier(d) {
   }
 
   if (d.specificity > 0.45) {
-    L.push(`<p><strong>Specificity:</strong> concrete — names, numbers, places. Specific biographies survive contact ` +
+    L.push(`<p><strong>Specificity:</strong> concrete, with names, numbers and places. Specific biographies survive contact ` +
       `with a hostile press. This one is carrying real weight.</p>`);
   } else if (d.specificity < 0.15) {
     L.push(`<p><strong>Specificity:</strong> thin. Almost no proper nouns or figures. It will not withstand a follow-up question.</p>`);
