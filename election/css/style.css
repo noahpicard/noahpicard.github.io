@@ -594,16 +594,32 @@ select:focus{outline:none; border-color:var(--accent)}
 }
 
 /* ==========================================================================
-   ROUND BRIEFING — the standing call to action in the campaign panel
+   WHAT TO DO — the collapsible standing instruction
    ========================================================================== */
 .brief{background:linear-gradient(180deg,#2a2a1e,#242419); border:1px solid #4a4529;
-       border-radius:10px; padding:14px 16px; margin-bottom:15px}
-.brief h5{margin:0 0 8px; font-family:var(--mono); font-size:13px; letter-spacing:.15em;
-          text-transform:uppercase; color:var(--accent)}
-.brief p{margin:0 0 9px; font-size:16.5px; line-height:1.5; color:var(--ink2)}
-.brief p:last-child{margin-bottom:0}
-.brief strong{color:var(--ink)}
-.brief .targets{display:flex; flex-wrap:wrap; gap:7px; margin-top:10px}
+       border-radius:10px; margin-bottom:15px; overflow:hidden}
+.brief-h{display:flex; justify-content:space-between; align-items:center; width:100%;
+         background:transparent; border:0; cursor:pointer; padding:12px 16px;
+         font-family:var(--mono); font-size:13px; letter-spacing:.15em; text-transform:uppercase;
+         color:var(--accent)}
+.brief-h:hover{color:#ffd97a}
+.brief-h .chev{font-size:14px; opacity:.8}
+.brief-body{padding:0 16px 14px}
+.brief.closed .brief-body{display:none}
+
+.brief-steps{list-style:none; margin:0; padding:0; counter-reset:step}
+.brief-steps li{counter-increment:step; position:relative; padding:5px 0 5px 30px;
+                font-size:16.5px; line-height:1.45; color:var(--ink3)}
+.brief-steps li::before{content:counter(step); position:absolute; left:0; top:5px;
+                        width:20px; height:20px; border-radius:50%; text-align:center;
+                        font-family:var(--mono); font-size:12px; line-height:20px;
+                        background:rgba(0,0,0,.3); color:var(--ink3)}
+.brief-steps li.now{color:var(--ink); font-weight:600}
+.brief-steps li.now::before{background:var(--accent); color:#1a1508; font-weight:700}
+.brief-steps li.done{opacity:.5; text-decoration:line-through}
+.brief-steps strong{color:var(--accent)}
+
+.brief .targets{display:flex; flex-wrap:wrap; gap:7px; margin-top:11px}
 .brief .tg{background:rgba(0,0,0,.28); border:1px solid #4a4529; border-radius:20px;
            padding:5px 12px; font-size:14.5px; font-family:var(--mono); color:var(--ink);
            cursor:pointer}

@@ -43,6 +43,7 @@ const UI = {
   hoverLock: false,
   pendingAfterHandoff: null,
   inspect: null,        // state being examined in the sidebar
+  briefOpen: true,      // the "what to do" card, collapsed state remembered
   skipFinal: false,
   finalTimer: null,
   finalStep: null
@@ -990,6 +991,11 @@ function renderActionPane() {
     renderActionPane(); refreshMap();
   }));
   $('#btn-endturn').addEventListener('click', () => endTurnNow());
+  const bt = $('#btn-brief-toggle', pane);
+  if (bt) bt.addEventListener('click', () => {
+    UI.briefOpen = UI.briefOpen === false;
+    renderActionPane();
+  });
   $$('.brief .tg', pane).forEach(b => {
     const ab = b.dataset.go;
     b.addEventListener('click', () => { UI.inspect = ab; renderCrossPane(); goTab('cross'); refreshMap(); });
@@ -1011,13 +1017,7 @@ function briefingHTML(G, ci, cand) {
     .map(t => ({ ...t, tight: STATES[t.ab].ev * t.closeness }))
     .sort((a, b) => b.tight - a.tight);
   const targets = (ranked.length ? ranked : stateValues(G, ci, simulate(G))).slice(0, 4);
-  const last = G.phase === 'final-push';
-  const roundsLeft = last ? 0 : G.settings.rounds - G.round;
-
-  const money = last
-    ? `Final round — nothing carries past today. Spend the full $${Math.round(cand.cash)}M.`
-    : `+$${Math.round(cand.income)}M next round${roundsLeft > 1 ? ` (${roundsLeft} left)` : ''} — none of it
-       carries over, so don't bank it.`;
+  const broke = cand.cash < 5;
 
   const why = (t) => {
     const margin = Math.abs(t.gap);
@@ -1025,13 +1025,25 @@ function briefingHTML(G, ci, cand) {
     return `${STATES[t.ab].name} — ${STATES[t.ab].ev} EV, ${state}`;
   };
 
-  return `<div class="brief">
-    <h5>Invest in swing states</h5>
-    <p>Close races with the most electoral votes on the line move fastest per dollar — a state you already lead
-      by 30 points won't budge. ${money}</p>
-    <div class="targets">${targets.map(t =>
-      `<button class="tg" data-go="${t.ab}" title="${esc(why(t))}"><b>${t.ab}</b> ${STATES[t.ab].ev} EV ·
-        ${Math.abs(t.gap) <= 1 ? 'tied' : t.gap > 0 ? 'up ' + t.gap : 'down ' + Math.abs(t.gap)}</button>`).join('')}</div>
+  // Three beats, in the order you actually do them.
+  const steps = broke
+    ? `<li class="done">Spend your money to sway voters</li>
+       <li class="done">Swing these states to your side</li>
+       <li class="now">You are out of money — <strong>end your round</strong></li>`
+    : `<li class="now">Spend your money to sway voters</li>
+       <li>Try swinging these states to your side</li>
+       <li>Once you are out of money, end your round</li>`;
+
+  return `<div class="brief${UI.briefOpen === false ? ' closed' : ''}">
+    <button class="brief-h" id="btn-brief-toggle" aria-expanded="${UI.briefOpen !== false}">
+      <span>What to do</span><span class="chev">${UI.briefOpen === false ? '&#9656;' : '&#9662;'}</span>
+    </button>
+    <div class="brief-body">
+      <ol class="brief-steps">${steps}</ol>
+      <div class="targets">${targets.map(t =>
+        `<button class="tg" data-go="${t.ab}" title="${esc(why(t))}"><b>${t.ab}</b> ${STATES[t.ab].ev} EV ·
+          ${Math.abs(t.gap) <= 1 ? 'tied' : t.gap > 0 ? 'up ' + t.gap : 'down ' + Math.abs(t.gap)}</button>`).join('')}</div>
+    </div>
   </div>`;
 }
 
