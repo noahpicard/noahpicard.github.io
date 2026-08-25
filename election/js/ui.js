@@ -996,6 +996,13 @@ function renderActionPane() {
     UI.sel.state = null; UI.sel.states = []; UI.sel.focusAge = null; UI.sel.focusGender = null;
     UI.sel.intensity = 1; UI.sel.mode = 'pro';
     UI.sel.targetIdx = G.candidates.findIndex((c, k) => k !== ci);
+    // If you were already looking at a state, carry it into the action rather
+    // than making you pick it a second time.
+    const a = ACTION_BY_ID[UI.sel.actionId];
+    if (UI.inspect && (a.targeting === 'state' || a.targeting === 'multi-state')) {
+      UI.sel.state = UI.inspect;
+      UI.sel.states = [UI.inspect];
+    }
     renderActionPane(); refreshMap();
   }));
   $('#btn-endturn').addEventListener('click', () => endTurnNow());
