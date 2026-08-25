@@ -887,15 +887,14 @@ function showRoundModal(poll) {
   $('#btn-round-go').addEventListener('click', go);
 
   // The card gates the round, so it carries its own minute rather than
-  // waiting on somebody to press the button.
-  const label = $('#btn-round-go'), text = label.textContent;
+  // waiting on somebody to press the button. The bar is the only indication;
+  // a ticking number just makes people watch the clock.
   const fill = $('#round-countdown');
   const endsAt = Date.now() + ROUND_CARD_MS;
   if (roundTick) clearInterval(roundTick);
   roundTick = setInterval(() => {
     const left = Math.max(0, endsAt - Date.now());
     if (fill) fill.style.width = (left / ROUND_CARD_MS * 100) + '%';
-    if (label) label.textContent = `${text} · ${Math.ceil(left / 1000)}s`;
     if (left <= 0) go();
   }, 250);
 }

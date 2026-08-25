@@ -697,14 +697,24 @@ select:focus{outline:none; border-color:var(--accent)}
 
 /* A shared countdown for every screen that is not the title or election
    night, so an unattended installation always keeps moving. */
-.screenbar{position:fixed; top:0; left:0; right:0; height:3px; z-index:96;
-           background:rgba(255,255,255,.04); pointer-events:none}
+.screenbar{position:fixed; top:0; left:0; right:0; height:6px; z-index:96;
+           background:rgba(255,255,255,.06); pointer-events:none}
 .screenbar[hidden]{display:none}
-.screenbar-fill{height:100%; width:100%; background:var(--accent); opacity:.38;
-                transition:width .25s linear}
-.screenbar.low .screenbar-fill{background:var(--bad); opacity:.9}
+.screenbar-fill{height:100%; width:100%; background:var(--accent); opacity:.85;
+                box-shadow:0 0 12px rgba(242,193,78,.35); transition:width .25s linear}
+.screenbar.low .screenbar-fill{background:var(--bad); opacity:1}
 
 /* the same countdown, inside the between-rounds polling card */
 .modal-countdown{height:3px; border-radius:2px; background:rgba(255,255,255,.07); overflow:hidden; margin-top:16px}
 .modal-countdown i{display:block; height:100%; width:100%; background:var(--accent); opacity:.45;
                    transition:width .25s linear}
+
+/* Where you are in setup: four segments, filled up to the current step. */
+.stepbar{display:flex; gap:6px; margin:0 0 20px}
+.stepbar i{flex:1; height:5px; border-radius:3px; background:var(--line2)}
+.stepbar[data-step="1"] i:nth-child(-n+1),
+.stepbar[data-step="2"] i:nth-child(-n+2),
+.stepbar[data-step="3"] i:nth-child(-n+3),
+.stepbar[data-step="4"] i:nth-child(-n+4){background:var(--accent)}
+.stepbar .lbl{flex:none; font-family:var(--mono); font-size:12px; letter-spacing:.12em;
+              color:var(--ink3); margin-left:4px; line-height:1; align-self:center}
