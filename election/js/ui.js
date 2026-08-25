@@ -27,7 +27,9 @@ const VIEWBOX = '0 0 1050 610';
 const UI = {
   G: null,
   setup: {
-    n: 2, rounds: 5, funding: 'flat', indiv: 1.4, seed: '',
+    // Fixed for the installation; still threaded through to newGame() as before.
+    n: 3, rounds: 3, indiv: 1.4, seed: '',
+    funding: 'flat',
     cands: []
   },
   humanQueue: [],      // setup: which human candidates still need bio/stances
@@ -99,31 +101,17 @@ $('#btn-how').addEventListener('click', () => openModal(methodologyHTML(null)));
 /* ==========================================================================
    SETUP — RACE
    ========================================================================== */
+/* Field size, round count, voter individuality and the seed are fixed for the
+   installation — the engine still takes all four as parameters (see UI.setup
+   and newGame), they simply are not offered as choices. Funding mode is the
+   one thing left to decide. */
 function buildRaceScreen() {
-  const segN = $('#seg-ncand'); segN.innerHTML = '';
-  for (let i = 2; i <= 6; i++) {
-    const b = el('button', UI.setup.n === i ? 'on' : '', String(i));
-    b.addEventListener('click', () => { UI.setup.n = i; buildRaceScreen(); });
-    segN.appendChild(b);
-  }
-  const segR = $('#seg-rounds'); segR.innerHTML = '';
-  for (const r of [3, 4, 5, 6, 8]) {
-    const b = el('button', UI.setup.rounds === r ? 'on' : '', String(r));
-    b.addEventListener('click', () => { UI.setup.rounds = r; buildRaceScreen(); });
-    segR.appendChild(b);
-  }
   $$('#opt-funding .opt').forEach(o => {
     o.classList.toggle('on', o.dataset.v === UI.setup.funding);
     o.onclick = () => { UI.setup.funding = o.dataset.v; buildRaceScreen(); };
   });
-  $$('#opt-indiv .opt').forEach(o => {
-    o.classList.toggle('on', Number(o.dataset.v) === UI.setup.indiv);
-    o.onclick = () => { UI.setup.indiv = Number(o.dataset.v); buildRaceScreen(); };
-  });
-  $('#inp-seed').value = UI.setup.seed;
 }
 $('#btn-race-next').addEventListener('click', () => {
-  UI.setup.seed = $('#inp-seed').value.trim();
   buildFieldScreen();
   show('screen-field');
 });
@@ -1545,10 +1533,8 @@ $('#btn-quit').addEventListener('click', () => { if (confirm('Abandon the campai
    METHODOLOGY
    ========================================================================== */
 function methodologyHTML(G) {
-  const seedLine = G ? `<p class="muted">This election's seed: <code>${esc(G.seed)}</code> — reuse it to replay the
-    same country.</p>` : '';
+
   return `<h3>Official Guidance</h3>
-  ${seedLine}
   <h4>The electorate</h4>
   <p>Every state is polled at <strong>100 registered voters</strong>, 5,100 in all. Each voter is assigned an age bucket
   (young 18–34, middle 35–64, older 65+) and a gender (male, female, nonbinary) by quota, so the hundred voters

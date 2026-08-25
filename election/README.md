@@ -17,9 +17,13 @@ Open `index.html`, or visit the folder on the site.
 ## What it is
 
 You write a biography, take a position on five randomly drawn issues, and then
-spend a war chest across five rounds of campaigning against up to five rivals —
-any of whom can be another person at the same keyboard, or the computer.
-Polling is published between rounds; the count happens on election night.
+spend a war chest across three rounds of campaigning against two rivals — either
+of whom can be another person at the same keyboard, or the computer. Polling is
+published between rounds; the count happens on election night.
+
+The installation build fixes the field at three candidates, three rounds and
+realistic voter individuality, and does not surface the seed. All four remain
+parameters of `newGame()` — see `UI.setup` in `js/ui.js` to change them.
 
 ## The model
 
