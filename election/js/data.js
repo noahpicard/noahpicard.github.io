@@ -78,6 +78,14 @@ const TOPIC_POOL = [
    backfire: probability the movement lands the wrong way
    decay  : diminishing-returns factor applied per prior use on the same target
    -------------------------------------------------------------------------- */
+/* Three groups shown in the campaign menu. `corp` is a fourth, ungrouped
+   action that only ever appears when a corporate offer is on the table. */
+const ACTION_GROUPS = [
+  { id:'ads',    label:'Ads',    icon:'📣', blurb:'Paid media, targeted by state and, if you like, by demographic.' },
+  { id:'clones', label:'Clones', icon:'🧑\u200d🤝\u200d🧑', blurb:'Deploy AI clones of yourself to canvass and campaign in person, or borrow a famous face to vouch for you.' },
+  { id:'policy', label:'Policy', icon:'\ud83d\udcdc', blurb:'Change what you stand for, or go after what your opponent stands for.' }
+];
+
 const ACTIONS = [
   {
     id:'tv', name:'TV Advertising', icon:'📺', cost: 12, group:'ads',
@@ -98,46 +106,36 @@ const ACTIONS = [
     power: 0.70, noise: 0.34, backfire: 0.17, decay: 0.70, canAttack:true, spill: 0.09
   },
   {
-    id:'visit', name:'Campaign Visits', icon:'🚌', cost: 10, group:'ground',
-    blurb:'You, on a stage, in a state. Send more surrogates to cover more ground — each copy of you is a little less convincing.',
-    targeting:'multi-state', ageWeight:{ young:0.9, middle:1.2, old:1.15 }, genderWeight:{ male:1.0, female:1.0, nonbinary:1.0 },
-    power: 0.78, noise: 0.20, backfire: 0.07, decay: 0.68, canAttack:false, spill: 0.06
-  },
-  {
-    id:'ground', name:'Grassroots Canvassing', icon:'🚪', cost: 6, group:'ground',
-    blurb:'Volunteers, clipboards, doorbells. Small, slow, nearly impossible to screw up.',
+    id:'ground', name:'Grassroots Canvassing', icon:'🚪', cost: 6, group:'clones',
+    blurb:'A legion of AI clones of you, working the doorbells block by block. Small, slow, nearly impossible to screw up.',
     targeting:'state', ageWeight:{ young:1.1, middle:1.0, old:1.1 }, genderWeight:{ male:0.95, female:1.15, nonbinary:1.0 },
     power: 0.40, noise: 0.06, backfire: 0.01, decay: 0.86, canAttack:false, spill: 0.01
   },
   {
-    id:'celeb', name:'Celebrity Endorsement', icon:'🌟', cost: 14, group:'special',
+    id:'visit', name:'Campaign Visits', icon:'🚌', cost: 10, group:'clones',
+    blurb:'Deploy AI clones of yourself onto the campaign trail, live on a stage. Send more clones to cover more ground — each one is a little less convincing than the last.',
+    targeting:'multi-state', ageWeight:{ young:0.9, middle:1.2, old:1.15 }, genderWeight:{ male:1.0, female:1.0, nonbinary:1.0 },
+    power: 0.78, noise: 0.20, backfire: 0.07, decay: 0.68, canAttack:false, spill: 0.06
+  },
+  {
+    id:'celeb', name:'Celebrity Endorsement', icon:'🌟', cost: 14, group:'clones',
     blurb:'A famous person says your name on purpose. Their crowd loves it. Everyone else notices.',
     targeting:'national', power: 0.85, noise: 0.30, backfire: 0.14, decay: 0.60, canAttack:false
   },
   {
-    id:'vip', name:'VIP Fundraiser', icon:'🥂', cost: 4, group:'special',
-    blurb:'A ballroom of donors. Converts a little money into a lot more money, and a faint smell of the ballroom.',
-    targeting:'none', power: 0, noise: 0, backfire: 0.10, decay: 0.78, canAttack:false
+    id:'policy', name:'Change a Policy Stance', icon:'🔀', cost: 9, group:'policy',
+    blurb:'Move one of your positions by a step. The voters you gain are real. So are the flip-flop headlines.',
+    targeting:'topic', power: 0, noise: 0, backfire: 0.30, decay: 0.90, canAttack:false
+  },
+  {
+    id:'oppo', name:'Smear Campaign', icon:'🔎', cost: 11, group:'policy',
+    blurb:'Dig something up on a rival and hand it to a reporter. Always aimed at them — sometimes the shovel hits your own foot.',
+    targeting:'opponent-national', power: 0.72, noise: 0.36, backfire: 0.20, decay: 0.66, canAttack:true
   },
   {
     id:'corp', name:'Corporate Backing', icon:'🏢', gated:'corp', cost: 0, group:'special',
     blurb:'A very large check from an interested party. They will want something later.',
     targeting:'none', power: 0, noise: 0, backfire: 0.22, decay: 1.0, canAttack:false
-  },
-  {
-    id:'policy', name:'Change a Policy Stance', icon:'🔀', cost: 9, group:'special',
-    blurb:'Move one of your positions by a step. The voters you gain are real. So are the flip-flop headlines.',
-    targeting:'topic', power: 0, noise: 0, backfire: 0.30, decay: 0.90, canAttack:false
-  },
-  {
-    id:'oppo', name:'Opposition Research', icon:'🔎', cost: 11, group:'special',
-    blurb:'Dig something up on a rival and hand it to a reporter. Sometimes the shovel hits your own foot.',
-    targeting:'opponent-national', power: 0.72, noise: 0.36, backfire: 0.20, decay: 0.66, canAttack:true
-  },
-  {
-    id:'debate', name:'Debate Preparation', icon:'🎙️', cost: 7, group:'special',
-    blurb:'Murder boards and index cards. Broad, mild, and it makes everything else you do land better next round.',
-    targeting:'national', power: 0.30, noise: 0.14, backfire: 0.08, decay: 0.72, canAttack:false
   }
 ];
 
@@ -186,17 +184,17 @@ const CORPORATIONS = [
 /* AI opponent archetypes. `weights` biases which actions they reach for. */
 const AI_PERSONAS = [
   { id:'populist',   name:'Populist',    desc:'Rallies and rage. Loves a crowd, hates a consultant.',
-    weights:{ visit:2.4, ground:1.6, internet:1.4, tv:0.7, print:0.5, celeb:1.0, oppo:1.2, debate:0.6, vip:0.5, policy:0.9 }, corpTaste:0.15, aggression:0.75 },
+    weights:{ visit:2.4, ground:1.6, internet:1.4, tv:0.7, print:0.5, celeb:1.0, oppo:1.2, policy:0.9 }, corpTaste:0.15, aggression:0.75 },
   { id:'technocrat', name:'Technocrat',  desc:'Reads the crosstabs. Buys exactly the right ad in exactly the right state.',
-    weights:{ tv:1.5, internet:1.5, print:0.8, visit:0.9, ground:1.3, celeb:0.4, oppo:0.7, debate:1.6, vip:1.2, policy:1.6 }, corpTaste:0.55, aggression:0.35 },
+    weights:{ tv:1.5, internet:1.5, print:0.8, visit:0.9, ground:1.3, celeb:0.4, oppo:0.7, policy:1.6 }, corpTaste:0.55, aggression:0.35 },
   { id:'firebrand',  name:'Firebrand',   desc:'Attacks first, polls later.',
-    weights:{ oppo:2.6, internet:2.0, tv:1.1, visit:1.2, print:0.4, celeb:1.1, debate:0.5, ground:0.6, vip:0.6, policy:0.5 }, corpTaste:0.35, aggression:0.95 },
+    weights:{ oppo:2.6, internet:2.0, tv:1.1, visit:1.2, print:0.4, celeb:1.1, ground:0.6, policy:0.5 }, corpTaste:0.35, aggression:0.95 },
   { id:'establish',  name:'Establishment', desc:'Ballrooms, broadcast buys, and a very long donor list.',
-    weights:{ tv:2.0, print:1.4, vip:2.2, celeb:1.2, debate:1.2, visit:1.0, ground:0.7, internet:0.6, oppo:0.8, policy:0.7 }, corpTaste:0.90, aggression:0.45 },
+    weights:{ tv:2.0, print:1.4, celeb:1.2, visit:1.0, ground:0.7, internet:0.6, oppo:0.8, policy:0.7 }, corpTaste:0.90, aggression:0.45 },
   { id:'grassroots', name:'Grassroots',  desc:'Doors, not dollars. Small checks, big volunteer lists.',
-    weights:{ ground:2.6, visit:1.8, internet:1.3, print:0.9, tv:0.5, celeb:0.7, debate:1.0, oppo:0.4, vip:0.4, policy:1.0 }, corpTaste:0.05, aggression:0.25 },
+    weights:{ ground:2.6, visit:1.8, internet:1.3, print:0.9, tv:0.5, celeb:0.7, oppo:0.4, policy:1.0 }, corpTaste:0.05, aggression:0.25 },
   { id:'celebrity',  name:'Celebrity',   desc:'Famous first, political second. The camera does the work.',
-    weights:{ celeb:2.6, internet:2.0, tv:1.5, visit:1.3, debate:0.5, oppo:1.0, print:0.3, ground:0.5, vip:1.4, policy:0.6 }, corpTaste:0.60, aggression:0.60 }
+    weights:{ celeb:2.6, internet:2.0, tv:1.5, visit:1.3, oppo:1.0, print:0.3, ground:0.5, policy:0.6 }, corpTaste:0.60, aggression:0.60 }
 ];
 
 /* Names for auto-generated AI candidates. */

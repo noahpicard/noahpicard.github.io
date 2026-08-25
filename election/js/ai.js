@@ -54,14 +54,18 @@ function leadRival(G, ci, result) {
 }
 
 /* Run one AI candidate's full round. Returns the list of action reports. */
-function aiTakeTurn(G, ci) {
+function aiTakeTurn(G, ci, maxActions) {
   const cand = G.candidates[ci];
   const rng = G.rng;
   const persona = cand.persona;
   const reports = [];
   let guard = 0;
+  // maxActions lets the caller pull a single decision at a time, so opponents
+  // can be played out gradually across a timed turn instead of all at once.
+  const cap = Math.min(11, maxActions == null ? 11 : maxActions);
 
   while (guard++ < 11) {
+    if (reports.length >= cap) break;
     const result = simulate(G);
     const myEv = result.ev[ci];
     const rival = leadRival(G, ci, result);
@@ -87,11 +91,9 @@ function aiTakeTurn(G, ci) {
       if (a.gated) continue;
       if (a.cost > cand.cash) continue;
       let w = persona.weights[a.id] || 0.5;
-      if (a.id === 'vip') w *= broke ? 3.2 : 0.5;
       if (a.id === 'oppo') w *= (desperate ? 1.9 : 1) * (0.5 + persona.aggression);
       if (a.id === 'policy') w *= desperate ? 1.7 : 0.8;
       if (a.id === 'celeb' && CELEBRITIES.every(c => G.usedCelebs.has(c.name))) w = 0;
-      if (a.id === 'debate' && G.round >= G.settings.rounds) w *= 0.2;
       // Late in the race, buy reach rather than infrastructure.
       if (G.round >= G.settings.rounds - 1 && (a.id === 'ground')) w *= 0.7;
       if (w > 0) menu.push({ a, w });

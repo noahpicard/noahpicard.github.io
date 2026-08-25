@@ -128,6 +128,7 @@
   <section class="screen wide" id="screen-game">
     <header class="topbar">
       <div class="tb-left">
+        <span class="tb-mark">Run for President<span class="tm">™</span></span>
         <span class="tb-round" id="tb-round">Round 1</span>
         <span class="tb-phase" id="tb-phase">Campaigning</span>
       </div>
@@ -136,6 +137,7 @@
         <button class="btn tiny ghost" id="btn-method">Official Guidance</button>
         <button class="btn tiny ghost" id="btn-quit">Quit</button>
       </div>
+      <div class="turnbar" id="turnbar" hidden><div class="turnbar-fill" id="turnbar-fill"></div></div>
     </header>
 
     <div class="game-grid">
@@ -165,8 +167,8 @@
         <div class="tabs" id="tabs">
           <button class="tab active" data-tab="act">Campaign</button>
           <button class="tab" data-tab="poll">Standings</button>
-          <button class="tab" data-tab="cross">Crosstabs</button>
-          <button class="tab" data-tab="plat">Platforms</button>
+          <button class="tab" data-tab="cross">Demographics</button>
+          <button class="tab" data-tab="plat">Policies</button>
         </div>
         <div class="tabpanes">
           <div class="tabpane active" id="pane-act"></div>
@@ -187,6 +189,11 @@
         <button class="btn tiny ghost" id="btn-skip" hidden>Skip ahead</button>
       </div>
       <div class="evbar big" id="final-evbar"></div>
+      <div id="final-epilogue" class="epilogue" hidden></div>
+      <div class="row-actions center" id="final-actions" hidden>
+        <button class="btn" id="btn-again">Run again</button>
+        <button class="btn ghost" id="btn-final-method">How the votes were counted</button>
+      </div>
       <div class="final-grid">
         <div class="mapwrap final-mapwrap">
           <svg id="finalmap" viewBox="0 0 975 610" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Election results map"></svg>
@@ -196,11 +203,6 @@
           <div class="callbox" id="callbox"></div>
           <div class="final-scoreboard" id="final-scoreboard"></div>
         </div>
-      </div>
-      <div id="final-epilogue" class="epilogue" hidden></div>
-      <div class="row-actions center" id="final-actions" hidden>
-        <button class="btn" id="btn-again">Run again</button>
-        <button class="btn ghost" id="btn-final-method">How the votes were counted</button>
       </div>
     </div>
   </section>
