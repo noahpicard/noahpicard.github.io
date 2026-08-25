@@ -64,9 +64,28 @@ function show(id) {
   $$('.screen').forEach(s => s.classList.toggle('active', s.id === id));
   window.scrollTo(0, 0);
 }
-function openModal(html) { $('#modal-body').innerHTML = html; $('#modal').hidden = false; }
-function closeModal() { $('#modal').hidden = true; $('#modal-body').innerHTML = ''; }
-$('#modal-x').addEventListener('click', closeModal);
+/* Some modals gate the flow of the game — the round-polling card is the only
+   route from one round into the next. Those are opened `gating`, which removes
+   the close affordances entirely: clicking the backdrop, pressing Escape or
+   hitting the × used to dismiss the card without ever advancing the round,
+   leaving the campaign panel empty and the game unrecoverable. */
+let modalGate = false;
+function openModal(html, gating) {
+  $('#modal-body').innerHTML = html;
+  $('#modal').hidden = false;
+  modalGate = !!gating;
+  $('#modal-x').hidden = !!gating;
+  $('#modal').classList.toggle('gating', !!gating);
+}
+function closeModal(force) {
+  if (modalGate && force !== true) return;
+  modalGate = false;
+  $('#modal').hidden = true;
+  $('#modal-body').innerHTML = '';
+  $('#modal-x').hidden = false;
+  $('#modal').classList.remove('gating');
+}
+$('#modal-x').addEventListener('click', () => closeModal());
 $('#modal').addEventListener('click', e => { if (e.target.id === 'modal') closeModal(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 $$('[data-back]').forEach(b => b.addEventListener('click', () => show(b.dataset.back)));
@@ -391,7 +410,7 @@ function startGame() {
   beginRound(G);
   addFeed(null, 'flat', `The race begins. ${G.candidates.length} candidates, ${G.settings.rounds} rounds of campaigning, ` +
     `and five issues: ${G.topics.map(t => t.name).join(', ')}.`);
-  Advisor.reset();
+  if (G.candidates.some(c => c.isHuman)) Advisor.reset();
   advanceTurn();
   if (G.candidates.some(c => c.isHuman)) setTimeout(() => Advisor.welcome(), 900);
 }
@@ -672,9 +691,9 @@ function showRoundModal(poll) {
     <tbody>${rows}</tbody></table>
     ${last ? `<h4>Next</h4><p>Campaigning is over. What is left in the accounts can still be spent in the last
       forty-eight hours — then the country votes.</p>` : ''}
-    <div class="row-actions center"><button class="btn" id="btn-round-go">${last ? 'The final push' : 'Round ' + (G.round + 1)}</button></div>`);
+    <div class="row-actions center"><button class="btn" id="btn-round-go">${last ? 'The final push' : 'Round ' + (G.round + 1)}</button></div>`, true);
   $('#btn-round-go').addEventListener('click', () => {
-    closeModal();
+    closeModal(true);
     if (last) startFinalPush(); else nextRound();
   });
 }
@@ -1256,7 +1275,7 @@ function revealPace(i, total) {
 function goToElection() {
   const G = UI.G;
   const F = runElection(G);
-  $('#advisor').hidden = true;
+  Advisor.hide();
   $('#toasts').innerHTML = '';
   show('screen-final');
   buildMap($('#finalmap'), $('#finaltip'), false);
@@ -1604,118 +1623,127 @@ vote = argmax<sub>k</sub>  (voter · candidate<sub>k</sub>) / (‖voter‖ ‖ca
 /* ==========================================================================
    LIBBY — the campaign advisory assistant
 
-   Volunteers guidance the way an over-eager office assistant would: what to
-   spend on, where it would matter, what just happened, and what changed on
-   the map since last time. Everything it says is read off the live board, so
-   it never congratulates you for something that did not happen.
+   Lives permanently in the corner. Speaks up at the moments that matter, and
+   is there to be clicked any time you want a hint. Everything it says is read
+   off the live board, so it never congratulates you for something that did
+   not happen.
    ========================================================================== */
 const Advisor = (() => {
-  let box, msgEl, hideTimer = null, dismissed = false;
-  let lastEV = null, sinceTip = 0;
+  let wrap, box, msgEl, dot, hideTimer = null;
+  let lastEV = null, lastWon = [], sinceTip = 0, tipIdx = 0;
 
   const TIPS = [
-    'Every dollar you do not spend this round is a dollar the other campaigns already spent. Money does not carry any advantage into election day.',
-    'Buying the same advertisement in the same state twice runs into diminishing returns. The second purchase is worth about three quarters of the first.',
-    'A blitz costs three times a modest buy and delivers about two and a quarter times the effect. Spreading the money around usually beats concentrating it.',
-    'Narrowing an advertisement to one age group multiplies its effect on those voters and wastes most of the rest. Use it where a group is close to turning.',
-    'Print and mail reach older voters almost exclusively. An internet blitz barely reaches anyone over sixty-five. Match the medium to the people you need.',
-    'Attacking an opponent lowers their support without raising yours. In a two-way race that is the same thing. In a crowded field it is not.',
-    'Click any state on the map to see how each age and gender group there is breaking, and what your spending has already done to them.',
-    'Safe states are worth nothing extra. A hundred-thousand-dollar buy in a state you already lead by thirty points is a hundred thousand dollars gone.',
-    'Debate preparation raises your standing a little now and makes everything you buy next round land harder. It rewards spending it early.',
-    'Changing a policy position moves you toward voters who already agree and away from the ones who liked where you stood. The cost grows every time you do it.'
+    'Unspent money is wasted money. None of it carries into election day.',
+    'The same ad twice in the same state is worth about three quarters the second time.',
+    'A blitz costs 3× a modest buy and delivers about 2¼×. Spread it around.',
+    'Narrowing to one age group multiplies the effect on them and wastes the rest.',
+    'Print reaches the old. Internet reaches the young. Match the medium to who you need.',
+    'Attacking lowers their number without raising yours — that only helps in a two-way race.',
+    'Click any state on the map to see how each group there is breaking.',
+    'A buy in a state you already lead by thirty points does nothing at all.',
+    'Debate prep pays off next round, so it rewards spending early.',
+    'Every policy change costs you more than the last one did.'
   ];
 
-  const el_ = () => { box = $('#advisor'); msgEl = $('#adv-msg'); };
+  const grab = () => { wrap = $('#advisor-wrap'); box = $('#advisor'); msgEl = $('#adv-msg'); dot = $('#adv-dot'); };
 
   function say(html, hold) {
-    if (dismissed) return;
-    if (!box) el_();
+    if (!box) grab();
     msgEl.innerHTML = html;
     box.hidden = false;
-    // restart the entrance animation so a new message reads as a new message
-    box.style.animation = 'none';
-    void box.offsetWidth;
-    box.style.animation = '';
+    dot.hidden = true;
+    box.style.animation = 'none'; void box.offsetWidth; box.style.animation = '';
     if (hideTimer) clearTimeout(hideTimer);
-    hideTimer = setTimeout(() => { if (box) box.hidden = true; }, hold || 11000);
+    if (hold !== 0) hideTimer = setTimeout(() => { if (box) box.hidden = true; }, hold || 9000);
   }
 
-  /* The states where money would actually change the outcome, for the viewer. */
-  function bestTargets(n) {
-    const G = UI.G, me = viewerIdx();
-    if (!G) return [];
-    return stateValues(G, me, simulate(G)).slice(0, n);
-  }
+  /* Where money would actually change the outcome, from the viewer's seat. */
+  const targets = (n) => {
+    const G = UI.G;
+    return G ? stateValues(G, viewerIdx(), simulate(G)).slice(0, n) : [];
+  };
+  const nameList = (t) => t.map(x => `<strong>${STATES[x.ab].name}</strong>`).join(', ');
 
   return {
-    reset() { dismissed = false; lastEV = null; sinceTip = 0; },
-    dismiss() { dismissed = true; if (box) box.hidden = true; },
+    reset() { grab(); lastEV = null; lastWon = []; sinceTip = 0; wrap.hidden = false; },
+    hide() { grab(); wrap.hidden = true; if (box) box.hidden = true; },
+    close() { if (box) box.hidden = true; },
+    nudge() { if (dot) dot.hidden = false; },
+
+    /* The launcher. Always gives the most useful thing available right now. */
+    hint() {
+      if (!box) grab();
+      if (!box.hidden) { box.hidden = true; return; }
+      const G = UI.G;
+      if (!G) return;
+      const cand = G.candidates[viewerIdx()];
+      const t = targets(3);
+      if (t.length && cand.cash >= 5) {
+        say(`<strong>$${Math.round(cand.cash)}M</strong> left to spend. Closest races worth it now:
+          ${nameList(t)}.<br><span class="muted">${TIPS[tipIdx++ % TIPS.length]}</span>`, 0);
+      } else {
+        say(TIPS[tipIdx++ % TIPS.length], 0);
+      }
+    },
 
     welcome() {
       const G = UI.G;
-      say(`Welcome aboard. I am <strong>LIBBY</strong>, and I will be advising this campaign.<br><br>
-        You have <strong>${G.settings.rounds} rounds</strong> before the country votes, and money arrives at the
-        start of every one of them — so spend what you have now. Put it into the states where you are
-        <strong>close</strong>, not the ones you already own.`, 15000);
+      say(`I am <strong>LIBBY</strong>. I will be advising this campaign.<br><br>
+        <strong>${G.settings.rounds} rounds</strong> until the country votes, and money arrives every round —
+        so spend what you have. Put it where you are <strong>close</strong>, not where you already win.<br><br>
+        <span class="muted">Click me any time for a hint.</span>`, 13000);
     },
 
     turnStart() {
-      const G = UI.G, me = viewerIdx(), cand = G.candidates[me];
-      const t = bestTargets(3);
+      const G = UI.G, cand = G.candidates[viewerIdx()];
+      const t = targets(3);
       if (!t.length) return;
-      const names = t.map(x => `<strong>${STATES[x.ab].name}</strong>`).join(', ');
-      say(`You have <strong>$${Math.round(cand.cash)}M</strong> to spend this round, and more arrives next round —
-        holding money back gains you nothing. The closest races worth your money right now are ${names}.`, 13000);
+      say(`<strong>$${Math.round(cand.cash)}M</strong> to spend, and more next round — holding it back gains you
+        nothing. Closest races: ${nameList(t)}.`, 10000);
     },
 
     onAction(rep) {
       sinceTip++;
-      const G = UI.G;
       if (rep.cls === 'awful' || rep.cls === 'bad') {
-        say(`That one got away from us. It happens — a strong biography buys message discipline, and there is
-          always the next buy. Try a different state or a different medium.`, 9000);
+        say(`That got away from us. Try a different state, or a different medium.`, 7000);
         return;
       }
       if (rep.cls === 'huge' || rep.cls === 'strong') {
-        const where = rep.states && rep.states.length === 1 ? STATES[rep.states[0]].name : 'the map';
-        say(`Now <em>that</em> moved numbers. ${esc(where)} is looking considerably better than it did five
-          minutes ago. Excellent work.`, 8000);
+        const w = rep.states && rep.states.length === 1 ? STATES[rep.states[0]].name : 'The map';
+        say(`Now <em>that</em> moved numbers. ${esc(w)} looks considerably better than it did.`, 7000);
         return;
       }
-      if (sinceTip >= 3) { sinceTip = 0; say(TIPS[Math.floor(Math.random() * TIPS.length)], 12000); }
+      if (sinceTip >= 3) { sinceTip = 0; Advisor.nudge(); }
     },
 
-    /* Called after each round's polling lands: report what actually changed. */
+    /* After each round's polling: report what actually changed on the map. */
     roundResult(poll) {
-      const G = UI.G, me = viewerIdx(), cand = G.candidates[me];
+      const me = viewerIdx();
       const ev = poll.ev[me];
       const won = STATE_IDS.filter(ab => poll.byState[ab].winner === me);
-
       if (lastEV != null) {
         const d = ev - lastEV;
         const gained = won.filter(ab => !lastWon.includes(ab));
         const lost = lastWon.filter(ab => !won.includes(ab));
         let m = '';
-        if (gained.length) m += `We picked up <strong>${gained.map(a => STATES[a].name).join(', ')}</strong>. `;
-        if (lost.length) m += `We lost <strong>${lost.map(a => STATES[a].name).join(', ')}</strong>. `;
-        if (d > 8) m += `That is <strong>+${d} electoral votes</strong> on the projection. Keep doing what you are doing.`;
-        else if (d < -8) m += `That is <strong>${d} electoral votes</strong>. We need to change something.`;
-        else if (!m) m = `The map barely moved this round. Try concentrating on fewer states, or targeting a
-          demographic that is close to turning.`;
-        else m += `Projection now <strong>${ev}</strong>.`;
-        say(m, 13000);
+        if (gained.length) m += `Picked up <strong>${gained.map(a => STATES[a].name).join(', ')}</strong>. `;
+        if (lost.length) m += `Lost <strong>${lost.map(a => STATES[a].name).join(', ')}</strong>. `;
+        if (d > 8) m += `<strong>+${d} electoral votes.</strong> Keep going.`;
+        else if (d < -8) m += `<strong>${d} electoral votes.</strong> Something needs to change.`;
+        else if (!m) m = `The map barely moved. Concentrate on fewer states, or target a group that is close to turning.`;
+        else m += `Projection <strong>${ev}</strong>.`;
+        say(m, 11000);
       }
       lastEV = ev; lastWon = won.slice();
     },
 
     finalPush() {
-      const G = UI.G, cand = G.candidates[viewerIdx()];
-      say(`Last chance. No more money is coming after this — whatever is left in the account is
-        <strong>$${Math.round(cand.cash)}M of nothing</strong> once the polls open. Spend all of it.`, 14000);
+      const cand = UI.G.candidates[viewerIdx()];
+      say(`Last chance. Nothing more is coming — the <strong>$${Math.round(cand.cash)}M</strong> left buys nothing
+        once the polls open. Spend all of it.`, 12000);
     }
   };
 })();
-let lastWon = [];
 
-$('#adv-x').addEventListener('click', () => Advisor.dismiss());
+$('#adv-x').addEventListener('click', () => Advisor.close());
+$('#adv-launcher').addEventListener('click', () => Advisor.hint());

@@ -415,6 +415,7 @@ select:focus{outline:none; border-color:var(--accent)}
 /* ---------- modal ---------- */
 .modal{position:fixed; inset:0; background:rgba(6,8,12,.8); z-index:100; display:grid; place-items:center; padding:20px}
 .modal[hidden]{display:none}
+.modal.gating{cursor:default}
 .modal-box{background:var(--panel); border:1px solid var(--line2); border-radius:12px; max-width:900px;
            width:100%; max-height:86vh; overflow-y:auto; padding:30px 34px; position:relative}
 .modal-x{position:absolute; top:12px; right:14px; background:transparent; border:0; color:var(--ink3);
@@ -501,35 +502,67 @@ select:focus{outline:none; border-color:var(--accent)}
 
 /* ==========================================================================
    CAMPAIGN ADVISOR
+   A permanent avatar in the corner; click it any time for a hint. The bubble
+   sits above it with a tail pointing back down at the launcher.
    ========================================================================== */
+#advisor-wrap{
+  position:fixed; left:22px; bottom:22px; z-index:85;
+  display:flex; flex-direction:column; align-items:flex-start; gap:14px;
+  max-width:calc(100vw - 44px);
+}
+#advisor-wrap[hidden]{display:none}
+
 #advisor{
-  position:fixed; left:22px; bottom:22px; z-index:85; width:440px; max-width:calc(100vw - 36px);
-  background:linear-gradient(180deg,#232a36,var(--panel));
-  border:1px solid var(--line2); border-radius:16px; padding:18px 20px 18px 16px;
-  box-shadow:0 24px 64px rgba(0,0,0,.66);
-  animation:advin .45s cubic-bezier(.16,1,.3,1);
+  position:relative; width:400px; max-width:calc(100vw - 44px);
+  background:var(--panel); border:1px solid var(--line2); border-radius:16px;
+  padding:16px 18px 16px 19px; box-shadow:0 24px 64px rgba(0,0,0,.66);
+  animation:advin .38s cubic-bezier(.16,1,.3,1); transform-origin:20% 100%;
 }
 #advisor[hidden]{display:none}
+/* the tail: one square rotated 45 degrees, only its two outer borders drawn,
+   so it reads as a clean point rather than a lopsided sliver */
 #advisor::after{
-  content:''; position:absolute; left:52px; bottom:-13px; width:24px; height:14px;
-  background:var(--panel); border-right:1px solid var(--line2); border-bottom:1px solid var(--line2);
-  transform:rotate(45deg) skew(6deg,6deg); border-radius:0 0 4px 0;
+  content:''; position:absolute; left:26px; bottom:-9px; width:16px; height:16px;
+  background:var(--panel);
+  border-right:1px solid var(--line2); border-bottom:1px solid var(--line2);
+  transform:rotate(45deg); border-radius:0 0 3px 0;
 }
-.adv-x{position:absolute; top:7px; right:11px; background:transparent; border:0; color:var(--ink3);
-       font-size:26px; line-height:1; cursor:pointer; padding:2px 6px}
+.adv-x{position:absolute; top:6px; right:10px; background:transparent; border:0; color:var(--ink3);
+       font-size:24px; line-height:1; cursor:pointer; padding:2px 6px}
 .adv-x:hover{color:var(--ink)}
-.adv-body{display:flex; gap:14px; align-items:flex-start}
-.adv-mascot{flex:none; width:74px; height:74px; animation:advbob 3.4s ease-in-out infinite}
-.adv-mascot svg{width:100%; height:100%; display:block}
-.adv-text{min-width:0; flex:1}
-.adv-name{font-family:var(--mono); font-size:14px; letter-spacing:.16em; color:var(--accent);
-          margin-bottom:6px; padding-right:18px}
-.adv-name span{display:block; letter-spacing:.1em; font-size:11px; color:var(--ink3); margin-top:2px}
-.adv-msg{font-size:18px; line-height:1.5; color:var(--ink)}
+.adv-name{font-family:var(--mono); font-size:13px; letter-spacing:.16em; color:var(--accent);
+          margin-bottom:7px; padding-right:20px}
+.adv-name span{letter-spacing:.08em; font-size:10.5px; color:var(--ink3); margin-left:8px}
+.adv-msg{font-size:18px; line-height:1.45; color:var(--ink)}
 .adv-msg strong{color:var(--accent)}
-@keyframes advin{from{opacity:0; transform:translateY(22px) scale(.94)} to{opacity:1; transform:none}}
-@keyframes advbob{0%,100%{transform:translateY(0) rotate(-2deg)} 50%{transform:translateY(-5px) rotate(2deg)}}
-@media (prefers-reduced-motion: reduce){ #advisor,.adv-mascot{animation:none} }
+.adv-msg .adv-list{margin:8px 0 0; padding-left:20px}
+.adv-msg .adv-list li{margin-bottom:3px}
+
+#adv-launcher{
+  position:relative; width:76px; height:76px; padding:0; flex:none;
+  border-radius:50%; border:2px solid var(--line2); background:var(--panel2);
+  cursor:pointer; overflow:visible; transition:transform .14s, border-color .14s;
+  box-shadow:0 10px 28px rgba(0,0,0,.5);
+}
+#adv-launcher img{width:100%; height:100%; border-radius:50%; display:block; pointer-events:none}
+#adv-launcher:hover{transform:translateY(-3px) scale(1.04); border-color:var(--accent)}
+#adv-launcher:active{transform:translateY(0) scale(.99)}
+#adv-launcher:focus-visible{outline:3px solid var(--accent); outline-offset:3px}
+.adv-dot{
+  position:absolute; top:-2px; right:-2px; width:19px; height:19px; border-radius:50%;
+  background:var(--accent); border:2px solid var(--bg);
+  animation:advpulse 1.9s ease-in-out infinite;
+}
+.adv-dot[hidden]{display:none}
+
+@keyframes advin{from{opacity:0; transform:translateY(14px) scale(.96)} to{opacity:1; transform:none}}
+@keyframes advpulse{0%,100%{transform:scale(1); opacity:1} 50%{transform:scale(1.22); opacity:.75}}
+@media (prefers-reduced-motion: reduce){ #advisor,.adv-dot,#adv-launcher{animation:none; transition:none} }
+@media (max-width:640px){
+  #advisor-wrap{left:12px; bottom:12px; gap:10px}
+  #advisor{width:calc(100vw - 24px)}
+  #adv-launcher{width:62px; height:62px}
+}
 
 /* ==========================================================================
    ROUND BRIEFING — the standing call to action in the campaign panel

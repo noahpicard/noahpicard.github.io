@@ -53,10 +53,20 @@ Full details are in the in-game "Methodology" panel.
 | `js/game.js` | Game construction and round flow |
 | `js/ui.js` | Screens, map rendering, campaign interface, advisor, toasts, election night |
 | `img/flag.svg` | The flag used, zoomed and panned, behind the title screen |
+| `img/advisor.svg` | The campaign advisor's avatar |
 
 The map geometry is derived from `us-atlas` (US Census cartographic boundary
 files, public domain), projected to Albers USA and simplified with
 Douglas-Peucker.
+
+`img/advisor.svg` is the campaign advisor's avatar, generated once with
+[DiceBear](https://dicebear.com)'s *Notionists* style by Zoish
+([CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) — public domain,
+no attribution required, credited here anyway). It ships as a static file;
+DiceBear is not a runtime dependency.
+
+`img/flag.svg` is drawn to the official 1:1.9 proportions — 13 stripes, 50
+stars in nine alternating rows.
 
 ## Note on "AI"
 
