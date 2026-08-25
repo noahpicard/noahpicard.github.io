@@ -17,9 +17,13 @@ Open `index.html`, or visit the folder on the site.
 ## What it is
 
 You write a biography, take a position on five randomly drawn issues, and then
-spend a war chest across five rounds of campaigning against up to five rivals —
-any of whom can be another person at the same keyboard, or the computer.
-Polling is published between rounds; the count happens on election night.
+spend a war chest across three rounds of campaigning against two rivals — either
+of whom can be another person at the same keyboard, or the computer. Polling is
+published between rounds; the count happens on election night.
+
+The installation build fixes the field at three candidates, three rounds and
+realistic voter individuality, and does not surface the seed. All four remain
+parameters of `newGame()` — see `UI.setup` in `js/ui.js` to change them.
 
 ## The model
 
@@ -53,10 +57,20 @@ Full details are in the in-game "Methodology" panel.
 | `js/game.js` | Game construction and round flow |
 | `js/ui.js` | Screens, map rendering, campaign interface, advisor, toasts, election night |
 | `img/flag.svg` | The flag used, zoomed and panned, behind the title screen |
+| `img/advisor.svg` | The campaign advisor's avatar |
 
 The map geometry is derived from `us-atlas` (US Census cartographic boundary
 files, public domain), projected to Albers USA and simplified with
 Douglas-Peucker.
+
+`img/advisor.svg` is the campaign advisor's avatar, generated once with
+[DiceBear](https://dicebear.com)'s *Notionists* style by Zoish
+([CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) — public domain,
+no attribution required, credited here anyway). It ships as a static file;
+DiceBear is not a runtime dependency.
+
+`img/flag.svg` is drawn to the official 1:1.9 proportions — 13 stripes, 50
+stars in nine alternating rows.
 
 ## Note on "AI"
 

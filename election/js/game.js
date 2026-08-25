@@ -43,8 +43,6 @@ function newGame(settings) {
       corp: null,
       uses: {},
       flips: 0,
-      momentum: 1,
-      nextMomentum: 1,
       traits: { charisma: 1, discipline: 0, warChest: 1 }
     };
     G.candidates.push(cand);
@@ -113,8 +111,6 @@ function allocateFunding(G) {
 
 function beginRound(G) {
   G.candidates.forEach((c) => {
-    c.momentum = c.nextMomentum || 1;
-    c.nextMomentum = 1;
     if (G.round > 1) c.cash += c.income;
     // A corporate patron keeps paying, and keeps costing.
     if (c.corp) {

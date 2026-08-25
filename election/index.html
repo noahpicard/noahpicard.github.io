@@ -35,19 +35,8 @@
   <section class="screen" id="screen-race">
     <div class="pane narrow">
       <div class="step-head"><span class="stepno">1</span><h2>The race</h2></div>
-
-      <div class="field">
-        <label>Candidates in the field</label>
-        <div class="seg" id="seg-ncand"></div>
-        <p class="hint">Every candidate on the ballot is a real competitor. Extra candidates split the
-          electorate, and it becomes much easier for nobody to reach 270.</p>
-      </div>
-
-      <div class="field">
-        <label>Campaign rounds before election day</label>
-        <div class="seg" id="seg-rounds"></div>
-        <p class="hint">Each round you receive money and spend it. Polling is published at the end of every round.</p>
-      </div>
+      <p class="lede">Three candidates on the ballot. Three rounds of campaigning, with funds issued at the start
+        of each, then the country votes.</p>
 
       <div class="field">
         <label>Where the money comes from</label>
@@ -66,29 +55,6 @@
               The favour comes due on election night.</span>
           </button>
         </div>
-      </div>
-
-      <div class="field">
-        <label>Voter individuality</label>
-        <div class="opts" id="opt-indiv">
-          <button class="opt" data-v="0">
-            <strong>Lockstep</strong>
-            <span>Voters are exactly their demographics. Pure model, blocky maps, brutal landslides.</span>
-          </button>
-          <button class="opt" data-v="1.4">
-            <strong>Realistic</strong>
-            <span>Each voter deviates from their group. Produces margins close to real American elections.</span>
-          </button>
-          <button class="opt" data-v="2.2">
-            <strong>Chaotic</strong>
-            <span>People are unpredictable. Everything is closer and much harder to steer.</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="field">
-        <label>Seed <span class="sub">(optional — same seed, same country)</span></label>
-        <input type="text" id="inp-seed" placeholder="leave blank for random" autocomplete="off">
       </div>
 
       <div class="row-actions">
@@ -162,6 +128,7 @@
   <section class="screen wide" id="screen-game">
     <header class="topbar">
       <div class="tb-left">
+        <span class="tb-mark">Run for President<span class="tm">™</span></span>
         <span class="tb-round" id="tb-round">Round 1</span>
         <span class="tb-phase" id="tb-phase">Campaigning</span>
       </div>
@@ -170,6 +137,7 @@
         <button class="btn tiny ghost" id="btn-method">Official Guidance</button>
         <button class="btn tiny ghost" id="btn-quit">Quit</button>
       </div>
+      <div class="turnbar" id="turnbar" hidden><div class="turnbar-fill" id="turnbar-fill"></div></div>
     </header>
 
     <div class="game-grid">
@@ -199,8 +167,8 @@
         <div class="tabs" id="tabs">
           <button class="tab active" data-tab="act">Campaign</button>
           <button class="tab" data-tab="poll">Standings</button>
-          <button class="tab" data-tab="cross">Crosstabs</button>
-          <button class="tab" data-tab="plat">Platforms</button>
+          <button class="tab" data-tab="cross">Demographics</button>
+          <button class="tab" data-tab="plat">Policies</button>
         </div>
         <div class="tabpanes">
           <div class="tabpane active" id="pane-act"></div>
@@ -221,6 +189,11 @@
         <button class="btn tiny ghost" id="btn-skip" hidden>Skip ahead</button>
       </div>
       <div class="evbar big" id="final-evbar"></div>
+      <div id="final-epilogue" class="epilogue" hidden></div>
+      <div class="row-actions center" id="final-actions" hidden>
+        <button class="btn" id="btn-again">Run again</button>
+        <button class="btn ghost" id="btn-final-method">How the votes were counted</button>
+      </div>
       <div class="final-grid">
         <div class="mapwrap final-mapwrap">
           <svg id="finalmap" viewBox="0 0 975 610" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Election results map"></svg>
@@ -231,11 +204,6 @@
           <div class="final-scoreboard" id="final-scoreboard"></div>
         </div>
       </div>
-      <div id="final-epilogue" class="epilogue" hidden></div>
-      <div class="row-actions center" id="final-actions" hidden>
-        <button class="btn" id="btn-again">Run again</button>
-        <button class="btn ghost" id="btn-final-method">How the votes were counted</button>
-      </div>
     </div>
   </section>
 
@@ -244,33 +212,16 @@
 <!-- ===================== MODAL ===================== -->
 <div id="toasts" aria-live="polite"></div>
 
-<div id="advisor" hidden>
-  <button class="adv-x" id="adv-x" aria-label="Dismiss advisor">&times;</button>
-  <div class="adv-body">
-    <div class="adv-mascot" aria-hidden="true">
-      <svg viewBox="0 0 100 100" role="img">
-        <path d="M18 96c2-18 14-29 32-29s30 11 32 29z" fill="#4a3527"/>
-        <path d="M26 96c1-12 9-20 24-20s23 8 24 20z" fill="#5b4231"/>
-        <ellipse cx="50" cy="45" rx="28" ry="27" fill="#fafafc"/>
-        <ellipse cx="50" cy="40" rx="25" ry="21" fill="#ffffff"/>
-        <path d="M22 34c6-6 14-9 21-8l-1 8c-6-1-13 1-19 5z" fill="#c9c9d4"/>
-        <path d="M78 34c-6-6-14-9-21-8l1 8c6-1 13 1 19 5z" fill="#c9c9d4"/>
-        <circle cx="38" cy="45" r="7" fill="#1b2029"/>
-        <circle cx="40.5" cy="42.5" r="2.6" fill="#ffffff"/>
-        <circle cx="62" cy="45" r="7" fill="#1b2029"/>
-        <circle cx="64.5" cy="42.5" r="2.6" fill="#ffffff"/>
-        <path d="M50 54c6 0 11 3 11 7 0 5-5 11-11 15-6-4-11-10-11-15 0-4 5-7 11-7z" fill="#f2c14e"/>
-        <path d="M50 68c3.5-2.4 6.5-5.4 7.8-8.2-2.3 1.4-5 2.2-7.8 2.2s-5.5-.8-7.8-2.2c1.3 2.8 4.3 5.8 7.8 8.2z" fill="#d99b26"/>
-        <rect x="60" y="82" width="16" height="4" fill="#b22234"/>
-        <rect x="60" y="86" width="16" height="4" fill="#f4f4f7"/>
-        <rect x="60" y="82" width="7" height="8" fill="#3c3b6e"/>
-      </svg>
-    </div>
-    <div class="adv-text">
-      <div class="adv-name">LIBBY <span>Campaign Advisory Assistant</span></div>
-      <div class="adv-msg" id="adv-msg"></div>
-    </div>
+<div id="advisor-wrap" hidden>
+  <div id="advisor" hidden role="status">
+    <button class="adv-x" id="adv-x" aria-label="Close">&times;</button>
+    <div class="adv-name">CIVIS <span>Civic Information &amp; Voter Interface System</span></div>
+    <div class="adv-msg" id="adv-msg"></div>
   </div>
+  <button id="adv-launcher" aria-label="Ask CIVIS, your campaign advisory system, for a hint">
+    <img src="img/advisor.svg" alt="" width="72" height="72" draggable="false">
+    <span class="adv-dot" id="adv-dot" hidden aria-hidden="true"></span>
+  </button>
 </div>
 
 <canvas id="confetti" aria-hidden="true"></canvas>

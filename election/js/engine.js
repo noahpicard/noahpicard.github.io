@@ -411,30 +411,6 @@ function runAction(G, ci, spec) {
   const rep = { ok: true, ci, actionId: action.id, cost, intensity, headlines: [], move: 0, cls: 'flat' };
   const charisma = cand.traits.charisma;                    // 0.75 .. 1.3
   const disciplineBonus = 1 - cand.traits.discipline * 0.5; // reduces backfire odds
-  const momentum = cand.momentum || 1;
-
-  /* ---- fundraising ---- */
-  if (action.id === 'vip') {
-    const key = 'vip';
-    const d = decayFor(cand, key, action);
-    let take = Math.max(0, rng.gauss(16 * intensity * d * cand.traits.warChest, 4.5 * intensity));
-    noteUse(cand, key);
-    if (rng.chance(action.backfire * disciplineBonus)) {
-      const m = pushBias(G, { action: { ageWeight:{young:1.5,middle:1,old:0.8}, genderWeight:{male:1,female:1,nonbinary:1.2} },
-        statesList: STATE_IDS, focus: null, targetIdx: ci, sign: -1,
-        magnitude: 0.10 * intensity, spillMag: 0 });
-      rep.move = m; rep.cls = 'bad';
-      rep.headlines.push(`A phone camera catches ${cand.name} at the ${rng.pick(['Belvedere','Kingsway','Hotel Arcadia','Grand Palisade'])} ballroom calling the guests "the people who actually matter." Raised $${take.toFixed(0)}M anyway.`);
-      cand.cash += take;
-      rep.cash = take;
-      return rep;
-    }
-    cand.cash += take;
-    rep.cash = take;
-    rep.cls = 'solid';
-    rep.headlines.push(`Donor dinner nets $${take.toFixed(0)}M. Nobody said anything on the record.`);
-    return rep;
-  }
 
   /* ---- corporate money ---- */
   if (action.id === 'corp') {
@@ -493,7 +469,7 @@ function runAction(G, ci, spec) {
     if (celeb.gender) gw[celeb.gender] = celeb.mult * 0.85; else { gw.male = gw.female = gw.nonbinary = 1.0; }
 
     const back = rng.chance(action.backfire * disciplineBonus);
-    let mag = Math.abs(rng.gauss(action.power * Math.pow(intensity, 0.75) * charisma * d * momentum, action.noise * intensity));
+    let mag = Math.abs(rng.gauss(action.power * Math.pow(intensity, 0.75) * charisma * d, action.noise * intensity));
     if (back) mag = -mag * 0.75;
     const m = pushBias(G, { action: { ageWeight: aw, genderWeight: gw }, statesList: STATE_IDS,
       focus: null, targetIdx: ci, sign: 1, magnitude: mag, spillMag: 0 });
@@ -511,7 +487,7 @@ function runAction(G, ci, spec) {
     const d = decayFor(cand, key, action);
     noteUse(cand, key);
     const back = rng.chance(action.backfire * disciplineBonus);
-    let mag = Math.abs(rng.gauss(action.power * Math.pow(intensity, 0.75) * charisma * d * momentum, action.noise * intensity));
+    let mag = Math.abs(rng.gauss(action.power * Math.pow(intensity, 0.75) * charisma * d, action.noise * intensity));
     const target = G.candidates[ti];
     if (back) {
       const m = pushBias(G, { action: { ageWeight:{young:1.1,middle:1,old:1}, genderWeight:{male:1,female:1.15,nonbinary:1.1} },
@@ -524,24 +500,6 @@ function runAction(G, ci, spec) {
       statesList: STATE_IDS, focus: null, targetIdx: ti, sign: -1, magnitude: mag, spillMag: 0 });
     rep.move = -m; rep.cls = moveWord(-m).cls; rep.against = ti;
     rep.headlines.push(`A ${rng.pick(['1998 deposition','deleted blog','county zoning filing','leaked group chat','old campus newspaper column'])} surfaces about ${target.name}. ${cand.name}'s campaign says it had "no involvement."`);
-    return rep;
-  }
-
-  /* ---- debate prep ---- */
-  if (action.id === 'debate') {
-    const key = 'debate';
-    const d = decayFor(cand, key, action);
-    noteUse(cand, key);
-    const back = rng.chance(action.backfire * disciplineBonus);
-    let mag = Math.abs(rng.gauss(action.power * Math.pow(intensity, 0.75) * charisma * d, action.noise * intensity));
-    if (back) mag = -mag * 0.6;
-    const m = pushBias(G, { action: { ageWeight:{young:0.9,middle:1.1,old:1.1}, genderWeight:{male:1,female:1,nonbinary:1} },
-      statesList: STATE_IDS, focus: null, targetIdx: ci, sign: 1, magnitude: mag, spillMag: 0 });
-    cand.nextMomentum = (cand.nextMomentum || 1) + 0.11 * intensity * d;
-    rep.move = m; rep.cls = moveWord(m).cls;
-    rep.headlines.push(back
-      ? `${cand.name} over-prepares and delivers a rehearsed line about ${rng.pick(['boats','grandmothers','the price of eggs','a childhood dog'])} twice in the same answer.`
-      : `${cand.name} spends the week on murder boards. Everything the campaign does next lands a little cleaner.`);
     return rep;
   }
 
@@ -561,7 +519,7 @@ function runAction(G, ci, spec) {
   noteUse(cand, key);
 
   const back = rng.chance(action.backfire * disciplineBonus * (attack ? 1.25 : 1));
-  let mag = rng.gauss(action.power * Math.pow(intensity, 0.75) * charisma * d * momentum / spread,
+  let mag = rng.gauss(action.power * Math.pow(intensity, 0.75) * charisma * d / spread,
                       action.noise * intensity);
   mag = Math.abs(mag);
   if (back) mag = -mag * 0.8;
@@ -602,8 +560,8 @@ function flavourFor(G, action, cand, ctx) {
     internet: ctx.attack
       ? `An attack cut on ${ctx.target.name} is pushed hard through feeds in ${ctx.where}${aud}. ${ctx.back ? 'It gets community-noted within the hour — ' + w + '.' : 'It gets stitched, remixed and quote-posted into ' + w + '.'}`
       : `Short-form blitz across ${ctx.where}${aud}. ${ctx.back ? 'The agency uses a sound that is nine months stale and the comments are merciless: ' + w + '.' : 'The algorithm decides it likes you today — ' + w + '.'}`,
-    visit: `${ctx.intensity > 1 ? 'A full bus tour' : 'A day of stops'} through ${ctx.where}${aud}. ${ctx.back ? 'A rope-line answer about ' + rng.pick(['the local team','a factory that closed in 2011','the price of a sandwich']) + ' plays badly on the evening news — ' + w + '.' : 'Rooms are full and the local coverage is warm: ' + w + '.'}`,
-    ground: `Volunteers knock ${(3 + Math.round(rng.float() * 9))}0,000 doors in ${ctx.where}${aud}. ${ctx.back ? 'A canvasser argues with a homeowner on a doorbell camera — ' + w + '.' : 'Slow, cheap, and it adds up to ' + w + '.'}`
+    visit: `${ctx.intensity > 1 ? 'A fleet of clones tours' : 'A clone of you tours'} ${ctx.where}${aud}. ${ctx.back ? 'A rope-line answer about ' + rng.pick(['the local team','a factory that closed in 2011','the price of a sandwich']) + ' plays badly on the evening news — ' + w + '.' : 'Rooms are full and the local coverage is warm: ' + w + '.'}`,
+    ground: `Clones of you knock ${(3 + Math.round(rng.float() * 9))}0,000 doors in ${ctx.where}${aud}. ${ctx.back ? 'One of them argues with a homeowner on a doorbell camera — ' + w + '.' : 'Slow, cheap, and it adds up to ' + w + '.'}`
   };
   return T[action.id] || `${cand.name} campaigns in ${ctx.where}. Result: ${w}.`;
 }
@@ -682,7 +640,6 @@ function describeImpact(G, ci, spec) {
   const intensity = spec.intensity || 1;
   const charisma = cand.traits.charisma;
   const disciplineBonus = 1 - cand.traits.discipline * 0.5;
-  const momentum = cand.momentum || 1;
   const rows = [];
   let headline = '';
 
@@ -690,15 +647,6 @@ function describeImpact(G, ci, spec) {
   if (cost) rows.push({ label: 'Cost', value: '$' + cost + 'M of $' + Math.round(cand.cash) + 'M on hand' });
 
   /* ---- money actions ---- */
-  if (action.id === 'vip') {
-    const d = decayFor(cand, 'vip', action);
-    const take = Math.round(16 * intensity * d * cand.traits.warChest);
-    headline = `Expected to raise roughly <b>$${take}M</b> — about $${Math.max(0, take - cost)}M more than it costs.`;
-    rows.push({ label: 'Typical return', value: '$' + take + 'M ± $' + Math.round(4.5 * intensity) + 'M' });
-    rows.push({ label: 'Risk', value: Math.round(action.backfire * disciplineBonus * 100) + '% chance of bad press', warn: true });
-    if (d < 0.95) rows.push({ label: 'Donor fatigue', value: Math.round(d * 100) + '% of first-time yield' });
-    return { headline, rows };
-  }
   if (action.id === 'corp') {
     const corp = spec.corp;
     if (!corp) return null;
@@ -728,7 +676,7 @@ function describeImpact(G, ci, spec) {
     const celeb = spec.celeb;
     if (!celeb) return null;
     const d = decayFor(cand, 'celeb', action);
-    const raw = action.power * Math.pow(intensity, 0.75) * charisma * d * momentum;
+    const raw = action.power * Math.pow(intensity, 0.75) * charisma * d;
     const aw = { young: 0.6, middle: 0.6, old: 0.6 }; aw[celeb.age] = celeb.mult;
     const gw = { male: 0.85, female: 0.85, nonbinary: 0.85 };
     if (celeb.gender) gw[celeb.gender] = celeb.mult * 0.85; else { gw.male = gw.female = gw.nonbinary = 1.0; }
@@ -746,7 +694,7 @@ function describeImpact(G, ci, spec) {
     const ti = spec.targetIdx;
     if (ti == null) return null;
     const d = decayFor(cand, 'oppo|' + ti, action);
-    const raw = action.power * Math.pow(intensity, 0.75) * charisma * d * momentum;
+    const raw = action.power * Math.pow(intensity, 0.75) * charisma * d;
     const mag = expectedMove(G, { ageWeight:{young:1,middle:1.1,old:1.15}, genderWeight:{male:1,female:1,nonbinary:1} },
                              STATE_IDS, null, raw);
     headline = `May <b>${magWord(mag)} decrease</b> preference for <b>${esc2(G.candidates[ti].name)}</b> nationwide. ` +
@@ -755,20 +703,6 @@ function describeImpact(G, ci, spec) {
     rows.push({ label: 'Reach', value: 'all fifty states and DC' });
     rows.push({ label: 'Risk', value: Math.round(action.backfire * disciplineBonus * 100) + '% chance it lands on you instead', warn: true });
     if (d < 0.95) rows.push({ label: 'Repeat use', value: Math.round(d * 100) + '% of full effect' });
-    return { headline, rows };
-  }
-
-  /* ---- debate prep ---- */
-  if (action.id === 'debate') {
-    const d = decayFor(cand, 'debate', action);
-    const raw = action.power * Math.pow(intensity, 0.75) * charisma * d;
-    const mag = expectedMove(G, { ageWeight:{young:0.9,middle:1.1,old:1.1}, genderWeight:{male:1,female:1,nonbinary:1} },
-                             STATE_IDS, null, raw);
-    headline = `May <b>${magWord(mag)} increase</b> preference for you everywhere at once, and makes everything ` +
-               `you do next round land harder.`;
-    rows.push({ label: 'Reach', value: 'all fifty states and DC' });
-    rows.push({ label: 'Next round', value: '+' + Math.round(11 * intensity * d) + '% to every action' });
-    rows.push({ label: 'Risk', value: Math.round(action.backfire * disciplineBonus * 100) + '% chance of over-rehearsing', warn: true });
     return { headline, rows };
   }
 
@@ -786,7 +720,7 @@ function describeImpact(G, ci, spec) {
                focus ? (focus.age || '*') + '/' + (focus.gender || '*') : '*',
                attack ? 'anti' + targetIdx : 'pro'].join('|');
   const d = decayFor(cand, key, action);
-  const raw = action.power * Math.pow(intensity, 0.75) * charisma * d * momentum / spread;
+  const raw = action.power * Math.pow(intensity, 0.75) * charisma * d / spread;
   const mag = expectedMove(G, action, statesList, focus, raw);
   const aud = audienceOf(action, focus);
   const where = statesList.length === 1 ? STATES[statesList[0]].name : statesList.length + ' states';
