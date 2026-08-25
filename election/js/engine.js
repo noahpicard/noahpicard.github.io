@@ -416,6 +416,8 @@ function runAction(G, ci, spec) {
   if (action.id === 'corp') {
     const corp = spec.corp;
     cand.corp = corp;
+    if (G.corpTaken) G.corpTaken.add(corp.name);
+    G.corpOffers[ci] = [];
     cand.cash += corp.cash;
     rep.cash = corp.cash;
     rep.cls = 'solid';

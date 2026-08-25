@@ -78,11 +78,11 @@ function newGame(settings) {
   /* --- money --- */
   allocateFunding(G);
 
-  /* --- corporate offers --- */
-  if (settings.fundingMode === 'corporate') {
-    const pool = rng.shuffle(CORPORATIONS);
-    G.candidates.forEach((c, i) => { G.corpOffers[i] = [pool[(i * 2) % pool.length], pool[(i * 2 + 1) % pool.length]]; });
-  }
+  /* --- corporate offers ---
+     Nobody is approached in the first round. Interested parties turn up from
+     round two onward, once there is a race worth buying into. */
+  G.corpTaken = new Set();
+  G.corpOfferRound = 0;
 
   G.baseline = simulate(G);
   return G;
@@ -109,7 +109,24 @@ function allocateFunding(G) {
 
 /* --- round bookkeeping ------------------------------------------------- */
 
+/* Put a fresh pair of named corporations in front of every candidate who has
+   not already signed with one. Anything already accepted is off the table. */
+function dealCorpOffers(G) {
+  if (G.settings.fundingMode !== 'corporate') return;
+  const pool = G.rng.shuffle(CORPORATIONS.filter(c => !G.corpTaken.has(c.name)));
+  let i = 0;
+  G.candidates.forEach((c) => {
+    if (c.corp) { G.corpOffers[c.idx] = []; return; }
+    const offers = [];
+    while (offers.length < 2 && i < pool.length) offers.push(pool[i++]);
+    G.corpOffers[c.idx] = offers;
+  });
+  G.corpOfferRound = G.round;
+}
+
 function beginRound(G) {
+  // From round two on, the money comes looking for you.
+  if (G.round > 1) dealCorpOffers(G);
   G.candidates.forEach((c) => {
     if (G.round > 1) c.cash += c.income;
     // A corporate patron keeps paying, and keeps costing.

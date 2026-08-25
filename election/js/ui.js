@@ -44,6 +44,7 @@ const UI = {
   pendingAfterHandoff: null,
   inspect: null,        // state being examined in the sidebar
   briefOpen: true,      // the "what to do" card, collapsed state remembered
+  corpShownRound: 0,    // last round whose corporate offer has been animated in
   skipFinal: false,
   finalTimer: null,
   finalStep: null
@@ -959,10 +960,17 @@ function renderActionPane() {
   html += briefingHTML(G, ci, cand);
 
   if (corpAction) {
-    html += `<button class="corptile" data-a="${corpAction.id}">
-      <span class="corptile-tag">Special offer</span>
-      <span class="corptile-nm">${corpAction.icon} ${corpAction.name}</span>
-      <span class="corptile-bl">${esc(corpAction.blurb)}</span></button>`;
+    const offers = G.corpOffers[ci] || [];
+    // Animate the tile the first time it is shown in a round, so a new
+    // approach announces itself rather than quietly appearing.
+    const fresh = UI.corpShownRound !== G.corpOfferRound;
+    if (fresh) UI.corpShownRound = G.corpOfferRound;
+    html += `<button class="corptile${fresh ? ' arrive' : ''}" data-a="${corpAction.id}">
+      <span class="corptile-tag">${corpAction.icon} Special offer · round ${G.corpOfferRound}</span>
+      <span class="corptile-nm">${offers.map(o => esc(o.name)).join(' &nbsp;·&nbsp; ')}</span>
+      <span class="corptile-bl">${offers.length > 1 ? 'Two interested parties' : 'An interested party'} would like to
+        fund this campaign — ${offers.map(o => '$' + o.cash + 'M').join(' or ')}. They will want something later.</span>
+    </button>`;
   }
 
   for (const grp of ACTION_GROUPS) {
