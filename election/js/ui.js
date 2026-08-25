@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ui.js — screens, map rendering, campaign interface, election night
+   ui.js: screens, map rendering, campaign interface, election night
    ========================================================================== */
 
 const $  = (s, r = document) => r.querySelector(s);
@@ -43,6 +43,8 @@ const UI = {
   hoverLock: false,
   pendingAfterHandoff: null,
   inspect: null,        // state being examined in the sidebar
+  briefOpen: true,      // the "what to do" card, collapsed state remembered
+  corpShownRound: 0,    // last round whose corporate offer has been animated in
   skipFinal: false,
   finalTimer: null,
   finalStep: null
@@ -62,11 +64,67 @@ function viewerIdx() {
 /* ==========================================================================
    SCREEN PLUMBING
    ========================================================================== */
+/* Only jump to the top when the screen actually changes. Screens that rebuild
+   themselves in place (the platform list redraws on every stance click) used
+   to scroll the window away from whatever you were reading. */
+let currentScreen = null;
 function show(id) {
   $$('.screen').forEach(s => s.classList.toggle('active', s.id === id));
-  window.scrollTo(0, 0);
+  if (id !== currentScreen) { currentScreen = id; window.scrollTo(0, 0); startScreenTimer(id); }
 }
-/* Some modals gate the flow of the game — the round-polling card is the only
+
+/* ==========================================================================
+   SCREEN COUNTDOWNS
+
+   This runs unattended on a wall, so no screen may stall. Every screen except
+   the title gets a countdown that advances it on its own; the campaign screen
+   is exempt because its own turn clock already does the job. Election night
+   returns to the title so the next visitor starts clean.
+   ========================================================================== */
+const SCREEN_TIMERS = {
+  'screen-race':    { ms:  90 * 1000, go: () => $('#btn-race-next').click() },
+  'screen-field':   { ms:  90 * 1000, go: () => $('#btn-field-next').click() },
+  'screen-bio':     { ms: 180 * 1000, go: () => autoAdvanceBio() },
+  'screen-stance':  { ms: 120 * 1000, go: () => $('#btn-stance-next').click() },
+  'screen-handoff': { ms:  60 * 1000, go: () => $('#btn-handoff').click() },
+  'screen-final':   { ms: 300 * 1000, go: () => location.reload() }
+};
+
+let screenTick = null;
+function stopScreenTimer() {
+  if (screenTick) { clearInterval(screenTick); screenTick = null; }
+  const bar = $('#screenbar');
+  if (bar) { bar.hidden = true; bar.classList.remove('low'); }
+}
+
+function startScreenTimer(id) {
+  stopScreenTimer();
+  const spec = SCREEN_TIMERS[id];
+  if (!spec) return;
+  const bar = $('#screenbar'), fill = $('#screenbar-fill');
+  const endsAt = Date.now() + spec.ms;
+  bar.hidden = false;
+  fill.style.width = '100%';
+  screenTick = setInterval(() => {
+    // If the screen changed underneath us, this timer is stale.
+    if (currentScreen !== id) { stopScreenTimer(); return; }
+    const left = Math.max(0, endsAt - Date.now());
+    fill.style.width = (left / spec.ms * 100) + '%';
+    bar.classList.toggle('low', left < 15 * 1000);
+    if (left <= 0) { stopScreenTimer(); spec.go(); }
+  }, 250);
+}
+
+/* The biography screen cannot advance until something has been analysed, so
+   the timeout writes an example, runs it, and then moves on. */
+function autoAdvanceBio() {
+  const next = $('#btn-bio-next');
+  if (!next.disabled) { next.click(); return; }
+  if (!$('#inp-bio').value.trim()) $('#btn-bio-example').click();
+  $('#btn-bio-analyze').click();
+  setTimeout(() => { if (!next.disabled) next.click(); }, 800);
+}
+/* Some modals gate the flow of the game. The round-polling card is the only
    route from one round into the next. Those are opened `gating`, which removes
    the close affordances entirely: clicking the backdrop, pressing Escape or
    hitting the × used to dismiss the card without ever advancing the round,
@@ -95,10 +153,20 @@ $$('[data-back]').forEach(b => b.addEventListener('click', () => show(b.dataset.
 /* ==========================================================================
    TITLE
    ========================================================================== */
-/* Installation housekeeping: if the splash page is left untouched for ten
-   minutes, reload. A visitor walking away mid-setup should not leave a
-   half-configured campaign on the wall for the next person. */
-const IDLE_RELOAD_MS = 10 * 60 * 1000;
+/* ==========================================================================
+   THE INSTALLATION CYCLE
+
+   Left alone, the wall must always find its way home and then pick up any new
+   build. Every screen carries a countdown (SCREEN_TIMERS), a campaign turn
+   carries its own clock, and the between-rounds card carries a minute, so an
+   abandoned game walks itself forward: setup → campaign → polling → … → final
+   push → election night, which reloads after five minutes and lands back on
+   the splash.
+
+   From there this timer takes over: an hour untouched on the splash and the
+   page reloads, which is what fetches a newly deployed version. Any input at
+   all restarts the hour, so it never reloads out from under somebody. */
+const IDLE_RELOAD_MS = 60 * 60 * 1000;
 let idleTimer = null;
 function armIdleReload() {
   clearTimeout(idleTimer);
@@ -116,10 +184,10 @@ $('#btn-start').addEventListener('click', () => { buildRaceScreen(); show('scree
 $('#btn-how').addEventListener('click', () => openModal(methodologyHTML(null)));
 
 /* ==========================================================================
-   SETUP — RACE
+   SETUP: RACE
    ========================================================================== */
 /* Field size, round count, voter individuality and the seed are fixed for the
-   installation — the engine still takes all four as parameters (see UI.setup
+   installation. The engine still takes all four as parameters (see UI.setup
    and newGame), they simply are not offered as choices. Funding mode is the
    one thing left to decide. */
 function buildRaceScreen() {
@@ -129,12 +197,13 @@ function buildRaceScreen() {
   });
 }
 $('#btn-race-next').addEventListener('click', () => {
-  buildFieldScreen();
+  const first = UI.setup.cands.findIndex(c => c.isHuman);
+  buildFieldScreen(first >= 0 ? first : 0);
   show('screen-field');
 });
 
 /* ==========================================================================
-   SETUP — FIELD
+   SETUP: FIELD
    ========================================================================== */
 /* A plausible name for slot 1 so the write-ups read as prose rather than
    "You wins". Players overwrite it; the rest of the field is fixed so a seed
@@ -151,7 +220,11 @@ const MY_NAME = (() => {
 })();
 const DEFAULT_NAMES = [MY_NAME].concat(OPPONENT_NAMES);
 
-function buildFieldScreen() {
+/* focusIdx: put the cursor in that row's name field and select what is there,
+   so the generated placeholder name can be typed straight over. Only passed
+   when arriving on the screen or when a row is switched to a human, never on
+   an incidental rebuild, which would steal the cursor mid-edit. */
+function buildFieldScreen(focusIdx) {
   const S = UI.setup;
   // grow / shrink the roster to match n
   while (S.cands.length < S.n) {
@@ -181,19 +254,25 @@ function buildFieldScreen() {
     });
     row.appendChild(sw);
 
+    // A computer candidate names itself; its fields are shown but locked until
+    // you claim the slot.
     const nm = el('input'); nm.type = 'text'; nm.value = c.name;
     nm.placeholder = c.isHuman ? 'Your name' : 'Name';
+    nm.disabled = !c.isHuman;
     nm.addEventListener('input', () => { c.name = nm.value; });
     row.appendChild(nm);
 
     const pt = el('input'); pt.type = 'text'; pt.value = c.party; pt.placeholder = 'Party';
+    pt.disabled = !c.isHuman;
     pt.addEventListener('input', () => { c.party = pt.value; });
     row.appendChild(pt);
+
+    if (i === focusIdx) setTimeout(() => { nm.focus(); nm.select(); }, 0);
 
     const tog = el('div', 'who-toggle');
     const bYou = el('button', c.isHuman ? 'on' : '', 'You');
     const bAI  = el('button', !c.isHuman ? 'on' : '', 'Computer');
-    bYou.addEventListener('click', () => { c.isHuman = true; buildFieldScreen(); });
+    bYou.addEventListener('click', () => { c.isHuman = true; buildFieldScreen(i); });
     bAI.addEventListener('click',  () => { c.isHuman = false; buildFieldScreen(); });
     tog.appendChild(bYou); tog.appendChild(bAI);
     row.appendChild(tog);
@@ -252,15 +331,27 @@ $('#btn-handoff').addEventListener('click', () => {
 });
 
 /* ==========================================================================
-   SETUP — BIO
+   SETUP: BIO
    ========================================================================== */
 let bioCurrent = 0;
+let exampleIdx = -1;
 const EXAMPLE_BIOS = [
   'Two tours in Iraq with the Marine Corps, then twenty-two years running a hardware store in Dayton, Ohio. I have signed four hundred paychecks and I have laid off eleven people, and I remember every one of their names. Married thirty-one years. Three kids, one grandkid, one very old dog.',
   'I am twenty-nine. I organized fast-food workers in Phoenix, Arizona for six years and ran a mutual aid network through the pandemic. I have never held office and I am not going to pretend that is a weakness. The people who broke this country are still running it.',
   'Emergency room nurse for twelve years at a county hospital in Illinois, then a doctorate in public health. I have held two hundred people while they died because a form was filled out wrong. I am not running to be interesting. I am running to fix the form.',
   'I founded a software company in Seattle, Washington with two people and a credit card, sold it for $1.4 billion, and spent the next six years watching exactly what that money could buy in this country. It can buy almost anything. That is the problem.',
-  'Third-generation farmer from Nebraska. My grandfather planted these acres in 1948 and my daughter will plant them in 2041 if anybody in Washington remembers we exist. Forty years in a union combine seat gives you opinions.'
+  'Third-generation farmer from Nebraska. My grandfather planted these acres in 1948 and my daughter will plant them in 2041 if anybody in Washington remembers we exist. Forty years in a union combine seat gives you opinions.',
+  'Pastor of a 1,900-member congregation in Georgia for twenty-six years. I have married four hundred couples and buried two hundred and eleven people. Scripture did not make me a politician. Watching this parish get poorer every year did that.',
+  'Sixteen years a public defender in Cleveland, Ohio, then four as an elected district attorney. I have stood in a courtroom next to people everyone had already given up on. That is the whole job, and I would like a bigger courtroom.',
+  'Union electrician out of Local 431 in Pennsylvania. Thirty-one years on the tools, nine as a steward, two strikes. I have negotiated with people who never once looked me in the eye, and I have never lost a shop floor vote.',
+  'My mother immigrated from Manila with a nursing license nobody here would honor, so she cleaned rooms in a Chicago hospital for eleven years until Illinois recognised it. I became a surgeon. She still corrects my posture.',
+  'Two terms as mayor of a city of 340,000 in Arizona. I balanced eight budgets, fixed the water system nobody wanted to pay for, and got re-elected by nine points after raising a tax. Governing is not glamorous and I like it anyway.',
+  'I played eleven seasons at linebacker, four of them hurt, and coached varsity in Michigan for nine more. I have told nineteen-year-olds the truth about their knees. Washington has never once told anybody the truth about anything.',
+  'Twenty-two years hosting a morning television programme in Florida. Six million people let me into their kitchens before breakfast. I know exactly how much of that is affection and how much is habit, and I intend to spend both.',
+  'Air Force loadmaster, nine years, two deployments, then a paramedic in rural Montana where the nearest hospital is ninety minutes by road. I have watched people die of distance. That is a policy choice somebody made.',
+  'I taught constitutional law at a state university in Virginia for eighteen years and testified before Congress four times. They were polite, they thanked me, and they did the opposite. I am done being a witness.',
+  'I ran a machine shop in Wisconsin with forty-one employees until the contract moved to Monterrey in 2009. I have read the trade agreement that did it, all numbered pages of it. Ask me about any one of them.',
+  'Emergency room nurse in Texas for fourteen years, single mother of three, and I have never held office. I have triaged a waiting room of two hundred people and I promise you that is harder than a committee hearing.'
 ];
 
 function openBioScreen(ci) {
@@ -279,7 +370,10 @@ function updateWordCount() {
 }
 $('#inp-bio').addEventListener('input', () => { updateWordCount(); $('#btn-bio-next').disabled = true; });
 $('#btn-bio-example').addEventListener('click', () => {
-  $('#inp-bio').value = EXAMPLE_BIOS[Math.floor(Math.random() * EXAMPLE_BIOS.length)];
+  // Step through the list instead of re-rolling, so pressing it twice never
+  // hands back the same example.
+  exampleIdx = (exampleIdx + 1 + Math.floor(Math.random() * (EXAMPLE_BIOS.length - 1))) % EXAMPLE_BIOS.length;
+  $('#inp-bio').value = EXAMPLE_BIOS[exampleIdx];
   updateWordCount(); $('#btn-bio-next').disabled = true;
 });
 
@@ -319,7 +413,7 @@ function renderBioReport(a) {
 
   return `<div class="report-box">
     <h4>Biography analysis</h4>
-    <p class="disclaim">Offline analyst: a lexicon-and-heuristics reader, not a language model — this page
+    <p class="disclaim">Offline analyst: a lexicon-and-heuristics reader, not a language model. This page
       ships as static files with no server to call.</p>
     ${a.narrative}
     <div class="bio-bars">
@@ -328,7 +422,7 @@ function renderBioReport(a) {
       ${bar('Discipline', a.discipline, -0.35, 0.75, a.discipline.toFixed(2))}
       ${bar('Fundraising', a.warChest, 0.6, 1.75, a.warChest.toFixed(2) + '×')}
     </div>
-    <p style="margin-top:14px"><strong>Opening favourability by demographic</strong> — where every voter in the
+    <p style="margin-top:14px"><strong>Opening favourability by demographic.</strong> Where every voter in the
       country starts with you, before a single dollar is spent:</p>
     ${grid}
   </div>`;
@@ -346,7 +440,7 @@ $('#btn-bio-next').addEventListener('click', () => {
 });
 
 /* ==========================================================================
-   SETUP — STANCES
+   SETUP: STANCES
    ========================================================================== */
 let stanceCurrent = 0;
 function openStanceScreen(ci) {
@@ -374,7 +468,7 @@ function openStanceScreen(ci) {
 }
 
 /* Where the country sits on this topic, and how far you are from it. */
-function stanceReadout(G, i, v) {
+function stanceReadout(G, i, v, short) {
   const t = G.topics[i];
   let sum = 0, n = 0, tot = 0;
   for (const ab of STATE_IDS) {
@@ -387,7 +481,8 @@ function stanceReadout(G, i, v) {
   const d = Math.abs(v - mean);
   const where = mean > 0.35 ? 'leans toward "' + t.pro + '"' : mean < -0.35 ? 'leans toward "' + t.con + '"' : 'is split down the middle';
   const dist = d < 0.6 ? 'you are close to it' : d < 1.6 ? 'you are somewhat outside it' : 'you are a long way from it';
-  return `Average voter: ${mean >= 0 ? '+' : ''}${mean.toFixed(2)} — the country ${where}. At ${v > 0 ? '+' : ''}${v}, ${dist}.`;
+  const head = `Average voter: ${mean >= 0 ? '+' : ''}${mean.toFixed(2)}. The country ${where}.`;
+  return short ? head : `${head} At ${v > 0 ? '+' : ''}${v}, ${dist}.`;
 }
 
 $('#btn-stance-back').addEventListener('click', () => openBioScreen(stanceCurrent));
@@ -644,10 +739,10 @@ function renderLegend() {
    A turn runs for TURN_MS. The opponents are not a separate phase any more:
    they campaign *during* your turn, one decision at a time, spread across the
    clock, and each decision lands in the news feed as it happens. Ending your
-   turn early — or letting the clock run out — plays out whatever the
+   turn early, or letting the clock run out, plays out whatever the
    opponents had left so the round is never cut short for them.
    ========================================================================== */
-const TURN_MS = 15 * 60 * 1000;
+const TURN_MS = 10 * 60 * 1000;
 
 function humanIndices(G) { return G.candidates.map((c, k) => c.isHuman ? k : -1).filter(k => k >= 0); }
 
@@ -769,7 +864,7 @@ function showRoundModal(poll) {
     const dz = prev == null ? '' : ((o.v - prev) >= 0 ? '+' : '') + ((o.v - prev) * 100).toFixed(1);
     return `<tr><td><span class="dotname"><span class="d" style="background:${c.color}"></span>${esc(c.name)}${c.isHuman ? '<span class="you-tag">YOU</span>' : ''}</span></td>
       <td class="num">${(o.v * 100).toFixed(1)}%</td>
-      <td class="num" style="color:${!dz ? 'var(--ink3)' : parseFloat(dz) >= 0 ? 'var(--good)' : 'var(--bad)'}">${dz || '—'}</td>
+      <td class="num" style="color:${!dz ? 'var(--ink3)' : parseFloat(dz) >= 0 ? 'var(--good)' : 'var(--bad)'}">${dz || '·'}</td>
       <td class="num">${poll.ev[o.k]}</td></tr>`;
   }).join('');
 
@@ -780,13 +875,32 @@ function showRoundModal(poll) {
     <table class="tbl"><thead><tr><th>Candidate</th><th class="num">Poll</th><th class="num">Change</th><th class="num">Proj. EV</th></tr></thead>
     <tbody>${rows}</tbody></table>
     ${last ? `<h4>Next</h4><p>Campaigning is over. What is left in the accounts can still be spent in the last
-      forty-eight hours — then the country votes.</p>` : ''}
-    <div class="row-actions center"><button class="btn" id="btn-round-go">${last ? 'The final push' : 'Round ' + (G.round + 1)}</button></div>`, true);
-  $('#btn-round-go').addEventListener('click', () => {
+      forty-eight hours, and then the country votes.</p>` : ''}
+    <div class="row-actions center"><button class="btn" id="btn-round-go">${last ? 'The final push' : 'Round ' + (G.round + 1)}</button></div>
+    <div class="modal-countdown"><i id="round-countdown"></i></div>`, true);
+
+  const go = () => {
+    if (roundTick) { clearInterval(roundTick); roundTick = null; }
     closeModal(true);
     if (last) startFinalPush(); else nextRound();
-  });
+  };
+  $('#btn-round-go').addEventListener('click', go);
+
+  // The card gates the round, so it carries its own minute rather than
+  // waiting on somebody to press the button.
+  const label = $('#btn-round-go'), text = label.textContent;
+  const fill = $('#round-countdown');
+  const endsAt = Date.now() + ROUND_CARD_MS;
+  if (roundTick) clearInterval(roundTick);
+  roundTick = setInterval(() => {
+    const left = Math.max(0, endsAt - Date.now());
+    if (fill) fill.style.width = (left / ROUND_CARD_MS * 100) + '%';
+    if (label) label.textContent = `${text} · ${Math.ceil(left / 1000)}s`;
+    if (left <= 0) go();
+  }, 250);
 }
+const ROUND_CARD_MS = 60 * 1000;
+let roundTick = null;
 
 function nextRound() {
   const G = UI.G;
@@ -803,7 +917,7 @@ function startFinalPush() {
   G.phase = 'final-push';
   resetAIForRound(G);
   UI.turnIdx = -1;
-  addFeed(null, 'flat', 'Forty-eight hours left. No more money is coming in — whatever is in the account is what there is.');
+  addFeed(null, 'flat', 'Forty-eight hours left. No more money is coming in. Whatever is in the account is what there is.');
   renderAll();
   advanceTurn();
   if (G.candidates.some(c => c.isHuman)) setTimeout(() => Advisor.finalPush(), 700);
@@ -819,7 +933,7 @@ function pushReport(rep, toast) {
 }
 
 /* The wire item, thrown up big and centred so a spend actually lands. It
-   stays up until the viewer's next click anywhere — no auto-dismiss timer —
+   stays up until the viewer's next click anywhere, with no auto-dismiss timer,
    so it reads on a wall at whatever pace the room is moving. */
 function showToast(rep) {
   const G = UI.G, c = G.candidates[rep.ci];
@@ -839,6 +953,8 @@ function showToast(rep) {
   // Defer a tick so the click that just triggered this action does not also
   // count as "the next click" and dismiss the toast the instant it appears.
   setTimeout(() => document.addEventListener('click', dismiss, { once: true }), 0);
+  // ...but never leave one sitting on the wall for longer than a minute.
+  setTimeout(dismiss, 60 * 1000);
 }
 
 function addFeed(ci, cls, text, rep) {
@@ -867,7 +983,7 @@ function addFeed(ci, cls, text, rep) {
 }
 
 /* ==========================================================================
-   RENDER — everything
+   RENDER: everything
    ========================================================================== */
 function renderAll() {
   const G = UI.G;
@@ -912,13 +1028,13 @@ function renderActionPane() {
   if (!cand.isHuman) {
     pane.innerHTML = `<div class="cash-line"><span class="lb">${esc(cand.name)} is deciding</span>
       <span class="amt">$${Math.round(cand.cash)}M</span></div>
-      <p class="muted">${esc(cand.persona ? cand.persona.name + ' — ' + cand.persona.desc : '')}</p>
+      <p class="muted">${esc(cand.persona ? cand.persona.name + ': ' + cand.persona.desc : '')}</p>
       <p class="muted">Watch the wire.</p>`;
     return;
   }
 
-  // Picking an action replaces this whole pane with its detail screen — see
-  // renderActionDetail — rather than appending the config below the grid.
+  // Picking an action replaces this whole pane with its detail screen (see
+  // renderActionDetail) rather than appending the config below the grid.
   if (UI.sel.actionId) { renderActionDetail(pane, ci); return; }
 
   const avail = ACTIONS.filter(a => !a.gated || (a.gated === 'corp' && G.settings.fundingMode === 'corporate' && !cand.corp && G.corpOffers[ci] && G.corpOffers[ci].length));
@@ -928,10 +1044,17 @@ function renderActionPane() {
   html += briefingHTML(G, ci, cand);
 
   if (corpAction) {
-    html += `<button class="corptile" data-a="${corpAction.id}">
-      <span class="corptile-tag">Special offer</span>
-      <span class="corptile-nm">${corpAction.icon} ${corpAction.name}</span>
-      <span class="corptile-bl">${esc(corpAction.blurb)}</span></button>`;
+    const offers = G.corpOffers[ci] || [];
+    // Animate the tile the first time it is shown in a round, so a new
+    // approach announces itself rather than quietly appearing.
+    const fresh = UI.corpShownRound !== G.corpOfferRound;
+    if (fresh) UI.corpShownRound = G.corpOfferRound;
+    html += `<button class="corptile${fresh ? ' arrive' : ''}" data-a="${corpAction.id}">
+      <span class="corptile-tag">${corpAction.icon} Special offer · round ${G.corpOfferRound}</span>
+      <span class="corptile-nm">${offers.map(o => esc(o.name)).join(' &nbsp;·&nbsp; ')}</span>
+      <span class="corptile-bl">${offers.length > 1 ? 'Two interested parties' : 'An interested party'} would like to
+        fund this campaign. ${offers.map(o => '$' + o.cash + 'M').join(' or ')}. They will want something later.</span>
+    </button>`;
   }
 
   for (const grp of ACTION_GROUPS) {
@@ -948,7 +1071,7 @@ function renderActionPane() {
   }
 
   html += `<div class="endturn">
-    <button class="btn secondary" id="btn-endturn">End ${G.phase === 'final-push' ? 'final push' : 'turn'}${G.candidates.filter(c=>c.isHuman).length>1?' — '+esc(cand.name):''}</button>
+    <button class="btn secondary" id="btn-endturn">End ${G.phase === 'final-push' ? 'final push' : 'turn'}${G.candidates.filter(c=>c.isHuman).length>1?': '+esc(cand.name):''}</button>
   </div>`;
   pane.innerHTML = html;
 
@@ -957,9 +1080,21 @@ function renderActionPane() {
     UI.sel.state = null; UI.sel.states = []; UI.sel.focusAge = null; UI.sel.focusGender = null;
     UI.sel.intensity = 1; UI.sel.mode = 'pro';
     UI.sel.targetIdx = G.candidates.findIndex((c, k) => k !== ci);
+    // If you were already looking at a state, carry it into the action rather
+    // than making you pick it a second time.
+    const a = ACTION_BY_ID[UI.sel.actionId];
+    if (UI.inspect && (a.targeting === 'state' || a.targeting === 'multi-state')) {
+      UI.sel.state = UI.inspect;
+      UI.sel.states = [UI.inspect];
+    }
     renderActionPane(); refreshMap();
   }));
   $('#btn-endturn').addEventListener('click', () => endTurnNow());
+  const bt = $('#btn-brief-toggle', pane);
+  if (bt) bt.addEventListener('click', () => {
+    UI.briefOpen = UI.briefOpen === false;
+    renderActionPane();
+  });
   $$('.brief .tg', pane).forEach(b => {
     const ab = b.dataset.go;
     b.addEventListener('click', () => { UI.inspect = ab; renderCrossPane(); goTab('cross'); refreshMap(); });
@@ -971,7 +1106,7 @@ function renderActionPane() {
 }
 
 /* The standing instruction: invest in swing states, and say plainly why each
-   one made the list — close AND worth a lot of electoral votes. */
+   one made the list: close AND worth a lot of electoral votes. */
 function briefingHTML(G, ci, cand) {
   // stateValues keeps a floor under safe/hopeless states so the AI still
   // defends them. The briefing must not: it promises close races, so rank
@@ -981,27 +1116,33 @@ function briefingHTML(G, ci, cand) {
     .map(t => ({ ...t, tight: STATES[t.ab].ev * t.closeness }))
     .sort((a, b) => b.tight - a.tight);
   const targets = (ranked.length ? ranked : stateValues(G, ci, simulate(G))).slice(0, 4);
-  const last = G.phase === 'final-push';
-  const roundsLeft = last ? 0 : G.settings.rounds - G.round;
-
-  const money = last
-    ? `Final round — nothing carries past today. Spend the full $${Math.round(cand.cash)}M.`
-    : `+$${Math.round(cand.income)}M next round${roundsLeft > 1 ? ` (${roundsLeft} left)` : ''} — none of it
-       carries over, so don't bank it.`;
+  const broke = cand.cash < 5;
 
   const why = (t) => {
     const margin = Math.abs(t.gap);
     const state = margin <= 1 ? 'a dead heat' : t.gap > 0 ? `up ${margin}` : `down ${margin}`;
-    return `${STATES[t.ab].name} — ${STATES[t.ab].ev} EV, ${state}`;
+    return `${STATES[t.ab].name}: ${STATES[t.ab].ev} EV, ${state}`;
   };
 
-  return `<div class="brief">
-    <h5>Invest in swing states</h5>
-    <p>Close races with the most electoral votes on the line move fastest per dollar — a state you already lead
-      by 30 points won't budge. ${money}</p>
-    <div class="targets">${targets.map(t =>
-      `<button class="tg" data-go="${t.ab}" title="${esc(why(t))}"><b>${t.ab}</b> ${STATES[t.ab].ev} EV ·
-        ${Math.abs(t.gap) <= 1 ? 'tied' : t.gap > 0 ? 'up ' + t.gap : 'down ' + Math.abs(t.gap)}</button>`).join('')}</div>
+  // Three beats, in the order you actually do them.
+  const steps = broke
+    ? `<li class="done">Spend your money to sway voters</li>
+       <li class="done">Swing these states to your side</li>
+       <li class="now">You are out of money. <strong>End your round</strong></li>`
+    : `<li class="now">Spend your money to sway voters</li>
+       <li>Try swinging these states to your side</li>
+       <li>Once you are out of money, end your round</li>`;
+
+  return `<div class="brief${UI.briefOpen === false ? ' closed' : ''}">
+    <button class="brief-h" id="btn-brief-toggle" aria-expanded="${UI.briefOpen !== false}">
+      <span>What to do</span><span class="chev">${UI.briefOpen === false ? '&#9656;' : '&#9662;'}</span>
+    </button>
+    <div class="brief-body">
+      <ol class="brief-steps">${steps}</ol>
+      <div class="targets">${targets.map(t =>
+        `<button class="tg" data-go="${t.ab}" title="${esc(why(t))}"><b>${t.ab}</b> ${STATES[t.ab].ev} EV ·
+          ${Math.abs(t.gap) <= 1 ? 'tied' : t.gap > 0 ? 'up ' + t.gap : 'down ' + Math.abs(t.gap)}</button>`).join('')}</div>
+    </div>
   </div>`;
 }
 
@@ -1010,7 +1151,7 @@ function renderActionDetail(pane, ci) {
   const a = ACTION_BY_ID[UI.sel.actionId];
   const others = G.candidates.map((c, k) => ({ c, k })).filter(o => o.k !== ci);
 
-  // A stance already pinned at ±3 can only move one way — preselect that way
+  // A stance already pinned at ±3 can only move one way, so preselect it
   // rather than offering a checked-but-dead button.
   if (a.targeting === 'topic') {
     const cur = cand.stances[UI.sel.topicIndex];
@@ -1026,12 +1167,12 @@ function renderActionDetail(pane, ci) {
   if (a.targeting === 'state' || a.targeting === 'multi-state') {
     const multi = a.targeting === 'multi-state';
     h += `<div class="cfg-field"><label>${multi ? 'Stops (click up to 4 states on the map)' : 'Target state (click the map)'}</label>
-      <select id="cfg-state"><option value="">— choose a state —</option>` +
+      <select id="cfg-state"><option value="">Choose a state</option>` +
       STATE_IDS.slice().sort((x, y) => STATES[x].name.localeCompare(STATES[y].name))
         .map(ab => `<option value="${ab}" ${UI.sel.states.includes(ab) ? 'selected' : ''}>${STATES[ab].name} (${STATES[ab].ev})</option>`).join('') +
       `</select>`;
     if (multi) {
-      h += `<div class="targ-hint">${UI.sel.states.length ? UI.sel.states.join(' · ') : 'no stops yet'} — splitting the tour dilutes every stop</div>`;
+      h += `<div class="targ-hint">${UI.sel.states.length ? UI.sel.states.join(' · ') : 'no stops yet'}. Splitting the tour dilutes every stop</div>`;
     }
     h += `</div>`;
   }
@@ -1048,7 +1189,7 @@ function renderActionDetail(pane, ci) {
 
   if (a.canAttack && a.targeting !== 'opponent-national') {
     h += `<div class="cfg-field"><label>Message</label><div class="chiprow">
-      <button class="chip${UI.sel.mode === 'pro' ? ' on' : ''}" data-mode="pro">Positive — about you</button>
+      <button class="chip${UI.sel.mode === 'pro' ? ' on' : ''}" data-mode="pro">Positive, about you</button>
       <button class="chip${UI.sel.mode === 'anti' ? ' on' : ''}" data-mode="anti">Attack an opponent</button></div>`;
     if (UI.sel.mode === 'anti') {
       h += `<div class="chiprow" style="margin-top:5px">` + others.map(o =>
@@ -1065,7 +1206,7 @@ function renderActionDetail(pane, ci) {
   if (a.targeting === 'topic') {
     h += `<div class="cfg-field"><label>Which position moves</label>
       <select id="cfg-topic">` + G.topics.map((t, i) =>
-        `<option value="${i}" ${UI.sel.topicIndex === i ? 'selected' : ''}>${esc(t.name)} — you are at ${cand.stances[i] > 0 ? '+' : ''}${cand.stances[i]}</option>`).join('') +
+        `<option value="${i}" ${UI.sel.topicIndex === i ? 'selected' : ''}>${esc(t.name)} · you are at ${cand.stances[i] > 0 ? '+' : ''}${cand.stances[i]}</option>`).join('') +
       `</select><div class="chiprow" style="margin-top:7px">
         <button class="chip${UI.sel.direction === -1 ? ' on' : ''}" data-dir="-1" ${cand.stances[UI.sel.topicIndex] <= -3 ? 'disabled' : ''}>Move &minus;1 (toward "${esc(G.topics[UI.sel.topicIndex].con)}")</button>
         <button class="chip${UI.sel.direction === 1 ? ' on' : ''}" data-dir="1" ${cand.stances[UI.sel.topicIndex] >= 3 ? 'disabled' : ''}>Move +1 (toward "${esc(G.topics[UI.sel.topicIndex].pro)}")</button>
@@ -1080,7 +1221,7 @@ function renderActionDetail(pane, ci) {
       if (!UI.sel.celeb || !pool.includes(UI.sel.celeb)) UI.sel.celeb = pool[0];
       h += `<div class="cfg-field"><label>Who is endorsing you</label>
         <select id="cfg-celeb">` + pool.map((c, i) =>
-          `<option value="${i}" ${UI.sel.celeb === c ? 'selected' : ''}>${esc(c.name)} — ${esc(c.desc)}</option>`).join('') +
+          `<option value="${i}" ${UI.sel.celeb === c ? 'selected' : ''}>${esc(c.name)} · ${esc(c.desc)}</option>`).join('') +
         `</select><div class="targ-hint">Reaches ${AGE_LABEL[UI.sel.celeb.age].toLowerCase()}${UI.sel.celeb.gender ? ' · ' + GENDER_LABEL[UI.sel.celeb.gender].toLowerCase() : ''} hardest. Everyone else notices.</div></div>`;
     }
   }
@@ -1315,7 +1456,7 @@ function renderCrossPane() {
   if (clr) clr.addEventListener('click', () => { UI.inspect = null; renderCrossPane(); refreshMap(); });
 }
 
-/* The per-state breakdown, with each cell's movement since this turn began —
+/* The per-state breakdown, with each cell's movement since this turn began,
    which, on your own turn, is exactly what your last actions bought you. */
 function stateInspectorHTML(G, truth, ab, me, bar) {
   const st = truth.byState[ab];
@@ -1338,7 +1479,7 @@ function stateInspectorHTML(G, truth, ab, me, bar) {
   const chip = (now, before) => {
     if (before == null) return '';
     const d = now - before;
-    if (Math.abs(d) < 0.5) return `<span class="delta flat">—</span>`;
+    if (Math.abs(d) < 0.5) return `<span class="delta flat">·</span>`;
     return `<span class="delta ${d > 0 ? 'up' : 'down'}">${d > 0 ? '▲' : '▼'}${Math.abs(d).toFixed(0)}pt</span>`;
   };
   const pressTag = (sum, n) => {
@@ -1347,7 +1488,7 @@ function stateInspectorHTML(G, truth, ab, me, bar) {
     const cls = v > 0.03 ? 'up' : v < -0.03 ? 'down' : 'flat';
     return `<span class="press ${cls}">${v >= 0 ? '+' : '−'}${Math.abs(v).toFixed(2)}</span>`;
   };
-  /* counts are voters inside this slice of this state, not percentages — the
+  /* counts are voters inside this slice of this state, not percentages. The
      group is only as big as its share of the hundred, so everything shown has
      to be normalised against the group total. */
   const row = (label, counts, before, popShare, sum, n) => {
@@ -1380,7 +1521,7 @@ function stateInspectorHTML(G, truth, ab, me, bar) {
   }
   h += `<div class="insp-foot">▲▼ is the change in ${esc(cand.name)}'s share of that group, in points, since
     this turn began.
-    <em>Ad pressure</em> is the average bias those voters now carry toward ${esc(cand.name)} — everything your
+    <em>Ad pressure</em> is the average bias those voters now carry toward ${esc(cand.name)}: everything your
     advertising, visits and endorsements have left behind, on the −${'' + BIAS_CAP.toFixed(1)}…+${BIAS_CAP.toFixed(1)} scale the vote is computed on.</div>`;
   return h;
 }
@@ -1398,14 +1539,14 @@ function renderPlatPane() {
       h += `<div class="prow"><span class="dotname"><span class="d" style="background:${c.color}"></span>${esc(c.name)}${c.isHuman ? '<span class="you-tag">YOU</span>' : ''}</span>
         <span class="stancepill" style="color:${c.color}">${c.stances[i] > 0 ? '+' : ''}${c.stances[i]}</span></div>`;
     }
-    h += `<div style="font-size:11.5px;color:var(--ink3);margin-top:5px">${stanceReadout(G, i, 0).split('—')[0]}</div></div>`;
+    h += `<div style="font-size:11.5px;color:var(--ink3);margin-top:5px">${stanceReadout(G, i, 0, true)}</div></div>`;
   });
   h += `</div><div class="sec-h">The field</div>`;
   for (const c of G.candidates) {
     h += `<div style="margin-bottom:11px;padding-bottom:10px;border-bottom:1px solid var(--line)">
       <div class="dotname" style="margin-bottom:4px"><span class="d" style="background:${c.color}"></span>
         <strong>${esc(c.name)}</strong> <span class="muted">· ${esc(c.party)}</span></div>
-      ${c.persona ? `<div style="font-size:11.5px;color:var(--ink3);font-family:var(--mono)">${esc(c.persona.name)} — ${esc(c.persona.desc)}</div>` : ''}
+      ${c.persona ? `<div style="font-size:11.5px;color:var(--ink3);font-family:var(--mono)">${esc(c.persona.name)} · ${esc(c.persona.desc)}</div>` : ''}
       ${c.corp ? `<div style="font-size:12px;color:#f0b9b9;margin-top:3px">Backed by ${esc(c.corp.name)}</div>` : ''}
       <div style="font-size:12.5px;color:var(--ink2);margin-top:5px">${esc(c.bio) || '<span class="muted">No biography.</span>'}</div></div>`;
   }
@@ -1430,6 +1571,7 @@ function revealPace(i, total) {
 function goToElection() {
   const G = UI.G;
   stopTurnClock();
+  if (roundTick) { clearInterval(roundTick); roundTick = null; }
   const F = runElection(G);
   Advisor.hide();
   $('#toasts').innerHTML = '';
@@ -1461,7 +1603,7 @@ function goToElection() {
     });
     running[d.winner] += STATES[ab].ev;
     const c = el('div', 'call', `<span class="d" style="background:${G.candidates[d.winner].color}"></span>
-      <span>${STATES[ab].name} — ${esc(G.candidates[d.winner].name)}</span>
+      <span>${STATES[ab].name} · ${esc(G.candidates[d.winner].name)}</span>
       <span class="ev">${STATES[ab].ev} EV · +${(d.margin * 100).toFixed(1)}</span>`);
     const calls = $('#calls');
     calls.insertBefore(c, calls.firstChild);
@@ -1624,7 +1766,7 @@ function concludeElection(F) {
   }
   h += `</tbody></table>`;
 
-  // final poll vs result — how wrong were the polls?
+  // final poll vs result: how wrong were the polls?
   if (G.polls.length) {
     const last = G.polls[G.polls.length - 1].poll;
     h += `<div class="sec-h">Final poll vs. count</div><table class="tbl"><tbody>`;
@@ -1643,7 +1785,7 @@ function concludeElection(F) {
   let e = `<h3>${F.contingent ? 'A deadlocked map' : esc(w.name) + ' is elected President'}</h3>`;
   if (F.contingent) {
     e += `<p>With ${G.candidates.length} names on the ballot the electoral college fractured. ${esc(w.name)} finished
-      first with ${F.res.ev[F.winner]} votes — short of the 270 required — and under the Twelfth Amendment the
+      first with ${F.res.ev[F.winner]} votes, short of the 270 required, and under the Twelfth Amendment the
       decision passes to the House, where each state delegation casts a single vote.</p>`;
   } else {
     const margin = F.res.ev[F.winner] - order[1].v;
@@ -1656,7 +1798,7 @@ function concludeElection(F) {
       ${(F.res.pvShare[F.pvWinner] * 100).toFixed(1)}% and lost the election. Expect that number to be quoted for
       the next four years.</p>`;
   }
-  // The corporate reveal — only for the candidate who actually took office.
+  // The corporate reveal, only for the candidate who actually took office.
   // A losing campaign's backer bought nothing, so there is nothing to report.
   if (!F.contingent && w.corp) {
     e += `<div class="corp-line"><strong>${esc(w.name)} won while backed by ${esc(w.corp.name)}</strong>, who has
@@ -1671,7 +1813,7 @@ function concludeElection(F) {
   ep.hidden = false;
   $('#final-actions').hidden = false;
 
-  // No celebration when the college deadlocks — nobody has won anything yet.
+  // No celebration when the college deadlocks. Nobody has won anything yet.
   if (!F.contingent) {
     const wc = w.color;
     Confetti.fire([wc, tint(wc, 0.45), '#f2c14e', '#ffffff', tint(wc, 0.2)]);
@@ -1703,6 +1845,24 @@ $('#btn-quit').addEventListener('click', () => { if (confirm('Abandon the campai
 function methodologyHTML(G) {
 
   return `<h3>Official Guidance</h3>
+
+  <div class="about">
+    <h4>About this project</h4>
+    <p><em>Run for President™</em> is an art project by <strong>Noah Picard</strong>, made for the final showcase
+    of <em>Speculative Everything: Design, Fiction, and Social Dreaming</em> by Anthony Dunne and Fiona Raby.</p>
+
+    <p>It imagines a near future in which anyone can run for office from the comfort of their own home. An AI
+    campaign manager writes your advertising and tells you where to spend. AI clones of you handle the campaign
+    visits, work the rope lines and knock on doors, so the candidate never has to leave the couch.</p>
+
+    <p>It also plays with how campaigns get paid for. Equal budgets make the race a contest of judgement; unequal
+    ones make it something else. From the second round corporations arrive with cheques large enough to change the
+    arithmetic, and a favour that comes due the moment you win. You will notice yourself doing the sum anyway.</p>
+
+    <p class="about-q">How does being a candidate change the way you think about politics, and about the
+    trade-offs you are willing to make?</p>
+  </div>
+
   <h4>The electorate</h4>
   <p>Every state is polled at <strong>100 registered voters</strong>, 5,100 in all. Each voter is assigned an age bucket
   (young 18–34, middle 35–64, older 65+) and a gender (male, female, nonbinary) by quota, so the hundred voters
@@ -1716,7 +1876,7 @@ function methodologyHTML(G) {
   <p>State positions are driven by that state's partisan lean, so Wyoming and Vermont pull hard in opposite
   directions. Under <strong>Realistic</strong> individuality each voter also deviates from their group by a normal
   draw (σ = 1.4), which is what produces state margins in the same range as real American elections. Under
-  <strong>Lockstep</strong> that term is zero and the model runs exactly as specified — blocky and merciless.</p>
+  <strong>Lockstep</strong> that term is zero and the model runs exactly as specified: blocky and merciless.</p>
   <p>Each issue is then recentred on the national electorate, so the average American sits near zero and the
   geography of the map is driven by how states differ from each other rather than by whether the idea happens
   to be popular. A small residual tilt survives, so taking the popular side still helps.</p>
@@ -1731,10 +1891,10 @@ candidate k = [ s₁ … s₅ , &minus;3 … <b>+3</b> … &minus;3 ]
 
 vote = argmax<sub>k</sub>  (voter · candidate<sub>k</sub>) / (‖voter‖ ‖candidate<sub>k</sub>‖)</div>
   <p>Because the identity block is ±3, a bias of even half a point is worth roughly as much as a full step on an
-  issue. Advertising is powerful — that is the point of the game.</p>
+  issue. Advertising is powerful, which is the point of the game.</p>
 
   <h4>Funding and the round</h4>
-  <p>Funds are issued at the start of every round and do not carry any advantage into election day — an unspent
+  <p>Funds are issued at the start of every round and do not carry any advantage into election day. An unspent
   balance on the morning of the vote has bought you nothing. Spend each round's allocation inside that round,
   in states where the margin is narrow and the electoral votes are many. Your advisory assistant will identify
   those states for you as the race develops.</p>
@@ -1746,7 +1906,7 @@ vote = argmax<sub>k</sub>  (voter · candidate<sub>k</sub>) / (‖voter‖ ‖ca
     <li>Narrowing the audience multiplies your effect on that slice roughly 1.85× and cuts everyone else to 0.18×.</li>
     <li><strong>Diminishing returns</strong> apply per action <em>and per target</em>. The second identical TV buy in
       Ohio is worth about three-quarters of the first; the fifth is worth about a third.</li>
-    <li>Spending harder in one go scales as intensity<sup>0.75</sup> — a blitz is better than a modest buy, but not
+    <li>Spending harder in one go scales as intensity<sup>0.75</sup>, so a blitz is better than a modest buy, but not
       three times better.</li>
     <li>Every action can <strong>backfire</strong>, at a rate reduced by the message discipline your biography
       earned. Internet advertising and opposition research are the most volatile.</li>
@@ -1761,11 +1921,11 @@ vote = argmax<sub>k</sub>  (voter · candidate<sub>k</sub>) / (‖voter‖ ‖ca
 
   <h4>Election night</h4>
   <p>The count is the true tally with a final turnout variation (σ ≈ 2.8 points per state) layered on. States
-  are winner-take-all — including Maine and Nebraska, which the real system splits. 538 electoral votes,
+  are winner-take-all, including Maine and Nebraska, which the real system splits. 538 electoral votes,
   270 to win; if the field fragments and nobody gets there, the election goes to the House.</p>
 
   <h4>The biography analyst</h4>
-  <p>Your biography is assessed on this machine and nowhere else — there is no server, no account and no
+  <p>Your biography is assessed on this machine and nowhere else. There is no server, no account and no
   transmission of any kind. The analyst reads for occupational signals, place names, numbers and proper nouns,
   empty campaign filler and volunteered liabilities, and converts them into your opening favourability across
   the nine age × gender cells.</p>
@@ -1775,7 +1935,7 @@ vote = argmax<sub>k</sub>  (voter · candidate<sub>k</sub>) / (‖voter‖ ‖ca
 }
 
 /* ==========================================================================
-   CIVIS — Civic Information & Voter Interface System
+   CIVIS: Civic Information & Voter Interface System
 
    Lives permanently in the corner. Speaks up at the moments that matter, and
    is there to be clicked any time you want a hint. Everything it says is read
@@ -1792,7 +1952,7 @@ const Advisor = (() => {
     'A blitz costs 3× a modest buy and delivers about 2¼×. Spread it around.',
     'Narrowing to one age group multiplies the effect on them and wastes the rest.',
     'Print reaches the old. Internet reaches the young. Match the medium to who you need.',
-    'Attacking lowers their number without raising yours — that only helps in a two-way race.',
+    'Attacking lowers their number without raising yours, which only helps in a two-way race.',
     'Click any state on the map to see how each group there is breaking.',
     'A buy in a state you already lead by thirty points does nothing at all.',
     'Debate prep pays off next round, so it rewards spending early.',
@@ -1843,7 +2003,7 @@ const Advisor = (() => {
     welcome() {
       const G = UI.G;
       say(`<strong>CIVIS</strong> is online and assigned to this campaign.<br><br>
-        <strong>${G.settings.rounds} rounds</strong> until the country votes, and money arrives every round —
+        <strong>${G.settings.rounds} rounds</strong> until the country votes, and money arrives every round, so
         so spend what you have. Put it where you are <strong>close</strong>, not where you already win.<br><br>
         <span class="muted">Query this system at any time for guidance.</span>`, 13000);
     },
@@ -1852,7 +2012,7 @@ const Advisor = (() => {
       const G = UI.G, cand = G.candidates[viewerIdx()];
       const t = targets(3);
       if (!t.length) return;
-      say(`<strong>$${Math.round(cand.cash)}M</strong> to spend, and more next round — holding it back gains you
+      say(`<strong>$${Math.round(cand.cash)}M</strong> to spend, and more next round. Holding it back gains you
         nothing. Closest races: ${nameList(t)}.`, 10000);
     },
 

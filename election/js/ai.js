@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ai.js — computer-controlled campaigns
+   ai.js: computer-controlled campaigns
    ========================================================================== */
 
 /* How valuable is each state to candidate ci right now?
@@ -170,7 +170,7 @@ function aiPickStances(G, ci, rng, anchorLean) {
 }
 
 /* Spread the computer field across the spectrum instead of drawing each
-   platform independently — otherwise two AIs routinely land on the same side
+   platform independently, because otherwise two AIs routinely land on the same side
    of the median and the race is over before it starts. */
 function spreadAnchors(rng, n) {
   if (n === 1) return [rng.range(-0.2, 0.2)];
