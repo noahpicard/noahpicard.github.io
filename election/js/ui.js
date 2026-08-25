@@ -1556,15 +1556,18 @@ function renderPlatPane() {
    ELECTION NIGHT
    ========================================================================== */
 
-/* Reveal pacing. Safe states come in quickly and in clumps; the closer the
-   race gets to the end of the board, the longer the network sits on each
-   call. Crossing 270 buys an extra beat. */
+/* Reveal pacing. Safe states come in first, in pairs, and from there the board
+   empties one state at a time with the network sitting longer on every call.
+   The last few are slow enough to be uncomfortable, which is the point.
+   Crossing 270 buys an extra beat on top. About eighty seconds end to end. */
 function revealPace(i, total) {
   const left = total - i;
-  if (left > 27) return { batch: 3, delay: 420 };
-  if (left > 12) return { batch: 1, delay: 660 };
-  if (left > 4)  return { batch: 1, delay: 1050 };
-  return { batch: 1, delay: 1500 };
+  if (left > 38) return { batch: 2, delay: 900 };
+  if (left > 24) return { batch: 1, delay: 1100 };
+  if (left > 12) return { batch: 1, delay: 1600 };
+  if (left > 6)  return { batch: 1, delay: 2300 };
+  if (left > 2)  return { batch: 1, delay: 3200 };
+  return { batch: 1, delay: 4200 };
 }
 
 function goToElection() {
@@ -1619,7 +1622,7 @@ function goToElection() {
     }
     if (i >= seq.length) {
       $('#btn-skip').hidden = true;
-      UI.finalTimer = setTimeout(() => concludeElection(F), 900);
+      UI.finalTimer = setTimeout(() => concludeElection(F), 1600);
       return;
     }
     const pace = revealPace(i, seq.length);
@@ -1639,10 +1642,10 @@ function goToElection() {
       $('#final-sub').textContent = `${seq.length - i} state${seq.length - i === 1 ? '' : 's'} still out. ` +
         `${G.candidates[lead.k].name} leads with ${lead.v}.`;
     }
-    UI.finalTimer = setTimeout(step, pace.delay + (justCrossed >= 0 ? 1400 : 0));
+    UI.finalTimer = setTimeout(step, pace.delay + (justCrossed >= 0 ? 2600 : 0));
   };
   UI.finalStep = step;
-  UI.finalTimer = setTimeout(step, 1100);
+  UI.finalTimer = setTimeout(step, 1800);
 }
 
 /* ==========================================================================
