@@ -225,9 +225,18 @@ input:disabled{background:rgba(255,255,255,.02); color:var(--ink3); border-color
 .col-map{display:grid; gap:16px; min-width:0}
 .col-side{position:sticky; top:64px}
 
-.mapcard,.feedcard{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:15px 17px}
+.mapcard{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:15px 17px}
+
+/* The news card gives its whole height to the feed; the heading floats over
+   the top-right corner as a small label instead of taking a line of its own. */
+.feedcard{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+          padding:10px 12px; position:relative}
+.feedcard h3{position:absolute; top:8px; right:14px; z-index:2; margin:0;
+             font-family:var(--mono); font-size:12px; letter-spacing:.18em; text-transform:uppercase;
+             color:var(--ink3); background:linear-gradient(90deg, rgba(27,33,43,0), var(--panel) 22%);
+             padding:2px 0 4px 26px; pointer-events:none}
 .mapcard-head{display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:11px}
-.mapcard h3,.feedcard h3{margin:0; font-family:var(--serif); font-size:26px; font-weight:600}
+.mapcard h3{margin:0; font-family:var(--serif); font-size:26px; font-weight:600}
 .map-sub{font-size:15px; color:var(--ink3); font-family:var(--mono); margin-top:2px}
 .map-modes{display:flex; gap:5px}
 .map-modes button{background:var(--panel2); border:1px solid var(--line2); color:var(--ink3);
@@ -277,7 +286,7 @@ input:disabled{background:rgba(255,255,255,.02); color:var(--ink3); border-color
 .legend .lg .d{width:18px; height:18px; border-radius:50%; flex:none}
 .legend .lg b{font-family:var(--mono); font-size:16px}
 
-.feed{max-height:300px; overflow-y:auto; display:grid; gap:8px; margin-top:10px; padding-right:4px}
+.feed{max-height:300px; overflow-y:auto; display:grid; gap:8px; margin-top:0; padding-right:4px}
 .feed-item{background:var(--panel2); border-left:3px solid var(--line2); border-radius:6px;
            padding:11px 14px; font-size:17px; color:var(--ink2); animation:fadein .3s ease}
 .feed-item .fw{display:flex; justify-content:space-between; gap:10px; margin-bottom:4px;
@@ -538,30 +547,32 @@ select:focus{outline:none; border-color:var(--accent)}
 
 /* ==========================================================================
    CAMPAIGN ADVISOR
-   A permanent avatar in the corner; click it any time for a hint. The bubble
-   sits above it with a tail pointing back down at the launcher.
+   Sits against the left edge, vertically centred and laid out horizontally —
+   avatar first, speech bubble beside it — so it stays clear of the news feed
+   along the bottom. Click the avatar any time for a hint.
    ========================================================================== */
 #advisor-wrap{
-  position:fixed; left:22px; bottom:22px; z-index:85;
-  display:flex; flex-direction:column; align-items:flex-start; gap:14px;
-  max-width:calc(100vw - 44px);
+  position:fixed; left:20px; top:50%; transform:translateY(-50%); z-index:85;
+  display:flex; flex-direction:row; align-items:center; gap:14px;
+  max-width:calc(100vw - 40px);
 }
 #advisor-wrap[hidden]{display:none}
 
 #advisor{
-  position:relative; width:400px; max-width:calc(100vw - 44px);
+  position:relative; width:380px; max-width:calc(100vw - 140px);
   background:var(--panel); border:1px solid var(--line2); border-radius:16px;
   padding:16px 18px 16px 19px; box-shadow:0 24px 64px rgba(0,0,0,.66);
-  animation:advin .38s cubic-bezier(.16,1,.3,1); transform-origin:20% 100%;
+  animation:advin .38s cubic-bezier(.16,1,.3,1); transform-origin:0 50%;
 }
 #advisor[hidden]{display:none}
 /* the tail: one square rotated 45 degrees, only its two outer borders drawn,
-   so it reads as a clean point rather than a lopsided sliver */
+   so it reads as a clean point rather than a lopsided sliver. Points left,
+   back at the avatar. */
 #advisor::after{
-  content:''; position:absolute; left:26px; bottom:-9px; width:16px; height:16px;
+  content:''; position:absolute; left:-9px; top:50%; margin-top:-8px; width:16px; height:16px;
   background:var(--panel);
-  border-right:1px solid var(--line2); border-bottom:1px solid var(--line2);
-  transform:rotate(45deg); border-radius:0 0 3px 0;
+  border-left:1px solid var(--line2); border-bottom:1px solid var(--line2);
+  transform:rotate(45deg); border-radius:0 0 0 3px;
 }
 .adv-x{position:absolute; top:6px; right:10px; background:transparent; border:0; color:var(--ink3);
        font-size:24px; line-height:1; cursor:pointer; padding:2px 6px}
@@ -576,14 +587,15 @@ select:focus{outline:none; border-color:var(--accent)}
 .adv-msg .adv-list li{margin-bottom:3px}
 
 #adv-launcher{
+  order:-1;
   position:relative; width:76px; height:76px; padding:0; flex:none;
   border-radius:50%; border:2px solid var(--line2); background:var(--panel2);
   cursor:pointer; overflow:visible; transition:transform .14s, border-color .14s;
   box-shadow:0 10px 28px rgba(0,0,0,.5);
 }
 #adv-launcher img{width:100%; height:100%; border-radius:50%; display:block; pointer-events:none}
-#adv-launcher:hover{transform:translateY(-3px) scale(1.04); border-color:var(--accent)}
-#adv-launcher:active{transform:translateY(0) scale(.99)}
+#adv-launcher:hover{transform:scale(1.06); border-color:var(--accent)}
+#adv-launcher:active{transform:scale(.98)}
 #adv-launcher:focus-visible{outline:3px solid var(--accent); outline-offset:3px}
 .adv-dot{
   position:absolute; top:-2px; right:-2px; width:19px; height:19px; border-radius:50%;
@@ -592,13 +604,16 @@ select:focus{outline:none; border-color:var(--accent)}
 }
 .adv-dot[hidden]{display:none}
 
-@keyframes advin{from{opacity:0; transform:translateY(14px) scale(.96)} to{opacity:1; transform:none}}
+@keyframes advin{from{opacity:0; transform:translateX(-16px) scale(.96)} to{opacity:1; transform:none}}
 @keyframes advpulse{0%,100%{transform:scale(1); opacity:1} 50%{transform:scale(1.22); opacity:.75}}
 @media (prefers-reduced-motion: reduce){ #advisor,.adv-dot,#adv-launcher{animation:none; transition:none} }
-@media (max-width:640px){
-  #advisor-wrap{left:12px; bottom:12px; gap:10px}
-  #advisor{width:calc(100vw - 24px)}
-  #adv-launcher{width:62px; height:62px}
+@media (max-width:900px){
+  #advisor-wrap{left:12px; top:auto; bottom:12px; transform:none;
+                flex-direction:column; align-items:flex-start; gap:10px}
+  #advisor{width:calc(100vw - 24px); max-width:none; transform-origin:20% 100%}
+  #advisor::after{left:26px; top:auto; bottom:-9px; margin-top:0;
+                  border-left:0; border-right:1px solid var(--line2); border-radius:0 0 3px 0}
+  #adv-launcher{order:0; width:62px; height:62px}
 }
 
 /* ==========================================================================
@@ -663,10 +678,32 @@ select:focus{outline:none; border-color:var(--accent)}
 /* Keep the map from eating the fold so the news feed stays visible — the
    opponents' moves land there live during your turn. */
 #usmap{max-height:52vh}
-.feed{max-height:340px; scroll-behavior:smooth}
+.feed{max-height:min(340px, 34vh); scroll-behavior:smooth; margin-top:0}
 
 /* Action icon in flight, and the little thump when it lands. */
 .flyer{position:fixed; left:0; top:0; z-index:95; pointer-events:none;
        font-size:46px; line-height:1; filter:drop-shadow(0 6px 14px rgba(0,0,0,.6))}
 .st.struck{animation:struck .55s ease}
 @keyframes struck{0%{filter:brightness(1)} 35%{filter:brightness(2.1)} 100%{filter:brightness(1)}}
+
+/* The artist's statement at the head of Official Guidance. */
+.modal-body .about{background:var(--bg2); border:1px solid var(--line2); border-left:3px solid var(--accent);
+                   border-radius:10px; padding:18px 22px; margin:0 0 26px}
+.modal-body .about h4{margin-top:0}
+.modal-body .about p:last-child{margin-bottom:0}
+.modal-body .about-q{color:var(--ink); font-size:19px; line-height:1.5; font-style:italic;
+                     margin-top:16px; padding-top:14px; border-top:1px solid var(--line)}
+
+/* A shared countdown for every screen that is not the title or election
+   night, so an unattended installation always keeps moving. */
+.screenbar{position:fixed; top:0; left:0; right:0; height:3px; z-index:96;
+           background:rgba(255,255,255,.04); pointer-events:none}
+.screenbar[hidden]{display:none}
+.screenbar-fill{height:100%; width:100%; background:var(--accent); opacity:.38;
+                transition:width .25s linear}
+.screenbar.low .screenbar-fill{background:var(--bad); opacity:.9}
+
+/* the same countdown, inside the between-rounds polling card */
+.modal-countdown{height:3px; border-radius:2px; background:rgba(255,255,255,.07); overflow:hidden; margin-top:16px}
+.modal-countdown i{display:block; height:100%; width:100%; background:var(--accent); opacity:.45;
+                   transition:width .25s linear}

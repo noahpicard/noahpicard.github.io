@@ -70,7 +70,59 @@ function viewerIdx() {
 let currentScreen = null;
 function show(id) {
   $$('.screen').forEach(s => s.classList.toggle('active', s.id === id));
-  if (id !== currentScreen) { currentScreen = id; window.scrollTo(0, 0); }
+  if (id !== currentScreen) { currentScreen = id; window.scrollTo(0, 0); startScreenTimer(id); }
+}
+
+/* ==========================================================================
+   SCREEN COUNTDOWNS
+
+   This runs unattended on a wall, so no screen may stall. Every screen except
+   the title gets a countdown that advances it on its own; the campaign screen
+   is exempt because its own turn clock already does the job. Election night
+   returns to the title so the next visitor starts clean.
+   ========================================================================== */
+const SCREEN_TIMERS = {
+  'screen-race':    { ms:  90 * 1000, go: () => $('#btn-race-next').click() },
+  'screen-field':   { ms:  90 * 1000, go: () => $('#btn-field-next').click() },
+  'screen-bio':     { ms: 180 * 1000, go: () => autoAdvanceBio() },
+  'screen-stance':  { ms: 120 * 1000, go: () => $('#btn-stance-next').click() },
+  'screen-handoff': { ms:  60 * 1000, go: () => $('#btn-handoff').click() },
+  'screen-final':   { ms: 300 * 1000, go: () => location.reload() }
+};
+
+let screenTick = null;
+function stopScreenTimer() {
+  if (screenTick) { clearInterval(screenTick); screenTick = null; }
+  const bar = $('#screenbar');
+  if (bar) { bar.hidden = true; bar.classList.remove('low'); }
+}
+
+function startScreenTimer(id) {
+  stopScreenTimer();
+  const spec = SCREEN_TIMERS[id];
+  if (!spec) return;
+  const bar = $('#screenbar'), fill = $('#screenbar-fill');
+  const endsAt = Date.now() + spec.ms;
+  bar.hidden = false;
+  fill.style.width = '100%';
+  screenTick = setInterval(() => {
+    // If the screen changed underneath us, this timer is stale.
+    if (currentScreen !== id) { stopScreenTimer(); return; }
+    const left = Math.max(0, endsAt - Date.now());
+    fill.style.width = (left / spec.ms * 100) + '%';
+    bar.classList.toggle('low', left < 15 * 1000);
+    if (left <= 0) { stopScreenTimer(); spec.go(); }
+  }, 250);
+}
+
+/* The biography screen cannot advance until something has been analysed, so
+   the timeout writes an example, runs it, and then moves on. */
+function autoAdvanceBio() {
+  const next = $('#btn-bio-next');
+  if (!next.disabled) { next.click(); return; }
+  if (!$('#inp-bio').value.trim()) $('#btn-bio-example').click();
+  $('#btn-bio-analyze').click();
+  setTimeout(() => { if (!next.disabled) next.click(); }, 800);
 }
 /* Some modals gate the flow of the game — the round-polling card is the only
    route from one round into the next. Those are opened `gating`, which removes
@@ -679,7 +731,7 @@ function renderLegend() {
    turn early — or letting the clock run out — plays out whatever the
    opponents had left so the round is never cut short for them.
    ========================================================================== */
-const TURN_MS = 15 * 60 * 1000;
+const TURN_MS = 10 * 60 * 1000;
 
 function humanIndices(G) { return G.candidates.map((c, k) => c.isHuman ? k : -1).filter(k => k >= 0); }
 
@@ -813,12 +865,31 @@ function showRoundModal(poll) {
     <tbody>${rows}</tbody></table>
     ${last ? `<h4>Next</h4><p>Campaigning is over. What is left in the accounts can still be spent in the last
       forty-eight hours — then the country votes.</p>` : ''}
-    <div class="row-actions center"><button class="btn" id="btn-round-go">${last ? 'The final push' : 'Round ' + (G.round + 1)}</button></div>`, true);
-  $('#btn-round-go').addEventListener('click', () => {
+    <div class="row-actions center"><button class="btn" id="btn-round-go">${last ? 'The final push' : 'Round ' + (G.round + 1)}</button></div>
+    <div class="modal-countdown"><i id="round-countdown"></i></div>`, true);
+
+  const go = () => {
+    if (roundTick) { clearInterval(roundTick); roundTick = null; }
     closeModal(true);
     if (last) startFinalPush(); else nextRound();
-  });
+  };
+  $('#btn-round-go').addEventListener('click', go);
+
+  // The card gates the round, so it carries its own minute rather than
+  // waiting on somebody to press the button.
+  const label = $('#btn-round-go'), text = label.textContent;
+  const fill = $('#round-countdown');
+  const endsAt = Date.now() + ROUND_CARD_MS;
+  if (roundTick) clearInterval(roundTick);
+  roundTick = setInterval(() => {
+    const left = Math.max(0, endsAt - Date.now());
+    if (fill) fill.style.width = (left / ROUND_CARD_MS * 100) + '%';
+    if (label) label.textContent = `${text} · ${Math.ceil(left / 1000)}s`;
+    if (left <= 0) go();
+  }, 250);
 }
+const ROUND_CARD_MS = 60 * 1000;
+let roundTick = null;
 
 function nextRound() {
   const G = UI.G;
@@ -1487,6 +1558,7 @@ function revealPace(i, total) {
 function goToElection() {
   const G = UI.G;
   stopTurnClock();
+  if (roundTick) { clearInterval(roundTick); roundTick = null; }
   const F = runElection(G);
   Advisor.hide();
   $('#toasts').innerHTML = '';
@@ -1760,6 +1832,24 @@ $('#btn-quit').addEventListener('click', () => { if (confirm('Abandon the campai
 function methodologyHTML(G) {
 
   return `<h3>Official Guidance</h3>
+
+  <div class="about">
+    <h4>About this project</h4>
+    <p><em>Run for President™</em> is an art project by <strong>Noah Picard</strong>, made for the final showcase
+    of <em>Speculative Everything: Design, Fiction, and Social Dreaming</em> by Anthony Dunne and Fiona Raby.</p>
+
+    <p>It imagines a near future in which anyone can run for office from the comfort of their own home. An AI
+    campaign manager writes your advertising and tells you where to spend. AI clones of you handle the campaign
+    visits, work the rope lines and knock on doors, so the candidate never has to leave the couch.</p>
+
+    <p>It also plays with how campaigns get paid for. Equal budgets make the race a contest of judgement; unequal
+    ones make it something else. From the second round corporations arrive with cheques large enough to change the
+    arithmetic, and a favour that comes due the moment you win. You will notice yourself doing the sum anyway.</p>
+
+    <p class="about-q">How does being a candidate change the way you think about politics — and about the
+    trade-offs you are willing to make?</p>
+  </div>
+
   <h4>The electorate</h4>
   <p>Every state is polled at <strong>100 registered voters</strong>, 5,100 in all. Each voter is assigned an age bucket
   (young 18–34, middle 35–64, older 65+) and a gender (male, female, nonbinary) by quota, so the hundred voters
