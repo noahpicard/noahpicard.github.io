@@ -274,27 +274,41 @@ function simulate(G) {
 }
 
 /* A poll is the truth plus sampling error. State polls are noisier than the
-   national number because the samples are smaller. */
-function pollFrom(result, rng, sd) {
+   national number because the samples are smaller.
+
+   The sampling error is drawn once and then held on the poll as `noise`. Pass
+   a previous poll's noise back in to re-run the same survey against a changed
+   electorate: that is what lets the board update after every campaign move
+   and show only the movement the move actually caused, instead of reshuffling
+   fifty states' worth of fresh wobble each time somebody buys an ad. One
+   election keeps one error, scaled down by `sd` as election day approaches,
+   which is also why a state that polls a little rich for somebody all year can
+   still come in under on the night. */
+function pollFrom(result, rng, sd, noise) {
   const n = result.ev.length;
-  const noisy = (shares, s) => {
-    const raw = shares.map(v => Math.max(0.0005, v + rng.gauss(0, s)));
+  const z = noise || { states: {}, nat: null };
+  const draw = () => { const a = []; for (let k = 0; k < n; k++) a.push(rng.gauss(0, 1)); return a; };
+  if (!z.nat) z.nat = draw();
+
+  const noisy = (shares, s, zs) => {
+    const raw = shares.map((v, k) => Math.max(0.0005, v + zs[k] * s));
     const tot = raw.reduce((a, b) => a + b, 0);
     return raw.map(v => v / tot);
   };
   const byState = {};
   const ev = new Array(n).fill(0);
   for (const ab of STATE_IDS) {
+    if (!z.states[ab]) z.states[ab] = draw();
     const shares = result.byState[ab].counts.map(c => c / 100);
-    const p = noisy(shares, sd * 2.1);      // state samples are much smaller
+    const p = noisy(shares, sd * 2.1, z.states[ab]);   // state samples are much smaller
     let winner = 0;
     for (let k = 1; k < n; k++) if (p[k] > p[winner]) winner = k;
     const sorted = p.slice().sort((a, b) => b - a);
     byState[ab] = { shares: p, winner, margin: sorted[0] - (sorted[1] || 0) };
     ev[winner] += STATES[ab].ev;
   }
-  const nat = noisy(result.pvShare, sd);
-  return { byState, ev, nat, moe: Math.round(sd * 1.96 * 1000) / 10 };
+  const nat = noisy(result.pvShare, sd, z.nat);
+  return { byState, ev, nat, sd, noise: z, moe: Math.round(sd * 1.96 * 1000) / 10 };
 }
 
 /* Election night: nudge each state's counts by a little turnout noise, then
