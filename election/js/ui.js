@@ -26,9 +26,11 @@ const VIEWBOX = '0 0 1050 610';
    ========================================================================== */
 const UI = {
   G: null,
+  truth: null,        // the count as it stands right now, memoised between renders
+  pollMoves: 0,       // campaign moves since the last full survey
   setup: {
     // Fixed for the installation; still threaded through to newGame() as before.
-    n: 3, rounds: 3, indiv: 1.4, seed: '',
+    n: 3, rounds: 2, indiv: 1.4, seed: '',
     funding: 'flat',
     cands: []
   },
@@ -82,10 +84,10 @@ function show(id) {
    returns to the title so the next visitor starts clean.
    ========================================================================== */
 const SCREEN_TIMERS = {
-  'screen-race':    { ms:  90 * 1000, go: () => $('#btn-race-next').click() },
-  'screen-field':   { ms:  90 * 1000, go: () => $('#btn-field-next').click() },
-  'screen-bio':     { ms: 180 * 1000, go: () => autoAdvanceBio() },
-  'screen-stance':  { ms: 120 * 1000, go: () => $('#btn-stance-next').click() },
+  'screen-race':    { ms:  60 * 1000, go: () => $('#btn-race-next').click() },
+  'screen-field':   { ms:  60 * 1000, go: () => $('#btn-field-next').click() },
+  'screen-bio':     { ms:  60 * 1000, go: () => autoAdvanceBio() },
+  'screen-stance':  { ms:  60 * 1000, go: () => $('#btn-stance-next').click() },
   'screen-handoff': { ms:  60 * 1000, go: () => $('#btn-handoff').click() },
   'screen-final':   { ms: 300 * 1000, go: () => location.reload() }
 };
@@ -503,7 +505,8 @@ function startGame() {
   UI.turnIdx = -1;
   UI.mapBuilt = false;
   // a pre-campaign poll so the map has something on it
-  UI.currentPoll = pollFrom(simulate(G), G.rng, 0.025);
+  UI.pollMoves = 0;
+  refreshPoll();
   buildMap($('#usmap'), $('#maptip'), true);
   renderAll();
   show('screen-game');
@@ -686,6 +689,20 @@ function previewState(ab) {
   tip.style.left = x + 'px'; tip.style.top = y + 'px';
 }
 
+/* Re-run the standing survey against the electorate as it is right now.
+
+   The sampling error is the one already on the board, so a state moves only if
+   the campaign actually moved it. This runs after every action by either side,
+   which is what makes the map answer back while the round is still going
+   instead of waiting for the polling card at the end of it. */
+function refreshPoll() {
+  const G = UI.G;
+  const sd = UI.currentPoll ? UI.currentPoll.sd : 0.025;
+  UI.truth = simulate(G);
+  UI.currentPoll = pollFrom(UI.truth, G.rng, sd, G.pollNoise);
+  G.pollNoise = UI.currentPoll.noise;
+}
+
 function refreshMap() {
   const G = UI.G;
   UI.mapData = UI.currentPoll.byState;
@@ -693,11 +710,14 @@ function refreshMap() {
   renderEVBar($('#evbar'), UI.currentPoll.ev, 538);
   const r = G.settings.rounds;
   const done = G.polls.length;
-  $('#map-sub').textContent = G.phase === 'final-push'
-    ? `Final polling average · national margin of error ±${UI.currentPoll.moe.toFixed(1)} pts`
-    : done === 0
-      ? `Pre-campaign polling · national margin of error ±${UI.currentPoll.moe.toFixed(1)} pts`
-      : `Polling average after round ${done} of ${r} · national margin of error ±${UI.currentPoll.moe.toFixed(1)} pts`;
+  // Once anybody has spent money this round the number on the wall is live, and
+  // says so, because it is now moving in front of the room.
+  const head = UI.pollMoves > 0
+    ? (G.phase === 'final-push' ? 'Live polling · the final push' : `Live polling · round ${G.round} in progress`)
+    : G.phase === 'final-push'
+      ? 'Final polling average'
+      : done === 0 ? 'Pre-campaign polling' : `Polling average after round ${done} of ${r}`;
+  $('#map-sub').textContent = `${head} · national margin of error ±${UI.currentPoll.moe.toFixed(1)} pts`;
   renderLegend();
 }
 
@@ -742,7 +762,7 @@ function renderLegend() {
    turn early, or letting the clock run out, plays out whatever the
    opponents had left so the round is never cut short for them.
    ========================================================================== */
-const TURN_MS = 10 * 60 * 1000;
+const TURN_MS = 5 * 60 * 1000;
 
 function humanIndices(G) { return G.candidates.map((c, k) => c.isHuman ? k : -1).filter(k => k >= 0); }
 
@@ -816,7 +836,7 @@ function startTurnClock() {
   const gap = Math.max(4000, Math.floor(TURN_MS * 0.85 / slots));
   UI.aiTick = setInterval(() => {
     if (!stepAI(G)) { clearInterval(UI.aiTick); UI.aiTick = null; return; }
-    renderCrossPane();
+    refreshMap(); renderPollPane(); renderCrossPane();
   }, gap);
 }
 
@@ -849,6 +869,8 @@ function finishRound() {
 
   const poll = endRound(G);
   UI.currentPoll = poll;
+  UI.truth = null;
+  UI.pollMoves = 0;   // a new round is a new survey, not a running total
   refreshMap();
   renderAll();
   showRoundModal(poll);
@@ -928,6 +950,9 @@ function startFinalPush() {
 function pushReport(rep, toast) {
   const G = UI.G;
   for (const h of rep.headlines) addFeed(rep.ci, rep.cls, h, rep);
+  // The money has been spent, so the board is out of date until it is re-run.
+  UI.pollMoves++;
+  refreshPoll();
   if (toast) showToast(rep);
 }
 
@@ -1424,7 +1449,7 @@ function renderPollPane() {
 /* ---------- crosstabs ---------- */
 function renderCrossPane() {
   const G = UI.G, pane = $('#pane-cross');
-  const truth = simulate(G);
+  const truth = UI.truth || (UI.truth = simulate(G));
   const tot = demoTotals(truth);
   const me = viewerIdx();
   const bar = (shares) => `<div class="sharebar">` + shares.map((sh, k) =>
@@ -2006,7 +2031,7 @@ const Advisor = (() => {
       const G = UI.G;
       say(`<strong>CIVIS</strong> is online and assigned to this campaign.<br><br>
         <strong>${G.settings.rounds} rounds</strong> until the country votes, and money arrives every round, so
-        so spend what you have. Put it where you are <strong>close</strong>, not where you already win.<br><br>
+        spend what you have. Put it where you are <strong>close</strong>, not where you already win.<br><br>
         <span class="muted">Query this system at any time for guidance.</span>`, 13000);
     },
 

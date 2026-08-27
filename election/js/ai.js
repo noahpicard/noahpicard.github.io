@@ -153,20 +153,113 @@ function aiTakeTurn(G, ci, maxActions) {
   return reports;
 }
 
-/* Give an AI candidate a starting platform: near the electorate it can win,
-   nudged by its persona. */
-function aiPickStances(G, ci, rng, anchorLean) {
-  const cand = G.candidates[ci];
-  const stances = [];
-  cand.anchorLean = anchorLean;
-  for (let i = 0; i < G.topics.length; i++) {
-    const t = G.topics[i];
+/* Where the average American stands on each issue. A platform is a point
+   measured out from here. */
+function nationalVector(G) { return G.topics.map(t => nationalMean(t)); }
+
+/* How the country would split between a set of platforms if the vote were held
+   right now, before anyone has spent a dollar. This is the same comparison the
+   ballot is decided by: a voter goes to whichever platform their own positions
+   point most nearly toward. Every voter's bias block is still zero, so the
+   result depends only on the platforms themselves and can be recomputed cheaply
+   while they are being fitted. Sampled at every fifth voter and weighted by
+   state population. */
+function openingShares(G, plats) {
+  const n = G.candidates.length;
+  const norms = plats.map(p => {
+    let s = 9 * n;                       // the identity block, the same size for everyone
+    for (const x of p.stances) s += x * x;
+    return Math.sqrt(s) || 1e-9;
+  });
+  const share = new Array(plats.length).fill(0);
+  let pop = 0;
+
+  for (const ab of STATE_IDS) {
+    const voters = G.states[ab].voters;
+    const local = new Array(plats.length).fill(0);
+    let cnt = 0;
+    for (let vi = 0; vi < voters.length; vi += 5) {
+      const t = voters[vi].t;
+      let best = -Infinity, bi = 0;
+      for (let p = 0; p < plats.length; p++) {
+        const st = plats[p].stances;
+        let dot = 0;
+        for (let i = 0; i < t.length; i++) dot += t[i] * st[i];
+        const sc = dot / norms[p];       // the voter's own norm is shared, so it drops out
+        if (sc > best) { best = sc; bi = p; }
+      }
+      local[bi]++; cnt++;
+    }
+    const w = STATES[ab].pop;
+    for (let p = 0; p < plats.length; p++) share[p] += (local[p] / cnt) * w;
+    pop += w;
+  }
+  return share.map(x => x / pop);
+}
+
+/* Draw the direction of one computer platform: its own lean, nudged by its
+   persona, expressed as an offset from the average voter. */
+function drawPlatform(G, cand, rng, anchorLean, nat) {
+  const dev = G.topics.map((t, i) => {
     let target = t.base + t.partisan * anchorLean * 3.0 + rng.gauss(0, 0.9);
     if (cand.persona.id === 'firebrand') target *= 1.45;       // extremists take big swings
     if (cand.persona.id === 'technocrat') target *= 0.75;      // hedgers cluster near zero
-    stances.push(clamp(Math.round(target), -3, 3));
+    return target - nat[i];
+  });
+  if (dev.every(d => Math.abs(d) < 1e-6)) dev[rng.int(dev.length)] = anchorLean >= 0 ? 1 : -1;
+  return dev;
+}
+
+/* Round a platform back to the whole-numbered stances the ballot carries,
+   after moving it k times its own offset away from the average voter. */
+function platformAt(nat, dev, k) {
+  return dev.map((d, i) => clamp(Math.round(nat[i] + d * k), -3, 3));
+}
+
+/* Hand the computer field its platforms.
+
+   Each opponent keeps a direction of its own, which is what makes them
+   different from each other. What gets levelled is how far that direction is
+   taken: each platform is pulled in toward the average voter or pushed out
+   away from them until the computers would split the country evenly between
+   themselves. Without this step one opponent routinely opens parked on the
+   median while another is stranded at the edge, and the finishing order is
+   settled before a dollar is spent. */
+function aiPickField(G, rng, anchors) {
+  const nat = nationalVector(G);
+  const plats = [];
+  G.candidates.forEach((cand, i) => {
+    if (cand.isHuman) return;
+    cand.anchorLean = anchors[i];
+    const dev = drawPlatform(G, cand, rng, anchors[i], nat);
+    plats.push({ cand, dev, stances: platformAt(nat, dev, 1) });
+  });
+  if (!plats.length) return;
+
+  // A single computer has nobody to be levelled against, so it just takes the
+  // platform it drew.
+  if (plats.length > 1) {
+    /* Fit one platform at a time against the rest of the field, a few times
+       around, which is enough for the shares to settle. */
+    const fair = 1 / plats.length;
+    for (let pass = 0; pass < 3; pass++) {
+      plats.forEach((p, pi) => {
+        let best = null;
+        for (let k = 0.1; k <= 4.0; k += 0.1) {
+          p.stances = platformAt(nat, p.dev, k);
+          const err = Math.abs(openingShares(G, plats)[pi] - fair);
+          if (!best || err < best.err) best = { st: p.stances, err };
+        }
+        p.stances = best.st;
+      });
+    }
   }
-  cand.stances = stances;
+
+  const shares = openingShares(G, plats);
+  plats.forEach((p, i) => {
+    p.cand.stances = p.stances;
+    p.cand.openingShare = shares[i];
+  });
 }
 
 /* Spread the computer field across the spectrum instead of drawing each

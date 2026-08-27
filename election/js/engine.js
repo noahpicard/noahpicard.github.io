@@ -274,27 +274,41 @@ function simulate(G) {
 }
 
 /* A poll is the truth plus sampling error. State polls are noisier than the
-   national number because the samples are smaller. */
-function pollFrom(result, rng, sd) {
+   national number because the samples are smaller.
+
+   The sampling error is drawn once and then held on the poll as `noise`. Pass
+   a previous poll's noise back in to re-run the same survey against a changed
+   electorate: that is what lets the board update after every campaign move
+   and show only the movement the move actually caused, instead of reshuffling
+   fifty states' worth of fresh wobble each time somebody buys an ad. One
+   election keeps one error, scaled down by `sd` as election day approaches,
+   which is also why a state that polls a little rich for somebody all year can
+   still come in under on the night. */
+function pollFrom(result, rng, sd, noise) {
   const n = result.ev.length;
-  const noisy = (shares, s) => {
-    const raw = shares.map(v => Math.max(0.0005, v + rng.gauss(0, s)));
+  const z = noise || { states: {}, nat: null };
+  const draw = () => { const a = []; for (let k = 0; k < n; k++) a.push(rng.gauss(0, 1)); return a; };
+  if (!z.nat) z.nat = draw();
+
+  const noisy = (shares, s, zs) => {
+    const raw = shares.map((v, k) => Math.max(0.0005, v + zs[k] * s));
     const tot = raw.reduce((a, b) => a + b, 0);
     return raw.map(v => v / tot);
   };
   const byState = {};
   const ev = new Array(n).fill(0);
   for (const ab of STATE_IDS) {
+    if (!z.states[ab]) z.states[ab] = draw();
     const shares = result.byState[ab].counts.map(c => c / 100);
-    const p = noisy(shares, sd * 2.1);      // state samples are much smaller
+    const p = noisy(shares, sd * 2.1, z.states[ab]);   // state samples are much smaller
     let winner = 0;
     for (let k = 1; k < n; k++) if (p[k] > p[winner]) winner = k;
     const sorted = p.slice().sort((a, b) => b - a);
     byState[ab] = { shares: p, winner, margin: sorted[0] - (sorted[1] || 0) };
     ev[winner] += STATES[ab].ev;
   }
-  const nat = noisy(result.pvShare, sd);
-  return { byState, ev, nat, moe: Math.round(sd * 1.96 * 1000) / 10 };
+  const nat = noisy(result.pvShare, sd, z.nat);
+  return { byState, ev, nat, sd, noise: z, moe: Math.round(sd * 1.96 * 1000) / 10 };
 }
 
 /* Election night: nudge each state's counts by a little turnout noise, then
@@ -346,10 +360,12 @@ function reachWeight(action, voter, focus) {
 /* Apply a bias push. Returns the average signed movement actually delivered,
    which is what the result copy is written from. */
 /* Global calibration of how much one dollar of campaigning is worth. Tuned so
-   that a single standard buy in one state moves it a couple of points, and a
-   whole campaign can decide a close state but cannot save a hopeless one. */
-let BIAS_SCALE = 0.034;
-let BIAS_CAP = 1.15;
+   that a single standard buy in one state moves it about three points, and a
+   whole campaign can decide a close state but cannot save a hopeless one.
+   Money is the whole game over two short rounds, so this sits deliberately
+   high: a full campaign is worth roughly ten points of national vote. */
+let BIAS_SCALE = 0.068;
+let BIAS_CAP = 1.70;
 
 function pushBias(G, opts) {
   const { action, statesList, focus, targetIdx, sign, magnitude, spillMag } = opts;
@@ -379,12 +395,12 @@ function pushBias(G, opts) {
    of a successful buy. Retune these whenever BIAS_SCALE moves, or every
    result will read as "essentially nothing". */
 const MOVE_WORDS = [
-  { min: 0.090,  word: 'a decisive surge',      cls: 'huge' },
-  { min: 0.048,  word: 'a strong move',         cls: 'strong' },
-  { min: 0.027,  word: 'a solid gain',          cls: 'solid' },
-  { min: 0.011,  word: 'a modest bump',         cls: 'modest' },
-  { min: -0.006, word: 'essentially nothing',   cls: 'flat' },
-  { min: -0.030, word: 'a small setback',       cls: 'bad' },
+  { min: 0.180,  word: 'a decisive surge',      cls: 'huge' },
+  { min: 0.096,  word: 'a strong move',         cls: 'strong' },
+  { min: 0.054,  word: 'a solid gain',          cls: 'solid' },
+  { min: 0.022,  word: 'a modest bump',         cls: 'modest' },
+  { min: -0.012, word: 'essentially nothing',   cls: 'flat' },
+  { min: -0.060, word: 'a small setback',       cls: 'bad' },
   { min: -999,   word: 'a real backfire',       cls: 'awful' }
 ];
 function moveWord(v) { return MOVE_WORDS.find(m => v >= m.min) || MOVE_WORDS[MOVE_WORDS.length - 1]; }
@@ -579,10 +595,10 @@ function flavourFor(G, action, cand, ctx) {
    promise of "strongly" is answered by a result reading "a strong move".
    Both are expressed in delivered-movement units. */
 const MAG_WORDS = [
-  { min: 0.090, word: 'very strongly' },
-  { min: 0.048, word: 'strongly' },
-  { min: 0.027, word: 'solidly' },
-  { min: 0.011, word: 'modestly' },
+  { min: 0.180, word: 'very strongly' },
+  { min: 0.096, word: 'strongly' },
+  { min: 0.054, word: 'solidly' },
+  { min: 0.022, word: 'modestly' },
   { min: -99,   word: 'slightly' }
 ];
 const magWord = (m) => (MAG_WORDS.find(x => m >= x.min) || MAG_WORDS[MAG_WORDS.length - 1]).word;

@@ -61,8 +61,8 @@ function newGame(settings) {
     if (cand.isHuman) return;
     const home = rng.pick(STATE_IDS);
     cand.bio = makeAIBio(rng, cand.persona, home);
-    aiPickStances(G, i, rng, anchors[i]);
   });
+  aiPickField(G, rng, anchors);   // every computer starts the same distance from the voters
 
   /* --- biography analysis. Human candidates write theirs on the setup screen
          and are seeded there instead, so we leave them alone here. --- */
@@ -149,7 +149,12 @@ function endRound(G) {
   // Polls get sharper as the election approaches.
   const t = G.round / Math.max(1, G.settings.rounds);
   const sd = 0.024 - 0.011 * t;    // national sampling error, tightening toward election day
-  const poll = pollFrom(truth, G.rng, sd);
+  // One sampling error for the whole election, tightening as election day gets
+  // closer. The board is now re-polled after every campaign move, so drawing
+  // fresh error here would make fifty states twitch at the round boundary for
+  // no reason anybody in the room could see.
+  const poll = pollFrom(truth, G.rng, sd, G.pollNoise);
+  G.pollNoise = poll.noise;
   G.polls.push({ round: G.round, poll, truthEv: truth.ev.slice() });
   G.history.push({ round: G.round, ev: truth.ev.slice(), pv: truth.pvShare.slice() });
   return poll;
