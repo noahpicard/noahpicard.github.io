@@ -61,8 +61,8 @@ function newGame(settings) {
     if (cand.isHuman) return;
     const home = rng.pick(STATE_IDS);
     cand.bio = makeAIBio(rng, cand.persona, home);
-    aiPickStances(G, i, rng, anchors[i]);
   });
+  aiPickField(G, rng, anchors);   // every computer starts the same distance from the voters
 
   /* --- biography analysis. Human candidates write theirs on the setup screen
          and are seeded there instead, so we leave them alone here. --- */

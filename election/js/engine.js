@@ -346,10 +346,12 @@ function reachWeight(action, voter, focus) {
 /* Apply a bias push. Returns the average signed movement actually delivered,
    which is what the result copy is written from. */
 /* Global calibration of how much one dollar of campaigning is worth. Tuned so
-   that a single standard buy in one state moves it a couple of points, and a
-   whole campaign can decide a close state but cannot save a hopeless one. */
-let BIAS_SCALE = 0.034;
-let BIAS_CAP = 1.15;
+   that a single standard buy in one state moves it about three points, and a
+   whole campaign can decide a close state but cannot save a hopeless one.
+   Money is the whole game over two short rounds, so this sits deliberately
+   high: a full campaign is worth roughly ten points of national vote. */
+let BIAS_SCALE = 0.068;
+let BIAS_CAP = 1.70;
 
 function pushBias(G, opts) {
   const { action, statesList, focus, targetIdx, sign, magnitude, spillMag } = opts;
@@ -379,12 +381,12 @@ function pushBias(G, opts) {
    of a successful buy. Retune these whenever BIAS_SCALE moves, or every
    result will read as "essentially nothing". */
 const MOVE_WORDS = [
-  { min: 0.090,  word: 'a decisive surge',      cls: 'huge' },
-  { min: 0.048,  word: 'a strong move',         cls: 'strong' },
-  { min: 0.027,  word: 'a solid gain',          cls: 'solid' },
-  { min: 0.011,  word: 'a modest bump',         cls: 'modest' },
-  { min: -0.006, word: 'essentially nothing',   cls: 'flat' },
-  { min: -0.030, word: 'a small setback',       cls: 'bad' },
+  { min: 0.180,  word: 'a decisive surge',      cls: 'huge' },
+  { min: 0.096,  word: 'a strong move',         cls: 'strong' },
+  { min: 0.054,  word: 'a solid gain',          cls: 'solid' },
+  { min: 0.022,  word: 'a modest bump',         cls: 'modest' },
+  { min: -0.012, word: 'essentially nothing',   cls: 'flat' },
+  { min: -0.060, word: 'a small setback',       cls: 'bad' },
   { min: -999,   word: 'a real backfire',       cls: 'awful' }
 ];
 function moveWord(v) { return MOVE_WORDS.find(m => v >= m.min) || MOVE_WORDS[MOVE_WORDS.length - 1]; }
@@ -579,10 +581,10 @@ function flavourFor(G, action, cand, ctx) {
    promise of "strongly" is answered by a result reading "a strong move".
    Both are expressed in delivered-movement units. */
 const MAG_WORDS = [
-  { min: 0.090, word: 'very strongly' },
-  { min: 0.048, word: 'strongly' },
-  { min: 0.027, word: 'solidly' },
-  { min: 0.011, word: 'modestly' },
+  { min: 0.180, word: 'very strongly' },
+  { min: 0.096, word: 'strongly' },
+  { min: 0.054, word: 'solidly' },
+  { min: 0.022, word: 'modestly' },
   { min: -99,   word: 'slightly' }
 ];
 const magWord = (m) => (MAG_WORDS.find(x => m >= x.min) || MAG_WORDS[MAG_WORDS.length - 1]).word;

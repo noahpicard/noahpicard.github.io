@@ -28,7 +28,7 @@ const UI = {
   G: null,
   setup: {
     // Fixed for the installation; still threaded through to newGame() as before.
-    n: 3, rounds: 3, indiv: 1.4, seed: '',
+    n: 3, rounds: 2, indiv: 1.4, seed: '',
     funding: 'flat',
     cands: []
   },
@@ -82,10 +82,10 @@ function show(id) {
    returns to the title so the next visitor starts clean.
    ========================================================================== */
 const SCREEN_TIMERS = {
-  'screen-race':    { ms:  90 * 1000, go: () => $('#btn-race-next').click() },
-  'screen-field':   { ms:  90 * 1000, go: () => $('#btn-field-next').click() },
-  'screen-bio':     { ms: 180 * 1000, go: () => autoAdvanceBio() },
-  'screen-stance':  { ms: 120 * 1000, go: () => $('#btn-stance-next').click() },
+  'screen-race':    { ms:  60 * 1000, go: () => $('#btn-race-next').click() },
+  'screen-field':   { ms:  60 * 1000, go: () => $('#btn-field-next').click() },
+  'screen-bio':     { ms:  60 * 1000, go: () => autoAdvanceBio() },
+  'screen-stance':  { ms:  60 * 1000, go: () => $('#btn-stance-next').click() },
   'screen-handoff': { ms:  60 * 1000, go: () => $('#btn-handoff').click() },
   'screen-final':   { ms: 300 * 1000, go: () => location.reload() }
 };
@@ -742,7 +742,7 @@ function renderLegend() {
    turn early, or letting the clock run out, plays out whatever the
    opponents had left so the round is never cut short for them.
    ========================================================================== */
-const TURN_MS = 10 * 60 * 1000;
+const TURN_MS = 5 * 60 * 1000;
 
 function humanIndices(G) { return G.candidates.map((c, k) => c.isHuman ? k : -1).filter(k => k >= 0); }
 
@@ -2006,7 +2006,7 @@ const Advisor = (() => {
       const G = UI.G;
       say(`<strong>CIVIS</strong> is online and assigned to this campaign.<br><br>
         <strong>${G.settings.rounds} rounds</strong> until the country votes, and money arrives every round, so
-        so spend what you have. Put it where you are <strong>close</strong>, not where you already win.<br><br>
+        spend what you have. Put it where you are <strong>close</strong>, not where you already win.<br><br>
         <span class="muted">Query this system at any time for guidance.</span>`, 13000);
     },
 
